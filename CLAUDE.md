@@ -4,27 +4,35 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a single-file static HTML project: `my-mac-file-map.html` — an interactive dashboard that visualizes the personal file structure and storage usage on a Mac. It displays storage breakdowns, file type census, and folder-by-folder details with collapsible sections.
+A Claude Code plugin (`files-organizer`) that scans Mac file systems, finds duplicates, analyzes folder structure, detects orphan files, and generates interactive HTML dashboards with reorganization recommendations.
 
 ## Architecture
 
-- **Single file**: `my-mac-file-map.html` — self-contained HTML with inline CSS and JS
-- **No build tools, dependencies, or package manager**
-- **No tests**
+This repo root IS the plugin. Install with `claude plugins add .`
 
-## Tech Stack
-
-- Vanilla HTML/CSS/JS
-- CSS custom properties for theming (dark theme with GitHub-inspired color palette)
-- Collapsible sections via `<details>` elements and a click handler on `.section-header`
+- **commands/** — 3 slash commands: `/scan`, `/organize`, `/file-map`
+- **agents/** — 3 subagents: `dedup-finder`, `structure-advisor`, `orphan-detector`
+- **skills/** — 2 skills: `generate-file-map` (HTML dashboard generation), `mac-file-patterns` (organization knowledge, Claude-only)
+- **scripts/** — 3 bash scripts for filesystem scanning, duplicate detection, similar name finding
+- **examples/** — Original `my-mac-file-map.html` dashboard (the project that inspired this plugin)
+- **.claude-plugin/** — Plugin manifest (`plugin.json`) and `marketplace.json`
 
 ## Key Design Patterns
 
+- Dark theme with GitHub-inspired color palette (CSS custom properties)
 - Color-coded file type badges (`.ext-doc`, `.ext-img`, `.ext-vid`, etc.)
 - Category tags (`.tag-personal`, `.tag-work`, `.tag-creative`, `.tag-3dprint`)
-- Storage breakdown uses inline `<div>` segments styled as a stacked bar chart
-- Stat cards grid uses `auto-fit` with `minmax(200px, 1fr)`
+- Recommendation cards with copy-to-clipboard shell commands
+- Self-contained single-file HTML output (no external dependencies)
+- Design system reference: `skills/generate-file-map/references/design-system.md`
+- HTML template: `skills/generate-file-map/assets/template.html`
 
-## To Preview
+## Usage
 
-Open `my-mac-file-map.html` directly in a browser. No server needed.
+- `/scan ~/Documents` — Scan a directory and generate file inventory
+- `/organize ~/Documents` — Full analysis with 3 parallel agents, produces recommendations
+- `/file-map output.html` — Generate interactive HTML dashboard
+
+## To Preview Example
+
+Open `examples/my-mac-file-map.html` directly in a browser. No server needed.

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>File Map Dashboard</title>
+<style>
+  :root { --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #c9d1d9; --head: #f0f6fc; --accent: #58a6ff; --green: #3fb950; --yellow: #d29922; --pink: #f778ba; --purple: #bc8cff; --orange: #d18616; --red: #f85149; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); padding: 2rem; line-height: 1.5; }
+  h1 { color: var(--head); font-size: 1.8rem; margin-bottom: 0.5rem; }
+  .subtitle { color: #8b949e; margin-bottom: 1.5rem; }
+
+  /* Search */
+  .search-bar { margin-bottom: 2rem; }
+  .search-bar input { width: 100%; max-width: 400px; padding: 8px 12px; background: var(--card); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 0.9rem; }
+  .search-bar input:focus { outline: none; border-color: var(--accent); }
+
+  /* Stat cards */
+  .overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; }
+  .stat-card .label { font-size: 0.8rem; color: #8b949e; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat-card .value { font-size: 1.8rem; font-weight: 700; color: var(--head); }
+  .stat-card .detail { font-size: 0.85rem; color: #8b949e; margin-top: 4px; }
+
+  /* Sections */
+  .section { background: var(--card); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 1.5rem; overflow: hidden; }
+  .section-header { padding: 1rem 1.2rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+  .section-header h2 { font-size: 1.1rem; color: var(--head); }
+  .section-header .size { font-size: 0.9rem; color: var(--accent); font-weight: 600; }
+  .section-body { padding: 0.8rem 1.2rem; }
+  .section-body.collapsed { display: none; }
+
+  /* File type badges */
+  .ext { font-size: 0.75rem; padding: 1px 5px; border-radius: 3px; margin-left: 4px; font-weight: 500; }
+  .ext-doc { background: #1f3a5f; color: #58a6ff; }
+  .ext-img { background: #2d1f3f; color: var(--purple); }
+  .ext-vid { background: #3f1f2f; color: var(--pink); }
+  .ext-design { background: #1f3f2f; color: var(--green); }
+  .ext-spread { background: #3f3a1f; color: var(--yellow); }
+  .ext-3d { background: #3f2a1f; color: var(--orange); }
+  .ext-archive { background: #2a2a2a; color: #8b949e; }
+  .ext-audio { background: #3f1f3f; color: #e078e0; }
+  .ext-pdf { background: #3f1f1f; color: #f07070; }
+
+  /* Category tags */
+  .tag { display: inline-block; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; margin: 2px; }
+  .tag-personal { background: #1f3a5f; color: #58a6ff; }
+  .tag-work { background: #3f3a1f; color: var(--yellow); }
+  .tag-creative { background: #2d1f3f; color: var(--purple); }
+  .tag-3dprint { background: #3f2a1f; color: var(--orange); }
+
+  /* Folders */
+  .folder { margin: 0.5rem 0; }
+  .folder-name { font-weight: 600; color: var(--accent); cursor: pointer; }
+  .folder-size { color: #8b949e; font-size: 0.85rem; margin-left: 0.5rem; }
+  .folder-desc { color: #8b949e; font-size: 0.85rem; margin-left: 1.5rem; }
+  .file-list { margin-left: 1.5rem; margin-top: 0.3rem; }
+  .file { font-size: 0.85rem; padding: 2px 0; color: var(--text); }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; }
+  table th, table td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+  table th { color: #8b949e; font-weight: 600; }
+
+  /* Storage bar */
+  .storage-bar { display: flex; height: 24px; border-radius: 6px; overflow: hidden; margin-bottom: 0.8rem; }
+  .storage-bar .segment { height: 100%; }
+  .legend { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.5rem; font-size: 0.8rem; }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+  /* Notes */
+  .note { background: #1a1e24; border-left: 3px solid var(--accent); padding: 0.8rem 1rem; margin: 1rem 0; font-size: 0.9rem; border-radius: 0 6px 6px 0; }
+
+  /* Details/collapsible */
+  details { margin: 0.3rem 0; }
+  details summary { cursor: pointer; padding: 4px 0; }
+  details summary:hover { color: var(--accent); }
+
+  /* Recommendation cards */
+  .rec-card { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 1rem; margin: 0.8rem 0; }
+  .rec-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+  .rec-icon { font-size: 1.2rem; }
+  .rec-title { font-weight: 600; color: var(--head); flex: 1; }
+  .rec-impact { font-size: 0.85rem; font-weight: 600; }
+  .rec-body { font-size: 0.85rem; color: #8b949e; margin-bottom: 0.8rem; }
+  .rec-delete { border-left: 3px solid var(--red); }
+  .rec-delete .rec-impact { color: var(--red); }
+  .rec-move { border-left: 3px solid var(--accent); }
+  .rec-move .rec-impact { color: var(--accent); }
+  .rec-merge { border-left: 3px solid var(--green); }
+  .rec-merge .rec-impact { color: var(--green); }
+  .rec-archive { border-left: 3px solid var(--yellow); }
+  .rec-archive .rec-impact { color: var(--yellow); }
+
+  /* Copy button */
+  .copy-btn { background: var(--border); border: none; color: var(--text); padding: 4px 12px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; }
+  .copy-btn:hover { background: #484f58; }
+  .copy-btn.copied { background: var(--green); color: #000; }
+
+  /* Proposed structure */
+  .tree { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.85rem; line-height: 1.8; background: var(--bg); padding: 1rem; border-radius: 6px; border: 1px solid var(--border); }
+  .tree .new { color: var(--green); }
+  .tree .existing { color: var(--text); }
+  .tree .moved { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<h1><!-- TITLE: e.g. "Complete Mac File Map" --></h1>
+<p class="subtitle"><!-- SUBTITLE: e.g. "Generated 2026-03-05. Excludes system files." --></p>
+
+<div class="search-bar">
+  <input type="text" id="searchInput" placeholder="Search files and folders..." oninput="filterSections(this.value)">
+</div>
+
+<div class="overview">
+  <!-- STAT CARDS: Repeat this block for each stat -->
+  <div class="stat-card">
+    <div class="label"><!-- LABEL --></div>
+    <div class="value"><!-- VALUE --></div>
+    <div class="detail"><!-- DETAIL --></div>
+  </div>
+</div>
+
+<!-- STORAGE BREAKDOWN -->
+<div class="section">
+  <div class="section-header"><h2>Storage Breakdown</h2></div>
+  <div class="section-body">
+    <div class="storage-bar">
+      <!-- SEGMENTS: <div class="segment" style="width:X%; background:COLOR;" title="LABEL"></div> -->
+    </div>
+    <div class="legend">
+      <!-- LEGEND ITEMS: <span class="legend-item"><span class="legend-dot" style="background:COLOR"></span> LABEL</span> -->
+    </div>
+  </div>
+</div>
+
+<!-- FILE TYPE CENSUS -->
+<div class="section">
+  <div class="section-header"><h2>File Type Census</h2></div>
+  <div class="section-body">
+    <table>
+      <tr><th>Type</th><th>Count</th><th>Category</th></tr>
+      <!-- ROWS: <tr><td>.ext</td><td>COUNT</td><td><span class="tag tag-TYPE">CATEGORY</span></td></tr> -->
+    </table>
+  </div>
+</div>
+
+<!-- FOLDER SECTIONS: Repeat for each major directory -->
+<div class="section" data-section="folder-name">
+  <div class="section-header">
+    <h2><!-- FOLDER NAME + SIZE --></h2>
+    <span class="size"><!-- DESCRIPTION --></span>
+  </div>
+  <div class="section-body">
+    <!-- Subfolders as <details> elements -->
+    <!-- Files as .file divs -->
+    <!-- Notes as .note divs -->
+  </div>
+</div>
+
+<!-- RECOMMENDATIONS (if available) -->
+<div class="section" data-section="recommendations">
+  <div class="section-header">
+    <h2>Recommendations</h2>
+    <span class="size"><!-- COUNT recommendations --></span>
+  </div>
+  <div class="section-body">
+    <!-- REC CARDS: Use .rec-card with appropriate type class -->
+  </div>
+</div>
+
+<!-- PROPOSED STRUCTURE (if available) -->
+<div class="section" data-section="proposed-structure">
+  <div class="section-header">
+    <h2>Proposed Folder Structure</h2>
+  </div>
+  <div class="section-body">
+    <div class="tree">
+      <!-- TREE: Use .new, .existing, .moved classes -->
+    </div>
+  </div>
+</div>
+
+<!-- KEY FINDINGS -->
+<div class="section" data-section="findings">
+  <div class="section-header"><h2>Key Findings &amp; Cleanup Opportunities</h2></div>
+  <div class="section-body">
+    <table>
+      <tr><th>Finding</th><th>Size</th><th>Action</th></tr>
+      <!-- ROWS -->
+    </table>
+  </div>
+</div>
+
+<script>
+  // Section collapse
+  document.querySelectorAll('.section-header').forEach(h => {
+    h.addEventListener('click', () => {
+      const body = h.nextElementSibling;
+      if (body && body.classList.contains('section-body')) {
+        body.classList.toggle('collapsed');
+      }
+    });
+  });
+
+  // Copy to clipboard
+  function copyCmd(btn) {
+    const cmd = btn.getAttribute('data-cmd');
+    navigator.clipboard.writeText(cmd).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy command';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+  // Search filter
+  function filterSections(query) {
+    const q = query.toLowerCase();
+    document.querySelectorAll('.section').forEach(section => {
+      if (!q) {
+        section.style.display = '';
+        return;
+      }
+      const text = section.textContent.toLowerCase();
+      section.style.display = text.includes(q) ? '' : 'none';
+    });
+  }
+</script>
+
+</body>
+</html>

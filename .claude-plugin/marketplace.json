@@ -1,0 +1,15 @@
+{
+  "name": "files-organizer-marketplace",
+  "description": "File organization tools for Mac",
+  "owner": {
+    "name": "Irene Calle Botero"
+  },
+  "plugins": [
+    {
+      "name": "files-organizer",
+      "description": "Scan Mac file systems, find duplicates, analyze folder structure, detect orphan files, and generate interactive HTML dashboards with reorganization recommendations.",
+      "source": ".",
+      "category": "productivity"
+    }
+  ]
+}
