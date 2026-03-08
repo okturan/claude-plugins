@@ -8,8 +8,12 @@
     {
       "name": "files-organizer",
       "description": "Scan Mac file systems, find duplicates, analyze folder structure, detect orphan files, and generate interactive HTML dashboards with reorganization recommendations.",
+      "author": {
+        "name": "okturan"
+      },
       "source": "./plugins/files-organizer",
-      "category": "productivity"
+      "category": "productivity",
+      "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/files-organizer"
     }
   ]
 }

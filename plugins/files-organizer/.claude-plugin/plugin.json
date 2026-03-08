@@ -5,5 +5,7 @@
   "author": {
     "name": "okturan"
   },
-  "keywords": ["file-organization", "deduplication", "mac", "dashboard", "cleanup"]
+  "repository": "https://github.com/okturan/claude-plugins",
+  "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/files-organizer",
+  "license": "MIT"
 }
