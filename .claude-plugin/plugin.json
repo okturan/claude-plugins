@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Scan Mac file systems, find duplicates, analyze folder structure, detect orphan files, and generate interactive HTML dashboards with reorganization recommendations.",
   "author": {
-    "name": "Irene Calle Botero"
+    "name": "okturan"
   },
   "keywords": ["file-organization", "deduplication", "mac", "dashboard", "cleanup"]
 }
