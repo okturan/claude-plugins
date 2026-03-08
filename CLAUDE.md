@@ -4,35 +4,35 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A Claude Code plugin (`files-organizer`) that scans Mac file systems, finds duplicates, analyzes folder structure, detects orphan files, and generates interactive HTML dashboards with reorganization recommendations.
+A personal Claude Code plugin marketplace. Install plugins via `/plugin` using `okturan/claude-plugins`.
 
 ## Architecture
 
-This repo root IS the plugin. Install with `claude plugins add .`
+```
+claude-plugins/
+├── .claude-plugin/
+│   └── marketplace.json           # Marketplace manifest (lists all plugins)
+└── plugins/
+    └── files-organizer/           # Each plugin in its own directory
+        ├── .claude-plugin/
+        │   └── plugin.json
+        ├── commands/
+        ├── agents/
+        ├── skills/
+        └── scripts/
+```
 
-- **commands/** — 3 slash commands: `/scan`, `/organize`, `/file-map`
-- **agents/** — 3 subagents: `dedup-finder`, `structure-advisor`, `orphan-detector`
-- **skills/** — 2 skills: `generate-file-map` (HTML dashboard generation), `mac-file-patterns` (organization knowledge, Claude-only)
-- **scripts/** — 3 bash scripts for filesystem scanning, duplicate detection, similar name finding
-- **examples/** — Original `my-mac-file-map.html` dashboard (the project that inspired this plugin)
-- **.claude-plugin/** — Plugin manifest (`plugin.json`) and `marketplace.json`
+## Adding a new plugin
 
-## Key Design Patterns
+1. Create `plugins/my-plugin/` with its own `.claude-plugin/plugin.json`
+2. Add an entry to `.claude-plugin/marketplace.json` with `"source": "./plugins/my-plugin"`
+3. Commit and push
 
-- Dark theme with GitHub-inspired color palette (CSS custom properties)
-- Color-coded file type badges (`.ext-doc`, `.ext-img`, `.ext-vid`, etc.)
-- Category tags (`.tag-personal`, `.tag-work`, `.tag-creative`, `.tag-3dprint`)
-- Recommendation cards with copy-to-clipboard shell commands
-- Self-contained single-file HTML output (no external dependencies)
-- Design system reference: `skills/generate-file-map/references/design-system.md`
-- HTML template: `skills/generate-file-map/assets/template.html`
+## Plugins
 
-## Usage
+### files-organizer
+Scans Mac file systems, finds duplicates, analyzes folder structure, detects orphan files, and generates interactive HTML dashboards with reorganization recommendations.
 
 - `/scan ~/Documents` — Scan a directory and generate file inventory
-- `/organize ~/Documents` — Full analysis with 3 parallel agents, produces recommendations
+- `/organize ~/Documents` — Full analysis with 3 parallel agents
 - `/file-map output.html` — Generate interactive HTML dashboard
-
-## To Preview Example
-
-Open `examples/my-mac-file-map.html` directly in a browser. No server needed.

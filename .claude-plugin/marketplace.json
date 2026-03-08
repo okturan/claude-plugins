@@ -1,6 +1,6 @@
 {
-  "name": "files-organizer-marketplace",
-  "description": "File organization tools for Mac",
+  "name": "claude-plugins",
+  "description": "Personal Claude Code plugin marketplace",
   "owner": {
     "name": "okturan"
   },
@@ -8,7 +8,7 @@
     {
       "name": "files-organizer",
       "description": "Scan Mac file systems, find duplicates, analyze folder structure, detect orphan files, and generate interactive HTML dashboards with reorganization recommendations.",
-      "source": ".",
+      "source": "./plugins/files-organizer",
       "category": "productivity"
     }
   ]
