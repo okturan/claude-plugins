@@ -24,13 +24,13 @@ Scan Mac file systems, find duplicates, analyze folder structure, detect orphan 
 
 | Command | What it does |
 |---------|-------------|
-| `/scan [directory]` | Scan a directory and show file inventory — sizes, types, age, large files |
+| `/scan [directory]` | Scan a directory and show file inventory - sizes, types, age, large files |
 | `/organize [directory]` | Full analysis with 3 parallel agents (dedup-finder, structure-advisor, orphan-detector) |
 | `/file-map [output.html]` | Generate a self-contained HTML dashboard with dark theme and copy-to-clipboard commands |
 
 ### project-health
 
-Deep audit any code repository — scores it out of 100 across 9 categories. Language-agnostic, works on any git repo.
+Deep audit any code repository - scores it out of 100 across 9 categories. Language-agnostic, works on any git repo.
 
 | Command | What it does |
 |---------|-------------|
