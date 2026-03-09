@@ -22,25 +22,22 @@ Then install any plugin from it:
 
 Scan Mac file systems, find duplicates, analyze folder structure, detect orphan files, and generate interactive HTML dashboards with reorganization recommendations.
 
-**Commands:**
-
 | Command | What it does |
 |---------|-------------|
 | `/scan [directory]` | Scan a directory and show file inventory — sizes, types, age, large files |
-| `/organize [directory]` | Full analysis with 3 parallel agents, produces prioritized recommendations with shell commands |
-| `/file-map [output.html]` | Generate a self-contained HTML dashboard with dark theme, collapsible folders, copy-to-clipboard commands |
+| `/organize [directory]` | Full analysis with 3 parallel agents (dedup-finder, structure-advisor, orphan-detector) |
+| `/file-map [output.html]` | Generate a self-contained HTML dashboard with dark theme and copy-to-clipboard commands |
 
-**How it works:**
+### project-health
 
-`/organize` launches three specialized agents in parallel:
+Deep audit any code repository — scores it out of 100 across 9 categories. Language-agnostic, works on any git repo.
 
-- **dedup-finder** — Finds exact duplicates (MD5), near-duplicates (similar names), redundant archives (ZIP + extracted folder)
-- **structure-advisor** — Analyzes folder hierarchy, finds scattered content, proposes a cleaner structure with migration commands
-- **orphan-detector** — Finds misplaced files, stray downloads, temp/junk files, lonely files that belong elsewhere
+| Command | What it does |
+|---------|-------------|
+| `/project-health` | Full audit of the current repository across all 9 categories |
+| `/project-health --category testing` | Audit only a single category |
 
-All three are bilingual-aware (English/Spanish filenames).
-
-`/file-map` generates a single HTML file you can open in any browser — no server needed. Dark theme with GitHub-inspired palette, file type badges, category tags, and recommendation cards with one-click copy for every shell command.
+Categories: Git Health (15), Structure (15), Code Quality (15), Config (10), Database (10), Docs (10), Testing & CI (15), Dependencies (5), Security (5).
 
 ## Adding Your Own Plugins
 

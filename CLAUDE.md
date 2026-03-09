@@ -13,13 +13,16 @@ claude-plugins/
 ├── .claude-plugin/
 │   └── marketplace.json           # Marketplace manifest (lists all plugins)
 └── plugins/
-    └── files-organizer/           # Each plugin in its own directory
-        ├── .claude-plugin/
-        │   └── plugin.json
+    ├── files-organizer/           # Mac file system organizer
+    │   ├── .claude-plugin/plugin.json
+    │   ├── commands/
+    │   ├── agents/
+    │   ├── skills/
+    │   └── scripts/
+    └── project-health/            # Repo audit scorer (100 pts)
+        ├── .claude-plugin/plugin.json
         ├── commands/
-        ├── agents/
-        ├── skills/
-        └── scripts/
+        └── skills/
 ```
 
 ## Adding a new plugin
