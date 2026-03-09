@@ -20,22 +20,22 @@ Then install any plugin from it:
 
 ### files-organizer
 
-Scan Mac file systems, find duplicates, analyze folder structure, detect orphan files, and generate interactive HTML dashboards with reorganization recommendations.
+Find duplicates, analyze folder structure, and generate an HTML dashboard for any directory.
 
 | Command | What it does |
 |---------|-------------|
-| `/scan [directory]` | Scan a directory and show file inventory - sizes, types, age, large files |
-| `/organize [directory]` | Full analysis with 3 parallel agents (dedup-finder, structure-advisor, orphan-detector) |
-| `/file-map [output.html]` | Generate a self-contained HTML dashboard with dark theme and copy-to-clipboard commands |
+| `/scan [directory]` | File inventory - sizes, types, age |
+| `/organize [directory]` | Full analysis with 3 parallel agents |
+| `/file-map [output.html]` | Interactive HTML dashboard with cleanup commands |
 
 ### project-health
 
-Deep audit any code repository - scores it out of 100 across 9 categories. Language-agnostic, works on any git repo.
+Audit any git repo and score it out of 100 across 9 categories.
 
 | Command | What it does |
 |---------|-------------|
-| `/project-health` | Full audit of the current repository across all 9 categories |
-| `/project-health --category testing` | Audit only a single category |
+| `/project-health` | Full audit across all 9 categories |
+| `/project-health --category testing` | Audit a single category |
 
 Categories: Git Health (15), Structure (15), Code Quality (15), Config (10), Database (10), Docs (10), Testing & CI (15), Dependencies (5), Security (5).
 

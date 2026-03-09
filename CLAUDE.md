@@ -28,14 +28,14 @@ claude-plugins/
 ## Plugins
 
 ### files-organizer
-Scans Mac file systems, finds duplicates, analyzes folder structure, detects orphan files, and generates interactive HTML dashboards with reorganization recommendations.
+Find duplicates, analyze folder structure, and generate an HTML dashboard for any directory.
 
-- `/scan ~/Documents` — Scan a directory and generate file inventory
-- `/organize ~/Documents` — Full analysis with 3 parallel agents
-- `/file-map output.html` — Generate interactive HTML dashboard
+- `/scan ~/Documents` - file inventory
+- `/organize ~/Documents` - full analysis with 3 parallel agents
+- `/file-map output.html` - interactive HTML dashboard
 
 ### project-health
-Deep audit any code repository — scores it out of 100 across 9 categories (git health, structure, code quality, config, database, docs, testing, deps, security). Language-agnostic, works on any repo.
+Audit any git repo and score it out of 100 across 9 categories.
 
-- `/project-health` — Full audit of the current repository
-- `/project-health --category testing` — Audit only the testing category
+- `/project-health` - full audit
+- `/project-health --category testing` - single category
