@@ -25,12 +25,6 @@ claude-plugins/
         └── skills/
 ```
 
-## Adding a new plugin
-
-1. Create `plugins/my-plugin/` with its own `.claude-plugin/plugin.json`
-2. Add an entry to `.claude-plugin/marketplace.json` with `"source": "./plugins/my-plugin"`
-3. Commit and push
-
 ## Plugins
 
 ### files-organizer

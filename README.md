@@ -39,50 +39,19 @@ Deep audit any code repository — scores it out of 100 across 9 categories. Lan
 
 Categories: Git Health (15), Structure (15), Code Quality (15), Config (10), Database (10), Docs (10), Testing & CI (15), Dependencies (5), Security (5).
 
-## Adding Your Own Plugins
+## Plugin Structure
 
-1. Create a directory under `plugins/your-plugin-name/`
-2. Add a manifest at `plugins/your-plugin-name/.claude-plugin/plugin.json`:
-   ```json
-   {
-     "name": "your-plugin-name",
-     "version": "0.1.0",
-     "description": "What your plugin does"
-   }
-   ```
-3. Add components as needed:
-   - `commands/*.md` — Slash commands
-   - `agents/*.md` — Autonomous subagents
-   - `skills/skill-name/SKILL.md` — Skills (knowledge Claude uses automatically)
-   - `hooks/hooks.json` — Event-driven automation
-   - `.mcp.json` — External tool integrations
-4. Register your plugin in the root `.claude-plugin/marketplace.json`:
-   ```json
-   {
-     "name": "your-plugin-name",
-     "description": "What your plugin does",
-     "author": { "name": "your-name" },
-     "source": "./plugins/your-plugin-name",
-     "category": "productivity"
-   }
-   ```
-5. Commit and push.
-
-## Plugin Structure Reference
+Each plugin lives under `plugins/` with its own manifest and components:
 
 ```
-plugins/your-plugin-name/
-  .claude-plugin/
-    plugin.json          # Required: plugin manifest
-  commands/              # Slash commands (markdown + YAML frontmatter)
-  agents/                # Subagent definitions (markdown + YAML frontmatter)
-  skills/                # Auto-activating skills (subdirs with SKILL.md)
-  scripts/               # Helper scripts
-  hooks/                 # Event handlers (hooks.json)
-  .mcp.json              # MCP server definitions
+plugins/plugin-name/
+  .claude-plugin/plugin.json   # manifest (name, version, description)
+  commands/*.md                # slash commands
+  agents/*.md                  # autonomous subagents
+  skills/*/SKILL.md            # auto-activating skills
+  scripts/                     # helper scripts
+  hooks/hooks.json             # event handlers
 ```
-
-Plugins are the distributable unit. Skills, agents, hooks, and MCP servers live inside plugins. Standalone skills (in `~/.claude/skills/`) work for personal use but can't be shared through marketplaces.
 
 ## License
 
