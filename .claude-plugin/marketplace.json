@@ -14,6 +14,16 @@
       "source": "./plugins/files-organizer",
       "category": "productivity",
       "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/files-organizer"
+    },
+    {
+      "name": "project-health",
+      "description": "Deep audit any code repository with a score out of 100 across 9 categories: git health, structure, code quality, config, database, docs, testing, dependencies, and security.",
+      "author": {
+        "name": "okturan"
+      },
+      "source": "./plugins/project-health",
+      "category": "analysis",
+      "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/project-health"
     }
   ]
 }

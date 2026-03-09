@@ -1,0 +1,11 @@
+{
+  "name": "project-health",
+  "version": "0.1.0",
+  "description": "Deep audit any code repository with a score out of 100 across 9 categories: git health, structure, code quality, config, database, docs, testing, dependencies, and security.",
+  "author": {
+    "name": "okturan"
+  },
+  "repository": "https://github.com/okturan/claude-plugins",
+  "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/project-health",
+  "license": "MIT"
+}

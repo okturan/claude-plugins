@@ -36,3 +36,9 @@ Scans Mac file systems, finds duplicates, analyzes folder structure, detects orp
 - `/scan ~/Documents` — Scan a directory and generate file inventory
 - `/organize ~/Documents` — Full analysis with 3 parallel agents
 - `/file-map output.html` — Generate interactive HTML dashboard
+
+### project-health
+Deep audit any code repository — scores it out of 100 across 9 categories (git health, structure, code quality, config, database, docs, testing, deps, security). Language-agnostic, works on any repo.
+
+- `/project-health` — Full audit of the current repository
+- `/project-health --category testing` — Audit only the testing category
