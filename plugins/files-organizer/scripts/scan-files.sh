@@ -1,7 +1,7 @@
 #!/bin/bash
-# Scan a directory tree and output structured file inventory as JSON-like text
+# Scan a directory tree and output structured file inventory
 # Usage: scan-files.sh <directory> [max-depth]
-# Output: tab-separated lines: path, size_bytes, type, extension, modified_date, md5 (for files < 50MB)
+# Output: tab-separated lines: path, size_bytes, extension, modified_date
 
 DIR="${1:-.}"
 MAX_DEPTH="${2:-5}"
@@ -10,6 +10,17 @@ if [ ! -d "$DIR" ]; then
   echo "ERROR: Directory '$DIR' does not exist" >&2
   exit 1
 fi
+
+TMPFILE=$(mktemp)
+trap 'rm -f "$TMPFILE"' EXIT
+
+FIND_EXCLUDES=(
+  ! -path '*/.*'
+  ! -path '*/node_modules/*'
+  ! -path '*/Library/*'
+  ! -path '*/__pycache__/*'
+  ! -path '*/.git/*'
+)
 
 echo "=== SCAN RESULTS FOR: $DIR ==="
 echo "=== SCAN DATE: $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
@@ -20,16 +31,12 @@ echo "=== DIRECTORY SIZES ==="
 du -h -d 2 "$DIR" 2>/dev/null | sort -rh | head -50
 echo ""
 
-# File inventory
+# Single find pass: inventory + extension census from one traversal
 echo "=== FILE INVENTORY ==="
 echo "PATH\tSIZE_BYTES\tEXTENSION\tMODIFIED"
 find "$DIR" -maxdepth "$MAX_DEPTH" -type f \
-  ! -path '*/.*' \
-  ! -path '*/node_modules/*' \
-  ! -path '*/Library/*' \
-  ! -path '*/__pycache__/*' \
-  ! -path '*/.git/*' \
-  2>/dev/null | while IFS= read -r file; do
+  "${FIND_EXCLUDES[@]}" \
+  2>/dev/null | tee "$TMPFILE" | while IFS= read -r file; do
   size=$(stat -f%z "$file" 2>/dev/null || stat --format=%s "$file" 2>/dev/null)
   ext="${file##*.}"
   if [ "$ext" = "$file" ]; then ext="none"; fi
@@ -39,23 +46,9 @@ find "$DIR" -maxdepth "$MAX_DEPTH" -type f \
 done
 echo ""
 
-# Extension census
+# Extension census from the same file list (no second find traversal)
 echo "=== EXTENSION CENSUS ==="
-find "$DIR" -maxdepth "$MAX_DEPTH" -type f \
-  ! -path '*/.*' \
-  ! -path '*/node_modules/*' \
-  ! -path '*/Library/*' \
-  2>/dev/null | sed 's/.*\.//' | tr '[:upper:]' '[:lower:]' | sort | uniq -c | sort -rn | head -40
-echo ""
-
-# Potential duplicates by size
-echo "=== POTENTIAL DUPLICATES (same size files) ==="
-find "$DIR" -maxdepth "$MAX_DEPTH" -type f \
-  ! -path '*/.*' \
-  ! -path '*/node_modules/*' \
-  ! -path '*/Library/*' \
-  -size +1k \
-  2>/dev/null -exec stat -f"%z %N" {} \; 2>/dev/null | sort -n | uniq -d -w 15 | head -30
+sed 's/.*\.//' "$TMPFILE" | tr '[:upper:]' '[:lower:]' | sort | uniq -c | sort -rn | head -40
 echo ""
 
 echo "=== SCAN COMPLETE ==="
