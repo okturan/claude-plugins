@@ -14,27 +14,8 @@ If a `--category` argument is provided, run only that single category audit and 
 
 1. Verify the current directory is a git repository. If not, tell the user and stop.
 
-2. Load the repo-audit skill for detailed audit procedures and scoring criteria.
+2. Load the repo-audit skill for the full list of categories, diagnostic commands, scoring criteria, and report format.
 
-3. Run all 9 audit categories (or the specified one):
-   - Repository & Git Health (15 pts)
-   - Project Structure & Organization (15 pts)
-   - Code Quality (15 pts)
-   - Configuration & Environment (10 pts)
-   - Data & Database (10 pts)
-   - Documentation (10 pts)
-   - Testing & CI (15 pts)
-   - Dependencies & Packaging (5 pts)
-   - Security (5 pts)
+3. Run the diagnostic commands for all categories (or the specified one). All 9 categories are independent — run their commands in parallel for speed.
 
-4. For each category, run the diagnostic commands, evaluate against the scoring criteria, and assign a score.
-
-5. Present the final report in a clean ASCII table with:
-   - Overall score out of 100
-   - Per-category scores with progress bars
-   - Top improvements sorted by point impact
-   - Strengths section
-
-6. Be honest and specific. Each improvement must have a concrete next step.
-
-This is a **read-only** audit — do not modify any files.
+4. Score each category against its rubric, then present the report as specified in the skill.

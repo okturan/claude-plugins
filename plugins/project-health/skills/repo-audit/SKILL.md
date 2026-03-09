@@ -5,20 +5,21 @@ description: "Comprehensive repository health audit methodology with 9 scoring c
 
 # Repository Audit
 
-Methodology for auditing any git repository across 9 categories, scoring each, and producing an actionable report.
+Methodology for auditing any git repository across 9 categories, scoring each, and producing an actionable report. All categories are independent — run their diagnostic commands in parallel.
+
+Common exclusions for all `find`/`grep` commands: `.git`, `node_modules`, `.claude`, `__pycache__`, `.venv`, `vendor`, `dist`, `build`, `target`.
 
 ## Audit Categories
 
 ### 1. Repository & Git Health (15 pts)
 
 ```bash
-git log --oneline | wc -l
-git log --oneline -10
+git rev-list --count HEAD
+git log --oneline -20
 git remote -v
 git branch -a
 git status
 git stash list
-git log --oneline -20
 git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | awk '/^blob/ {print $3, $4}' | sort -rn | head -20
 ```
 
@@ -33,9 +34,8 @@ git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objec
 
 ```bash
 ls -la
-find . -maxdepth 1 -type f | sort
 find . -maxdepth 2 -type d -not -path './.git/*' | sort
-find . -type f -not -path './.git/*' -not -path './.claude/*' -not -path '*/node_modules/*' | xargs ls -lhS 2>/dev/null | head -30
+find . -type f -not -path './.git/*' -not -path './.claude/*' -not -path '*/node_modules/*' -not -path '*/__pycache__/*' -not -path '*/.venv/*' -not -path '*/vendor/*' -not -path '*/dist/*' -not -path '*/build/*' -not -path '*/target/*' | xargs ls -lhS 2>/dev/null | head -30
 ```
 
 **Scoring:**
@@ -51,8 +51,8 @@ Detect the primary language first, then run appropriate checks.
 
 **For any language:**
 ```bash
-# Line counts per source file
-find . -type f \( -name '*.py' -o -name '*.js' -o -name '*.ts' -o -name '*.go' -o -name '*.rs' -o -name '*.java' \) -not -path '*/node_modules/*' -not -path './.git/*' -exec wc -l {} + | sort -n
+# Line counts — only show files over 500 lines (god file candidates)
+find . -type f \( -name '*.py' -o -name '*.js' -o -name '*.ts' -o -name '*.go' -o -name '*.rs' -o -name '*.java' \) -not -path '*/node_modules/*' -not -path './.git/*' -not -path '*/.venv/*' -exec wc -l {} + | awk '$1 > 500' | sort -rn
 ```
 
 **Language-specific checks:**
@@ -74,22 +74,20 @@ find . -type f \( -name '*.py' -o -name '*.js' -o -name '*.ts' -o -name '*.go' -
 ```bash
 ls .env .env.example .gitignore requirements.txt package.json pyproject.toml Cargo.toml go.mod 2>/dev/null
 cat .gitignore 2>/dev/null
-find . -maxdepth 2 \( -name 'credentials*' -o -name 'token*' -o -name '*.db' -o -name '.env' \) -not -path './.git/*' 2>/dev/null
 ```
 
 **Scoring:**
 - Comprehensive .gitignore (3 pts)
-- No credentials committed (3 pts)
+- No credentials committed (3 pts) — use the sensitive-file scan from Category 9
 - .env.example or equivalent provided (2 pts)
 - Proper packaging config present (2 pts)
 
 ### 5. Data & Database (10 pts)
 
 ```bash
-find . -name '*.db' -o -name '*.sqlite' -o -name '*.sqlite3' 2>/dev/null | head -10
-ls -lh *.db 2>/dev/null
+find . \( -name '*.db' -o -name '*.sqlite' -o -name '*.sqlite3' \) -not -path './.git/*' -exec ls -lh {} \; 2>/dev/null
 # Look for migration patterns
-grep -rn 'CREATE TABLE\|ALTER TABLE\|migration\|schema_version' --include='*.py' --include='*.js' --include='*.ts' --include='*.sql' . 2>/dev/null | head -20
+grep -rn 'CREATE TABLE\|ALTER TABLE\|migration\|schema_version' --include='*.py' --include='*.js' --include='*.ts' --include='*.go' --include='*.rs' --include='*.java' --include='*.sql' . 2>/dev/null | grep -v 'node_modules\|\.git' | head -20
 ```
 
 **Scoring:**
@@ -103,9 +101,8 @@ If no database is used, award 8/10 by default (deduct only if data files are mes
 ### 6. Documentation (10 pts)
 
 ```bash
-ls README.md CHANGELOG.md CONTRIBUTING.md LICENSE 2>/dev/null
+ls README.md CHANGELOG.md CONTRIBUTING.md LICENSE CLAUDE.md .cursorrules .github/copilot-instructions.md 2>/dev/null
 wc -l README.md 2>/dev/null
-ls CLAUDE.md .cursorrules .github/copilot-instructions.md 2>/dev/null
 ```
 
 **Scoring:**
@@ -119,9 +116,7 @@ ls CLAUDE.md .cursorrules .github/copilot-instructions.md 2>/dev/null
 
 ```bash
 find . -name 'test_*' -o -name '*_test.*' -o -name '*.test.*' -o -name '*_spec.*' -o -name 'conftest.py' 2>/dev/null | head -20
-ls -d .github/workflows/ .circleci/ .travis.yml Jenkinsfile 2>/dev/null
-ls .flake8 .pylintrc ruff.toml .eslintrc* biome.json 2>/dev/null
-ls .pre-commit-config.yaml .husky/ 2>/dev/null
+ls -d .github/workflows/ .circleci/ .travis.yml Jenkinsfile .flake8 .pylintrc ruff.toml .eslintrc* biome.json .pre-commit-config.yaml .husky/ 2>/dev/null
 ```
 
 **Scoring:**
@@ -133,10 +128,8 @@ ls .pre-commit-config.yaml .husky/ 2>/dev/null
 ### 8. Dependencies & Packaging (5 pts)
 
 ```bash
-# Check for lock/pin files
-ls requirements.txt package-lock.json yarn.lock pnpm-lock.yaml Cargo.lock go.sum 2>/dev/null
-cat requirements.txt 2>/dev/null | head -20
-ls .python-version .nvmrc .tool-versions 2>/dev/null
+ls requirements.txt package-lock.json yarn.lock pnpm-lock.yaml Cargo.lock go.sum .python-version .nvmrc .tool-versions 2>/dev/null
+head -20 requirements.txt 2>/dev/null
 ```
 
 **Scoring:**
@@ -148,11 +141,13 @@ ls .python-version .nvmrc .tool-versions 2>/dev/null
 ### 9. Security (5 pts)
 
 ```bash
+# Sensitive files anywhere in the repo
+find . -maxdepth 3 \( -name 'credentials*' -o -name 'token*' -o -name '*.pem' -o -name '*.key' -o -name '.env' \) -not -path './.git/*' 2>/dev/null
 # Hardcoded secrets patterns
-grep -rn 'api_key\|password\|secret\|token' --include='*.py' --include='*.js' --include='*.ts' --include='*.go' . 2>/dev/null | grep -v 'node_modules\|\.git\|test_\|_test\.' | grep -v 'def \|#\|//\|import\|"""' | head -20
-# Sensitive file permissions
-find . -maxdepth 2 \( -name 'credentials*' -o -name '*.pem' -o -name '*.key' \) -not -path './.git/*' 2>/dev/null
+grep -rn 'api_key\|password\|secret\|token' --include='*.py' --include='*.js' --include='*.ts' --include='*.go' --include='*.rs' --include='*.java' . 2>/dev/null | grep -v 'node_modules\|\.git\|test_\|_test\.' | grep -v 'def \|#\|//\|import\|"""' | head -20
 ```
+
+The sensitive-file scan here also serves Category 4 (credentials check) — no need to run it twice.
 
 **Scoring:**
 - No hardcoded secrets in code (2 pts)
@@ -174,15 +169,15 @@ find . -maxdepth 2 \( -name 'credentials*' -o -name '*.pem' -o -name '*.key' \) 
   ---------------------------------------------
   Category                Score    Status
   ---------------------------------------------
-  Repository & Git        __/15    [██████░░░░]
-  Project Structure       __/15    [████████░░]
-  Code Quality            __/15    [███████░░░]
-  Config & Environment    __/10    [████░░░░░░]
-  Data & Database         __/10    [██████████]
-  Documentation           __/10    [████████░░]
-  Testing & CI            __/15    [░░░░░░░░░░]
-  Dependencies            __/5     [████░░░░░░]
-  Security                __/5     [██████████]
+  Repository & Git        __/15    [########--]
+  Project Structure       __/15    [#########-]
+  Code Quality            __/15    [#######---]
+  Config & Environment    __/10    [########--]
+  Data & Database         __/10    [##########]
+  Documentation           __/10    [########--]
+  Testing & CI            __/15    [----------]
+  Dependencies            __/5     [####------]
+  Security                __/5     [##########]
   ---------------------------------------------
 
   TOP IMPROVEMENTS (by impact)
@@ -199,7 +194,7 @@ find . -maxdepth 2 \( -name 'credentials*' -o -name '*.pem' -o -name '*.key' \) 
   - Another strength
 ```
 
-Generate the progress bars proportionally: each bar is 10 characters wide. `full_blocks = round(score / max_score * 10)`. Use `#` for filled and `-` for empty if Unicode blocks don't render well in the user's terminal.
+Progress bars: 10 chars wide. `filled = round(score / max_score * 10)`. Use `#` for filled, `-` for empty.
 
 ## Notes
 
