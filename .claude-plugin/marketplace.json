@@ -1,6 +1,6 @@
 {
-  "name": "claude-plugins",
-  "description": "Personal Claude Code plugin marketplace",
+  "name": "okturan-plugins",
+  "description": "Personal plugin marketplace by okturan",
   "owner": {
     "name": "okturan"
   },
