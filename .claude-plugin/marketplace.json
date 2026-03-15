@@ -24,6 +24,16 @@
       "source": "./plugins/project-health",
       "category": "analysis",
       "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/project-health"
+    },
+    {
+      "name": "codex-cli",
+      "description": "Gives Claude Code agents full knowledge of the OpenAI Codex CLI, enabling them to construct and run codex commands without consulting help pages.",
+      "author": {
+        "name": "okturan"
+      },
+      "source": "./plugins/codex-cli",
+      "category": "integration",
+      "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/codex-cli"
     }
   ]
 }
