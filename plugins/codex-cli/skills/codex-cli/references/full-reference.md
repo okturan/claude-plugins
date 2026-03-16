@@ -7,7 +7,7 @@ codex [OPTIONS] [PROMPT]              # Interactive CLI
 ├── exec [PROMPT]                     # Non-interactive (aliases: e)
 │   ├── resume [SESSION_ID] [PROMPT]  # Resume previous exec session
 │   └── review [PROMPT]              # Code review in exec mode
-├── review [PROMPT]                   # Code review (interactive)
+├── review [PROMPT]                   # Code review (non-interactive)
 ├── login                             # Manage login
 │   └── status                       # Show login status
 ├── logout                            # Remove credentials
@@ -46,6 +46,8 @@ codex [OPTIONS] [PROMPT]              # Interactive CLI
 ```
 
 ## Global Options (available on most commands)
+
+**IMPORTANT: Global flags must be placed BEFORE the subcommand.** For example: `codex -m o3 --search exec --full-auto "task"`, NOT `codex exec -m o3 --search "task"`.
 
 | Flag | Description |
 |------|-------------|
@@ -115,7 +117,7 @@ codex exec review --json -o review.md
 
 ### codex review
 
-Run code review interactively.
+Run code review non-interactively.
 
 | Flag | Description |
 |------|-------------|

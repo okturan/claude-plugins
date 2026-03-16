@@ -25,14 +25,16 @@ codex exec -m o3 --json "structured output"
 echo "task" | codex exec -    # read from stdin
 ```
 
-### Code Review
+### Code Review (non-interactive)
 
 ```bash
 codex review --uncommitted                    # review current changes
 codex review --base main                      # review against branch
 codex review --commit abc123                  # review a specific commit
-codex exec review --uncommitted --json        # non-interactive review
+codex exec review --uncommitted --json        # review with JSONL output
 ```
+
+Note: Both `codex review` and `codex exec review` are non-interactive. Use `codex exec review` when additional exec flags are needed (e.g., `--json`, `-o`).
 
 ### Session Management
 
@@ -111,8 +113,10 @@ Manage credentials with `codex login` and `codex logout`. Use `codex login statu
 
 When building a `codex` invocation:
 
+**IMPORTANT:** Global flags (`-m`, `-C`, `--search`, `-s`, `-a`) must go BEFORE the subcommand. Example: `codex -m o3 --search exec --full-auto "task"`.
+
 1. **Choose interactive vs non-interactive**: Use `codex exec` for scripted/automated use, plain `codex` for interactive TUI sessions
-2. **Set the model** if needed: `-m o3` or via `-c model="model-name"`
+2. **Set the model** if needed: `-m o3` or via `-c model="model-name"` — place before subcommand
 3. **Choose sandbox level**: Default to `--full-auto` for safe autonomous execution. Use `--sandbox danger-full-access` only when explicitly needed
 4. **Pass the prompt**: As a positional argument or pipe via stdin with `-`
 5. **Capture output**: Use `--json` for JSONL events, `-o file` to save last message

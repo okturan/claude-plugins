@@ -25,8 +25,9 @@ codex exec --full-auto "$ARGUMENTS"
 Execute this command and present the output to the user.
 
 **Important notes:**
-- If the user's task description mentions a specific model (e.g., "use o3"), add `-m <model>` to the command
-- If the task mentions a specific directory, add `-C <dir>`
-- If the task mentions web search, add `--search`
+- Global flags (`-m`, `-C`, `--search`) MUST go before the subcommand. Example: `codex -m o3 --search exec --full-auto "task"`, NOT `codex exec -m o3 --search "task"`
+- If the user's task description mentions a specific model (e.g., "use o3"), add `-m <model>` before `exec`
+- If the task mentions a specific directory, add `-C <dir>` before `exec`
+- If the task mentions web search, add `--search` before `exec`
 - Always show the constructed command before running it so the user can see exactly what will execute
 - If codex is not installed, inform the user to install it: `npm install -g @openai/codex` or `brew install codex`
