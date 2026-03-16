@@ -63,7 +63,7 @@ dup_hashes=$(cut -f1 "$HASHFILE" | sort | uniq -d)
 echo "$dup_hashes" | while IFS= read -r hash; do
   [ -z "$hash" ] && continue
   echo "--- Duplicate group (MD5: $hash) ---"
-  awk -F'\t' -v h="$hash" '$1 == h' "$HASHFILE" | while IFS=$'\t' read -r h size path; do
+  awk -F'\t' -v h="$hash" '$1 == h' "$HASHFILE" | while IFS=$'\t' read -r _h size path; do
     echo "  [$(format_size "$size")] $path"
   done
   echo ""

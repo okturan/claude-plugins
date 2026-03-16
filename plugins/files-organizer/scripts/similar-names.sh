@@ -53,7 +53,7 @@ cut -f1 "$TMPFILE" | sort | uniq -d | while IFS= read -r name; do
   dirs=$(awk -F'\t' -v n="$name" '$1 == n {print $2}' "$TMPFILE" | while IFS= read -r p; do dirname "$p"; done | sort -u | wc -l | tr -d ' ')
   if [ "$dirs" -gt 1 ]; then
     echo "--- '$name' found in $dirs directories ---"
-    awk -F'\t' -v n="$name" '$1 == n' "$TMPFILE" | while IFS=$'\t' read -r n path size; do
+    awk -F'\t' -v n="$name" '$1 == n' "$TMPFILE" | while IFS=$'\t' read -r _n path size; do
       echo "  [$(format_size "$size")] $path"
     done
     echo ""

@@ -35,7 +35,7 @@ git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objec
 ```bash
 ls -la
 find . -maxdepth 2 -type d -not -path './.git/*' | sort
-find . -type f -not -path './.git/*' -not -path './.claude/*' -not -path '*/node_modules/*' -not -path '*/__pycache__/*' -not -path '*/.venv/*' -not -path '*/vendor/*' -not -path '*/dist/*' -not -path '*/build/*' -not -path '*/target/*' | xargs ls -lhS 2>/dev/null | head -30
+find . -type f -not -path './.git/*' -not -path './.claude/*' -not -path '*/node_modules/*' -not -path '*/__pycache__/*' -not -path '*/.venv/*' -not -path '*/vendor/*' -not -path '*/dist/*' -not -path '*/build/*' -not -path '*/target/*' -print0 | xargs -0 ls -lhS 2>/dev/null | head -30
 ```
 
 **Scoring:**
@@ -96,7 +96,7 @@ grep -rn 'CREATE TABLE\|ALTER TABLE\|migration\|schema_version' --include='*.py'
 - Data files organized, not in root (2 pts)
 - Reasonable DB sizes (2 pts)
 
-If no database is used, award 8/10 by default (deduct only if data files are messy).
+If no database is used, award 10/10 and note "N/A — no database" (deduct only if stale data files or messy data organization found).
 
 ### 6. Documentation (10 pts)
 
@@ -115,8 +115,8 @@ wc -l README.md 2>/dev/null
 ### 7. Testing & CI (15 pts)
 
 ```bash
-find . -name 'test_*' -o -name '*_test.*' -o -name '*.test.*' -o -name '*_spec.*' -o -name 'conftest.py' 2>/dev/null | head -20
-ls -d .github/workflows/ .circleci/ .travis.yml Jenkinsfile .flake8 .pylintrc ruff.toml .eslintrc* biome.json .pre-commit-config.yaml .husky/ 2>/dev/null
+find . \( -name 'test_*' -o -name '*_test.*' -o -name '*.test.*' -o -name '*_spec.*' -o -name 'conftest.py' \) -not -path '*/node_modules/*' -not -path './.git/*' -not -path '*/.venv/*' -not -path '*/vendor/*' -not -path '*/dist/*' -not -path '*/build/*' 2>/dev/null | head -20
+ls -d .github/workflows/ .circleci/ .travis.yml Jenkinsfile .flake8 .pylintrc ruff.toml biome.json .pre-commit-config.yaml .husky/ 2>/dev/null; ls .eslintrc* 2>/dev/null
 ```
 
 **Scoring:**
@@ -141,19 +141,23 @@ head -20 requirements.txt 2>/dev/null
 ### 9. Security (5 pts)
 
 ```bash
-# Sensitive files anywhere in the repo
-find . -maxdepth 3 \( -name 'credentials*' -o -name 'token*' -o -name '*.pem' -o -name '*.key' -o -name '.env' \) -not -path './.git/*' 2>/dev/null
+# Sensitive files anywhere in the repo (no depth limit)
+find . \( -name 'credentials*' -o -name 'token*' -o -name '*.pem' -o -name '*.key' -o -name '.env' \) -not -path './.git/*' -not -path '*/node_modules/*' 2>/dev/null
 # Hardcoded secrets patterns
 grep -rn 'api_key\|password\|secret\|token' --include='*.py' --include='*.js' --include='*.ts' --include='*.go' --include='*.rs' --include='*.java' . 2>/dev/null | grep -v 'node_modules\|\.git\|test_\|_test\.' | grep -v 'def \|#\|//\|import\|"""' | head -20
+# Check permissions on sensitive files found above
+find . \( -name '.env' -o -name '*.pem' -o -name '*.key' -o -name 'credentials*' \) -not -path './.git/*' -not -path '*/node_modules/*' -exec ls -la {} \; 2>/dev/null
+# Check for secrets in git history (recent 100 commits)
+git log --diff-filter=A --name-only --pretty=format: -100 | grep -iE '\.env$|\.pem$|\.key$|credentials|secret' | head -10
 ```
 
 The sensitive-file scan here also serves Category 4 (credentials check) — no need to run it twice.
 
 **Scoring:**
 - No hardcoded secrets in code (2 pts)
-- Sensitive files have restrictive permissions (1 pt)
-- Auth scopes minimal / least privilege (1 pt)
-- No secrets in git history (1 pt)
+- Sensitive files have restrictive permissions — check `ls -la` output, files like `.env`/`.pem`/`.key` should not be world-readable (1 pt)
+- No secrets in git history — check if sensitive files were ever committed (1 pt)
+- No overly broad API scopes or credentials stored in plaintext config (1 pt)
 
 ## Report Format
 

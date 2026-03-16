@@ -26,14 +26,14 @@ echo "=== SCAN RESULTS FOR: $DIR ==="
 echo "=== SCAN DATE: $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
 echo ""
 
-# Directory size summary
+# Directory size summary (same excludes as file inventory)
 echo "=== DIRECTORY SIZES ==="
-du -h -d 2 "$DIR" 2>/dev/null | sort -rh | head -50
+du -h -d 2 "$DIR" 2>/dev/null | grep -v '/\.' | grep -v '/node_modules' | grep -v '/Library/' | grep -v '/__pycache__/' | sort -rh | head -50
 echo ""
 
 # Single find pass: inventory + extension census from one traversal
 echo "=== FILE INVENTORY ==="
-echo "PATH\tSIZE_BYTES\tEXTENSION\tMODIFIED"
+printf 'PATH\tSIZE_BYTES\tEXTENSION\tMODIFIED\n'
 find "$DIR" -maxdepth "$MAX_DEPTH" -type f \
   "${FIND_EXCLUDES[@]}" \
   2>/dev/null | tee "$TMPFILE" | while IFS= read -r file; do
@@ -46,9 +46,13 @@ find "$DIR" -maxdepth "$MAX_DEPTH" -type f \
 done
 echo ""
 
-# Extension census from the same file list (no second find traversal)
+# Extension census from the same file list (extract extension from basename only)
 echo "=== EXTENSION CENSUS ==="
-sed 's/.*\.//' "$TMPFILE" | tr '[:upper:]' '[:lower:]' | sort | uniq -c | sort -rn | head -40
+while IFS= read -r f; do
+  base=$(basename "$f")
+  ext="${base##*.}"
+  if [ "$ext" = "$base" ]; then echo "none"; else echo "$ext" | tr '[:upper:]' '[:lower:]'; fi
+done < "$TMPFILE" | sort | uniq -c | sort -rn | head -40
 echo ""
 
 echo "=== SCAN COMPLETE ==="
