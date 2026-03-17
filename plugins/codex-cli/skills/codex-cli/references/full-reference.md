@@ -47,26 +47,37 @@ codex [OPTIONS] [PROMPT]              # Interactive CLI
 
 ## Global Options (available on most commands)
 
-**IMPORTANT: Global flags must be placed BEFORE the subcommand.** For example: `codex -m o3 --search exec --full-auto "task"`, NOT `codex exec -m o3 --search "task"`.
+**IMPORTANT — three categories of flags with different placement:**
+- **Global-only flags** (`-s`, `-a`, `--search`, `--oss`) MUST go BEFORE the subcommand — rejected after `exec`
+- **Exec-specific flags** (`--skip-git-repo-check`, `--json`, `-o`, `--ephemeral`) MUST go AFTER `exec` — rejected before it
+- **Flexible flags** (`-m`, `-C`, `-c`, `-i`, `--full-auto`) work in either position
+- For `codex exec review`, exec-specific flags work between `exec` and `review`, or after `review`
+
+### Global-only flags (MUST go before subcommand)
+
+| Flag | Description |
+|------|-------------|
+| `-s, --sandbox <MODE>` | Sandbox policy: `read-only`, `workspace-write`, `danger-full-access` |
+| `-a, --ask-for-approval <POLICY>` | Approval policy: `untrusted`, `on-request`, `never` |
+| `--search` | Enable live web search tool |
+| `--oss` | Use local open source model provider (LM Studio or Ollama) |
+| `--local-provider <PROVIDER>` | Specify local provider: `lmstudio` or `ollama` |
+| `--dangerously-bypass-approvals-and-sandbox` | Skip all prompts, no sandbox. EXTREMELY DANGEROUS |
+| `--no-alt-screen` | Inline mode (no alternate screen buffer) |
+| `--add-dir <DIR>` | Additional writable directories |
+
+### Flexible flags (work before OR after subcommand)
 
 | Flag | Description |
 |------|-------------|
 | `-m, --model <MODEL>` | Model the agent should use |
-| `-s, --sandbox <MODE>` | Sandbox policy: `read-only`, `workspace-write`, `danger-full-access` |
-| `-a, --ask-for-approval <POLICY>` | Approval policy: `untrusted`, `on-request`, `never` |
-| `--full-auto` | Alias for `-a on-request --sandbox workspace-write` |
-| `--dangerously-bypass-approvals-and-sandbox` | Skip all prompts, no sandbox. EXTREMELY DANGEROUS |
+| `-C, --cd <DIR>` | Set working directory |
 | `-c, --config <key=value>` | Override config value from `~/.codex/config.toml` |
-| `--enable <FEATURE>` | Enable a feature flag |
-| `--disable <FEATURE>` | Disable a feature flag |
 | `-i, --image <FILE>...` | Attach image(s) to initial prompt |
 | `-p, --profile <PROFILE>` | Config profile from config.toml |
-| `-C, --cd <DIR>` | Set working directory |
-| `--search` | Enable live web search tool |
-| `--add-dir <DIR>` | Additional writable directories |
-| `--no-alt-screen` | Inline mode (no alternate screen buffer) |
-| `--oss` | Use local open source model provider (LM Studio or Ollama) |
-| `--local-provider <PROVIDER>` | Specify local provider: `lmstudio` or `ollama` |
+| `--full-auto` | Alias for `-a on-request --sandbox workspace-write` |
+| `--enable <FEATURE>` | Enable a feature flag |
+| `--disable <FEATURE>` | Disable a feature flag |
 
 ## Subcommand Details
 
@@ -325,6 +336,27 @@ codex -c model_provider=oss --oss "use local model"
 | `workspace-write` | Model can write within the workspace |
 | `danger-full-access` | Full filesystem access. No restrictions |
 
+## Troubleshooting
+
+### "Not inside a trusted directory and --skip-git-repo-check was not specified"
+The directory is not a git repo. Add `--skip-git-repo-check` AFTER `exec`:
+```bash
+# Correct — exec tasks:
+codex exec --skip-git-repo-check --full-auto "task"
+
+# Correct — reviews outside a git repo (use exec review, not plain review):
+codex exec --skip-git-repo-check review --uncommitted
+
+# WRONG — will cause "unexpected argument" error:
+codex --skip-git-repo-check exec --full-auto "task"
+```
+Note: `codex review` (without `exec`) has no `--skip-git-repo-check` flag. Outside a git repo, use `codex exec review --skip-git-repo-check` instead.
+
+### "unexpected argument '--some-flag' found"
+You likely placed a flag in the wrong position:
+- **Exec-specific flags** (`--skip-git-repo-check`, `--json`, `-o`, `--ephemeral`) MUST go AFTER `exec`
+- **Global-only flags** (`--search`, `-s`, `-a`) MUST go BEFORE `exec`
+
 ## Common Patterns
 
 ### Quick code review of uncommitted work
@@ -360,4 +392,9 @@ codex resume --last
 ### Run in a different directory
 ```bash
 codex -C /path/to/project exec "fix the tests"
+```
+
+### Run in a non-git directory
+```bash
+codex exec --skip-git-repo-check --full-auto "analyze this project"
 ```

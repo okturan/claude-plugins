@@ -47,19 +47,40 @@ codex exec resume --last "continue in exec"   # resume in non-interactive mode
 
 ## Key Flags
 
+### Global-only flags (MUST go BEFORE the subcommand)
+
+These flags are rejected if placed after `exec`:
+
+| Flag | Purpose |
+|------|---------|
+| `-s, --sandbox <MODE>` | `read-only` / `workspace-write` / `danger-full-access` |
+| `-a, --ask-for-approval <POLICY>` | `untrusted` / `on-request` / `never` |
+| `--search` | Enable web search tool |
+| `--oss` | Use local model provider (LM Studio/Ollama) |
+
+### Flexible flags (work before OR after `exec`)
+
 | Flag | Purpose |
 |------|---------|
 | `-m, --model <MODEL>` | Select model (e.g., `o3`) |
-| `-s, --sandbox <MODE>` | `read-only` / `workspace-write` / `danger-full-access` |
-| `-a, --ask-for-approval <POLICY>` | `untrusted` / `on-request` / `never` |
-| `--full-auto` | Shorthand for `-a on-request -s workspace-write` |
 | `-C, --cd <DIR>` | Set working directory |
-| `--search` | Enable web search tool |
-| `-i, --image <FILE>` | Attach image to prompt |
 | `-c, --config <key=value>` | Override config.toml values (dotted TOML paths) |
-| `--oss` | Use local model provider (LM Studio/Ollama) |
-| `--json` | Print events to stdout as JSONL (exec mode) |
-| `-o, --output-last-message <FILE>` | Write last agent message to file (exec mode) |
+| `-i, --image <FILE>` | Attach image to prompt |
+| `--full-auto` | Shorthand for `-a on-request -s workspace-write` |
+
+### Exec-specific flags (MUST go AFTER `exec`)
+
+These flags are rejected if placed before `exec`:
+
+| Flag | Purpose |
+|------|---------|
+| `--skip-git-repo-check` | Allow running outside a Git repository |
+| `--json` | Print events to stdout as JSONL |
+| `-o, --output-last-message <FILE>` | Write last agent message to file |
+| `--ephemeral` | Run without persisting session files |
+| `--output-schema <FILE>` | JSON Schema file for structured response |
+
+Note: For `codex exec review`, exec-specific flags like `--json` and `-o` can go either between `exec` and `review`, or after `review`. Both work.
 
 ## MCP Server Management
 
@@ -113,13 +134,50 @@ Manage credentials with `codex login` and `codex logout`. Use `codex login statu
 
 When building a `codex` invocation:
 
-**IMPORTANT:** Global flags (`-m`, `-C`, `--search`, `-s`, `-a`) must go BEFORE the subcommand. Example: `codex -m o3 --search exec --full-auto "task"`.
+**CRITICAL — flag placement rules:**
+- **Global-only flags** (`--search`, `-s`, `-a`) MUST go **BEFORE** the subcommand
+- **Exec-specific flags** (`--skip-git-repo-check`, `--json`, `-o`, `--ephemeral`) MUST go **AFTER** `exec`
+- **Flexible flags** (`-m`, `-C`, `-c`, `-i`, `--full-auto`) work in either position
+- Getting this wrong causes `unexpected argument` errors
 
+```
+codex [GLOBAL-ONLY / FLEXIBLE FLAGS] exec [EXEC-SPECIFIC / FLEXIBLE FLAGS] "prompt"
+```
+
+**Correct examples:**
+```bash
+codex -m o3 exec --full-auto "task"                          # -m before exec (works)
+codex exec -m o3 --full-auto "task"                          # -m after exec (also works)
+codex exec --skip-git-repo-check --full-auto "task"          # exec flag after exec
+codex -m o3 exec --skip-git-repo-check --full-auto "task"    # combined
+codex exec --json review --uncommitted                       # --json between exec and review
+codex exec review --uncommitted --json                       # --json after review (also works)
+```
+
+**WRONG — will error:**
+```bash
+codex --skip-git-repo-check exec --full-auto "task"          # exec-specific before exec ✗
+codex --json exec "task"                                      # exec-specific before exec ✗
+codex exec --search "task"                                    # global-only after exec ✗
+codex exec -a never "task"                                    # global-only after exec ✗
+```
+
+### Steps:
 1. **Choose interactive vs non-interactive**: Use `codex exec` for scripted/automated use, plain `codex` for interactive TUI sessions
 2. **Set the model** if needed: `-m o3` or via `-c model="model-name"` — place before subcommand
-3. **Choose sandbox level**: Default to `--full-auto` for safe autonomous execution. Use `--sandbox danger-full-access` only when explicitly needed
-4. **Pass the prompt**: As a positional argument or pipe via stdin with `-`
-5. **Capture output**: Use `--json` for JSONL events, `-o file` to save last message
+3. **Check for git repo**: If the directory is NOT a git repo, add `--skip-git-repo-check` AFTER `exec`
+4. **Choose sandbox level**: Default to `--full-auto` for safe autonomous execution. Use `--sandbox danger-full-access` only when explicitly needed
+5. **Pass the prompt**: As a positional argument or pipe via stdin with `-`
+6. **Capture output**: Use `--json` for JSONL events, `-o file` to save last message
+
+## Troubleshooting
+
+### "Not inside a trusted directory" error
+This means the current directory is not a git repository. Add `--skip-git-repo-check` **after** `exec`:
+```bash
+codex exec --skip-git-repo-check --full-auto "task"
+```
+**Do NOT** put `--skip-git-repo-check` before `exec` — it is an exec-specific flag.
 
 ## Additional Resources
 
