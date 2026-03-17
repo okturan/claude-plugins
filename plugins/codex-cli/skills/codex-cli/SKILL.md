@@ -1,7 +1,9 @@
 ---
 name: codex-cli
-description: This skill should be used when the user asks to "use codex", "run codex", "check with codex", "codex review", "codex exec", "delegate to codex", "get codex's opinion", "build a codex command", "codex flags", "how to use codex", mentions "codex cli", or references OpenAI's Codex CLI tool in any way. Provides complete knowledge of the Codex CLI (v0.114.0) command structure, flags, usage patterns, and sandbox/approval policies so that commands can be constructed correctly without consulting help pages.
+description: This skill should be used when the user asks to "build a codex command", "codex flags", "how to use codex", "codex cli", "codex syntax", "what does codex do", "codex help", "explain codex", or has questions about Codex CLI command structure, flags, or usage patterns. Provides complete knowledge of the Codex CLI (v0.114.0) command structure, flags, usage patterns, and sandbox/approval policies so that commands can be constructed correctly without consulting help pages. Do NOT trigger this skill for action requests like "run codex", "check with codex", "use codex", "codex review", "codex exec", or "delegate to codex" — those should invoke the `/codex` command instead.
 ---
+
+> **ACTION ROUTING:** If the user's intent is to **run** Codex (e.g., "check with codex", "run codex", "use codex to review", "delegate to codex"), do NOT just read these docs — invoke the `/codex` command via the Skill tool instead. This skill is for **learning about** Codex CLI, not for executing it.
 
 # Codex CLI Knowledge
 
