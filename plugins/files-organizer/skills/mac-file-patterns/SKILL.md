@@ -70,6 +70,61 @@ Files may use Spanish or English naming. Common pairs:
 - Documents/Documentos, Recipes/Recetas, Invoice/Factura
 - Budget/Presupuesto, Contract/Contrato, Letter/Carta
 
+## Hidden Dotfiles & Developer Caches
+
+Dotfiles (directories starting with `.` in the home folder) are invisible in Finder and often overlooked by file scanners. They routinely consume 20-80+ GB on developer machines. Always scan these — they are often the single largest category of reclaimable space.
+
+### Common large dotdirs
+
+| Directory | What it is | Typical size | Cleanup command |
+|-----------|-----------|-------------|-----------------|
+| `~/.cache/huggingface` | Downloaded ML models | 5-50 GB | `rm -rf ~/.cache/huggingface/` |
+| `~/.npm` | npm package cache | 2-10 GB | `npm cache clean --force` |
+| `~/.cache/uv` | Python uv cache | 1-5 GB | `uv cache clean` |
+| `~/.cache/pip` | pip download cache | 0.5-3 GB | `pip cache purge` |
+| `~/.bun` | Bun runtime cache | 1-3 GB | `rm -rf ~/.bun/install/cache` |
+| `~/.gradle` | Gradle build cache | 1-5 GB | `rm -rf ~/.gradle/caches/` |
+| `~/.m2` | Maven repository cache | 0.5-3 GB | `rm -rf ~/.m2/repository/` |
+| `~/.cargo/registry` | Rust crate cache | 0.5-3 GB | `cargo cache --autoclean` |
+| `~/.colima` / `~/.lima` | Container VM images | 5-20 GB | `colima delete` |
+| `~/.codex/worktrees` | Codex stale worktrees | 1-10 GB | `rm -rf ~/.codex/worktrees/` |
+| `~/.cache/puppeteer` | Puppeteer browsers | 0.5-2 GB | `rm -rf ~/.cache/puppeteer/` |
+| `~/.cache/torch` | PyTorch model cache | 0.5-5 GB | `rm -rf ~/.cache/torch/` |
+| `~/.rustup` | Rust toolchains | 1-3 GB | Keep if using Rust |
+| `~/.platformio` | PlatformIO (IoT) | 0.5-2 GB | Keep if using PlatformIO |
+| `~/.rbenv` | Ruby versions | 0.5-2 GB | Keep if using Ruby |
+| `~/.vscode` | VS Code extensions | 1-3 GB | Manage in VS Code |
+
+All cache directories regenerate on demand — cleaning them is always safe, just costs a re-download next time they're needed.
+
+### ~/Library hidden costs
+
+`~/Library` is excluded from many scans but often holds 20-50+ GB:
+
+| Subdirectory | What it is | Typical offenders |
+|-------------|-----------|-------------------|
+| `Application Support/Google/Chrome` | Chrome profiles, data, extensions | 5-15 GB |
+| `Application Support/Code` | VS Code extensions, cache, WebStorage | 2-5 GB |
+| `Caches/` | App caches (Chrome, Homebrew, Playwright, pip) | 3-10 GB |
+| `Containers/` | Sandboxed app data (iMessage, Slack) | 2-5 GB |
+| `Developer/Xcode/DerivedData` | Xcode build cache | 1-5 GB |
+| `Developer/CoreSimulator` | iOS simulator runtime data | 1-5 GB |
+
+Clean Caches: `rm -rf ~/Library/Caches/*` (regenerates automatically)
+Clean DerivedData: `rm -rf ~/Library/Developer/Xcode/DerivedData/`
+
+### System-level space consumers
+
+| Location | What it is | Typical size |
+|----------|-----------|-------------|
+| `/Library/Developer/CoreSimulator` | iOS Simulator runtimes (separate APFS volumes!) | 10-30 GB |
+| `/Library/Frameworks/Python.framework` | System Python installs | 2-5 GB |
+| `/opt/homebrew` | Homebrew packages | 3-10 GB |
+| `/Applications/Xcode.app` | Xcode IDE | 5-15 GB |
+
+Clean old simulators: `xcrun simctl delete unavailable`
+Clean Homebrew: `brew cleanup --prune=all`
+
 ## Common Cleanup Targets
 
 ### Always safe to delete
@@ -86,6 +141,14 @@ Files may use Spanish or English naming. Common pairs:
 - Duplicate downloads: `file (1).pdf`, `file (2).pdf`
 - wetransfer folders with hash names (after extracting content)
 - Empty directories
+
+### Build artifacts in code projects
+These regenerate automatically when you build/install again:
+- `node_modules/` — `rm -rf` per project, `npm install` to restore
+- `build/`, `dist/`, `.next/`, `.expo/` — build outputs
+- `DerivedData/`, `.build/` — Xcode/Swift build caches
+- `Pods/` — CocoaPods dependencies
+- `.gradle/` — Gradle build cache (project-level)
 
 ## Additional Resources
 

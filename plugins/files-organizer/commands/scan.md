@@ -1,41 +1,75 @@
 ---
-description: Scan a directory and generate structured file inventory
+description: Deep scan of disk usage — covers everything including hidden dotfiles, Library, Applications, system dirs, APFS volumes, and cleanable caches
 argument-hint: [directory-path] [max-depth]
 allowed-tools: Read, Bash, Glob, Grep
 ---
 
-Scan the filesystem at the specified path (default: user's home personal directories) and generate a structured inventory of all files.
+Perform a comprehensive disk usage scan. This is a two-phase process: first a fast system-wide overview, then an optional file-level inventory if the user wants to drill deeper.
 
 Target path: $ARGUMENTS
 
-If no path is provided, scan these directories in the user's home folder:
-- ~/Documents
-- ~/Downloads
-- ~/Desktop
-- ~/Pictures
-- ~/Movies
-- ~/Music
-- ~/Dropbox (if it exists)
+## Phase 1: Deep Disk Scan (always run)
 
-**Scanning process:**
+Run the deep disk scan script. This is fast (uses du, not per-file stat) and covers everything the old scan missed: hidden dotfiles, ~/Library, /Applications, /Library, /opt, APFS volumes, build artifacts, and cleanable caches.
 
-1. Run the scan script to collect file metadata:
-   ```
-   bash ${CLAUDE_PLUGIN_ROOT}/scripts/scan-files.sh "<target-path>" <max-depth>
-   ```
+```
+bash ${CLAUDE_PLUGIN_ROOT}/scripts/scan-disk.sh "$HOME"
+```
 
-2. Parse and summarize the output:
-   - Total file count and storage used
-   - Top 10 largest directories
-   - File extension census (count by type)
-   - Date range of files (oldest to newest)
+Parse the output and present a **complete disk usage map** organized as:
 
-3. Present a concise summary organized by:
-   - **Storage breakdown** by top-level folder
-   - **File type distribution** (documents, images, video, audio, 3D, archives, design, code)
-   - **Age analysis** (files by year)
-   - **Large files** (anything > 500MB)
+### 1. Disk Overview
+- APFS container: total, used, free, percentage
+- Per-volume breakdown (System, Data, VM, Preboot, Recovery, any simulator volumes)
 
-4. Save the raw scan data mentally for use by `/organize` or `/file-map` commands.
+### 2. Where The Space Goes
+Present a single table that accounts for ALL space on the data volume. Group into:
+- **Home visible dirs** (~/code, ~/Documents, ~/Downloads, etc.)
+- **Home dotfiles** (~/.cache, ~/.npm, ~/.colima, etc.) — this is the category most scans miss entirely
+- **~/Library** (Application Support, Caches, Containers, Developer, etc.)
+- **/Applications**
+- **System** (/Library, /opt/homebrew, /private/var)
 
-Keep the output concise and scannable. Use tables where appropriate. Highlight anything unusual (extremely large files, very old files, suspicious temp files).
+The goal is that these categories sum to roughly match the APFS data volume usage. If there's a gap > 5GB, investigate (APFS snapshots, purgeable space, missed directories).
+
+### 3. Largest Items
+- Top code projects by size
+- Largest individual files (>100MB)
+- Build artifacts & node_modules (with total)
+
+### 4. Cleanable Space
+Present a table of reclaimable items with:
+- What it is
+- Size
+- How to clean it (specific command)
+- Risk level (safe / verify first / use with caution)
+- Total potential savings
+
+Categorize cleanable items:
+- **Package caches**: npm, pip, uv, bun, cargo, gradle, m2, pnpm
+- **Build artifacts**: node_modules, DerivedData, build/, dist/, .next
+- **Tool caches**: Hugging Face models, Playwright browsers, Puppeteer
+- **VM/container images**: Colima/Lima, Docker, OrbStack
+- **App caches**: ~/Library/Caches (browser, Homebrew, etc.)
+- **Stale data**: old worktrees, archived sessions
+
+### 5. Actionable Summary
+End with a concise "quick wins" table: the top 5-10 cleanup actions sorted by space recovered, with the exact command to run each.
+
+## Phase 2: File Inventory (only if needed)
+
+If the user asks to drill into a specific directory, or if `/organize` or `/file-map` will be run next, run the file-level scan:
+
+```
+bash ${CLAUDE_PLUGIN_ROOT}/scripts/scan-files.sh "<target-path>" <max-depth>
+```
+
+This produces per-file metadata (path, size, extension, date) useful for duplicate detection, age analysis, and file type distribution.
+
+## Presentation
+
+- Use tables for everything — they're scannable
+- Always show sizes in human-readable form (GB/MB)
+- Bold the biggest items and quick wins
+- If totals don't add up, say so and explain why (APFS overhead, snapshots, etc.)
+- Keep it concise — the user can ask to drill deeper into anything

@@ -15,11 +15,10 @@ TMPFILE=$(mktemp)
 trap 'rm -f "$TMPFILE"' EXIT
 
 FIND_EXCLUDES=(
-  ! -path '*/.*'
-  ! -path '*/node_modules/*'
-  ! -path '*/Library/*'
-  ! -path '*/__pycache__/*'
   ! -path '*/.git/*'
+  ! -path '*/node_modules/*'
+  ! -path '*/__pycache__/*'
+  ! -path '*/.Trash/*'
 )
 
 echo "=== SCAN RESULTS FOR: $DIR ==="
@@ -28,7 +27,7 @@ echo ""
 
 # Directory size summary (same excludes as file inventory)
 echo "=== DIRECTORY SIZES ==="
-du -h -d 2 "$DIR" 2>/dev/null | grep -v '/\.' | grep -v '/node_modules' | grep -v '/Library/' | grep -v '/__pycache__/' | sort -rh | head -50
+du -h -d 2 "$DIR" 2>/dev/null | grep -v '/node_modules' | grep -v '/__pycache__/' | grep -v '/.git/' | sort -rh | head -50
 echo ""
 
 # Single find pass: inventory + extension census from one traversal
