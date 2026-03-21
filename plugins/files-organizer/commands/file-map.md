@@ -15,10 +15,7 @@ Output file: $ARGUMENTS (default: file-map.html in current directory)
    bash ${CLAUDE_PLUGIN_ROOT}/scripts/scan-files.sh ~
    ```
 
-2. **Read the template** for design patterns:
-   ```
-   Read ${CLAUDE_PLUGIN_ROOT}/skills/generate-file-map/assets/template.html
-   ```
+2. **Read the template** for design patterns — use the Read tool to load `${CLAUDE_PLUGIN_ROOT}/skills/generate-file-map/assets/template.html`
 
 3. **Generate the HTML dashboard** with these sections:
 

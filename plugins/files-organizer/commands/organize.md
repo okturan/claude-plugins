@@ -11,7 +11,7 @@ Target: $ARGUMENTS
 
 **Phase 1 - Scan the filesystem:**
 
-If a recent scan hasn't been done, run the scan script first:
+If a recent scan hasn't been done, run the file-level scan script (note: this is `scan-files.sh`, not the deep disk scan from `/scan`):
 ```
 bash ${CLAUDE_PLUGIN_ROOT}/scripts/scan-files.sh "<target-path>"
 ```

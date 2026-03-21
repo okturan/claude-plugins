@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "description": "Gives Claude Code agents full knowledge of the OpenAI Codex CLI, enabling them to construct and run codex commands without consulting help pages.",
   "author": {
-    "name": "okan"
+    "name": "okturan"
   },
+  "repository": "https://github.com/okturan/claude-plugins",
+  "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/codex-cli",
+  "license": "MIT",
   "keywords": ["codex", "openai", "cli", "interop"]
 }

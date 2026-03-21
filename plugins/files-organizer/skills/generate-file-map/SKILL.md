@@ -10,7 +10,7 @@ Create interactive, self-contained HTML dashboards that visualize file structure
 
 ## Data Gathering
 
-To populate the dashboard with file data, run the scan scripts at `../../scripts/`:
+To populate the dashboard with file data, run the scan scripts at `${CLAUDE_PLUGIN_ROOT}/scripts/`:
 - `scan-files.sh <directory>` - Collects file inventory, directory sizes, extension census
 - `find-duplicates.sh <directory>` - Identifies duplicate files by MD5 hash
 - `similar-names.sh <directory>` - Finds files with similar names across directories

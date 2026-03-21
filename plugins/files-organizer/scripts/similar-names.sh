@@ -30,10 +30,11 @@ echo ""
 
 # Collect all filenames with paths and sizes in one pass
 find "$DIR" -type f \
-  ! -path '*/.*' \
+  ! -path '*/.git/*' \
   ! -path '*/node_modules/*' \
   ! -path '*/Library/*' \
-  ! -path '*/.git/*' \
+  ! -path '*/.Trash/*' \
+  ! -path '*/__pycache__/*' \
   2>/dev/null | while IFS= read -r file; do
   basename=$(basename "$file")
   name="${basename%.*}"

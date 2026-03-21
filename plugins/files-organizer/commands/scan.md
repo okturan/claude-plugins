@@ -1,6 +1,6 @@
 ---
 description: Deep scan of disk usage — covers everything including hidden dotfiles, Library, Applications, system dirs, APFS volumes, and cleanable caches
-argument-hint: [directory-path] [max-depth]
+argument-hint: [directory-path]
 allowed-tools: Read, Bash, Glob, Grep
 ---
 
@@ -13,7 +13,7 @@ Target path: $ARGUMENTS
 Run the deep disk scan script. This is fast (uses du, not per-file stat) and covers everything the old scan missed: hidden dotfiles, ~/Library, /Applications, /Library, /opt, APFS volumes, build artifacts, and cleanable caches.
 
 ```
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/scan-disk.sh "$HOME"
+bash ${CLAUDE_PLUGIN_ROOT}/scripts/scan-disk.sh "${ARGUMENTS:-$HOME}"
 ```
 
 Parse the output and present a **complete disk usage map** organized as:

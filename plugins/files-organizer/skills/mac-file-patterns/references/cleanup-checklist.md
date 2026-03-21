@@ -15,7 +15,7 @@ find ~ -name 'Thumbs.db' -type f -delete
 find ~ -name '$RECYCLE.BIN' -type d -exec rm -rf {} +
 
 # Remove incomplete downloads
-find ~/Downloads -name '*.crdownload' -o -name '*.partial' -type f -delete
+find ~/Downloads \( -name '*.crdownload' -o -name '*.partial' \) -type f -delete
 ```
 
 ### Empty Directories

@@ -19,7 +19,11 @@ claude-plugins/
     │   ├── agents/
     │   ├── skills/
     │   └── scripts/
-    └── project-health/            # Repo audit scorer (100 pts)
+    ├── project-health/            # Repo audit scorer (100 pts)
+    │   ├── .claude-plugin/plugin.json
+    │   ├── commands/
+    │   └── skills/
+    └── codex-cli/                 # OpenAI Codex CLI knowledge + runner
         ├── .claude-plugin/plugin.json
         ├── commands/
         └── skills/
@@ -39,3 +43,10 @@ Audit any git repo and score it out of 100 across 9 categories.
 
 - `/project-health` - full audit
 - `/project-health --category testing` - single category
+
+### codex-cli
+Run or learn about OpenAI's Codex CLI from within Claude Code.
+
+- `/codex-cli:codex <task>` - delegate task to Codex CLI
+- `/codex-cli:codex` - code review of uncommitted changes
+- `/codex-cli:codex-cli` - Codex CLI syntax and flag reference

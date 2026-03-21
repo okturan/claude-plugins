@@ -9,6 +9,20 @@ Methodology for auditing any git repository across 9 categories, scoring each, a
 
 Common exclusions for all `find`/`grep` commands: `.git`, `node_modules`, `.claude`, `__pycache__`, `.venv`, `vendor`, `dist`, `build`, `target`.
 
+## Category Shortnames
+
+| Shortname   | Category                         | Max |
+|-------------|----------------------------------|-----|
+| git         | Repository & Git Health          | 15  |
+| structure   | Project Structure & Organization | 15  |
+| code        | Code Quality                     | 15  |
+| config      | Config & Environment             | 10  |
+| data        | Data & Database                  | 10  |
+| docs        | Documentation                    | 10  |
+| testing     | Testing & CI                     | 15  |
+| deps        | Dependencies & Packaging         | 5   |
+| security    | Security                         | 5   |
+
 ## Audit Categories
 
 ### 1. Repository & Git Health (15 pts)
@@ -69,7 +83,7 @@ find . -type f \( -name '*.py' -o -name '*.js' -o -name '*.ts' -o -name '*.go' -
 - No dead code or commented-out blocks (3 pts)
 - Type annotations or equivalent (3 pts)
 
-### 4. Configuration & Environment (10 pts)
+### 4. Config & Environment (10 pts)
 
 ```bash
 ls .env .env.example .gitignore requirements.txt package.json pyproject.toml Cargo.toml go.mod 2>/dev/null
@@ -78,7 +92,7 @@ cat .gitignore 2>/dev/null
 
 **Scoring:**
 - Comprehensive .gitignore (3 pts)
-- No credentials committed (3 pts) — use the sensitive-file scan from Category 9
+- No credentials committed (3 pts) — run the sensitive-file scan from Category 9 (if running this category in isolation, run the Category 9 scan commands as well)
 - .env.example or equivalent provided (2 pts)
 - Proper packaging config present (2 pts)
 
@@ -109,7 +123,7 @@ wc -l README.md 2>/dev/null
 - README with setup instructions (3 pts)
 - LICENSE present (2 pts)
 - CHANGELOG or version history (2 pts)
-- AI-aware docs (CLAUDE.md, etc.) (1 pt)
+- AI-aware docs — CLAUDE.md, etc. (1 pt) — award if present, or award and note "N/A" if not a Claude Code project
 - Code-level documentation adequate (2 pts)
 
 ### 7. Testing & CI (15 pts)
@@ -144,11 +158,11 @@ head -20 requirements.txt 2>/dev/null
 # Sensitive files anywhere in the repo (no depth limit)
 find . \( -name 'credentials*' -o -name 'token*' -o -name '*.pem' -o -name '*.key' -o -name '.env' \) -not -path './.git/*' -not -path '*/node_modules/*' 2>/dev/null
 # Hardcoded secrets patterns
-grep -rn 'api_key\|password\|secret\|token' --include='*.py' --include='*.js' --include='*.ts' --include='*.go' --include='*.rs' --include='*.java' . 2>/dev/null | grep -v 'node_modules\|\.git\|test_\|_test\.' | grep -v 'def \|#\|//\|import\|"""' | head -20
+grep -rnE '(api_key|password|secret|token)\s*[=:]\s*["\x27][^"\x27]{4,}' --include='*.py' --include='*.js' --include='*.ts' --include='*.go' --include='*.rs' --include='*.java' . 2>/dev/null | grep -v 'node_modules\|\.git\|test_\|_test\.\|\.example' | head -20
 # Check permissions on sensitive files found above
 find . \( -name '.env' -o -name '*.pem' -o -name '*.key' -o -name 'credentials*' \) -not -path './.git/*' -not -path '*/node_modules/*' -exec ls -la {} \; 2>/dev/null
-# Check for secrets in git history (recent 100 commits)
-git log --diff-filter=A --name-only --pretty=format: -100 | grep -iE '\.env$|\.pem$|\.key$|credentials|secret' | head -10
+# Check for secrets in git history
+git log --diff-filter=A --name-only --pretty=format: | grep -iE '\.env$|\.pem$|\.key$|credentials|secret' | head -10
 ```
 
 The sensitive-file scan here also serves Category 4 (credentials check) — no need to run it twice.
@@ -173,15 +187,15 @@ The sensitive-file scan here also serves Category 4 (credentials check) — no n
   ---------------------------------------------
   Category                Score    Status
   ---------------------------------------------
-  Repository & Git        __/15    [########--]
-  Project Structure       __/15    [#########-]
-  Code Quality            __/15    [#######---]
-  Config & Environment    __/10    [########--]
-  Data & Database         __/10    [##########]
-  Documentation           __/10    [########--]
-  Testing & CI            __/15    [----------]
-  Dependencies            __/5     [####------]
-  Security                __/5     [##########]
+  Repository & Git        __/15    [??????????]
+  Project Structure       __/15    [??????????]
+  Code Quality            __/15    [??????????]
+  Config & Environment    __/10    [??????????]
+  Data & Database         __/10    [??????????]
+  Documentation           __/10    [??????????]
+  Testing & CI            __/15    [??????????]
+  Dependencies            __/5     [??????????]
+  Security                __/5     [??????????]
   ---------------------------------------------
 
   TOP IMPROVEMENTS (by impact)
@@ -207,4 +221,4 @@ Progress bars: 10 chars wide. `filled = round(score / max_score * 10)`. Use `#` 
 - Acknowledge what's already good
 - This is read-only analysis — never modify files
 - Auto-detect the primary language and adapt checks accordingly
-- Skip categories that don't apply (e.g., database for a pure frontend project) — award default points and note "N/A"
+- Skip categories that don't apply (e.g., database for a pure frontend project) — award full points and note "N/A"

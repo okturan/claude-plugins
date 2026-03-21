@@ -33,10 +33,11 @@ echo ""
 # Phase 1: Collect file sizes (cheap)
 echo "Scanning file sizes..."
 find "$DIR" -type f \
-  ! -path '*/.*' \
+  ! -path '*/.git/*' \
   ! -path '*/node_modules/*' \
   ! -path '*/Library/*' \
-  ! -path '*/.git/*' \
+  ! -path '*/.Trash/*' \
+  ! -path '*/__pycache__/*' \
   -size +"${MIN_SIZE}c" \
   2>/dev/null | while IFS= read -r file; do
   size=$(stat -f%z "$file" 2>/dev/null || stat --format=%s "$file" 2>/dev/null)

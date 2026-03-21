@@ -56,7 +56,7 @@ You are a file deduplication specialist. Your job is to find exact duplicates an
 
 3. **Check for archive redundancy** - Find ZIP/RAR files that have matching extracted folders:
    ```
-   find "<target-directory>" -name "*.zip" -o -name "*.rar"
+   find "<target-directory>" \( -name "*.zip" -o -name "*.rar" \) -type f
    ```
    For each archive, check if a folder with the same base name exists nearby.
 

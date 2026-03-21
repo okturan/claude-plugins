@@ -6,9 +6,9 @@ Scans directories, finds duplicates, analyzes folder structure, detects misplace
 
 ## Commands
 
-### `/scan [directory] [max-depth]`
+### `/scan [directory]`
 
-Quick inventory of a directory. Shows storage breakdown, file type distribution, age analysis, and flags large files. Defaults to scanning ~/Documents, ~/Downloads, ~/Desktop, ~/Pictures, ~/Movies, ~/Music.
+Deep disk usage scan covering everything including hidden dotfiles, Library, Applications, system dirs, APFS volumes, and cleanable caches. Defaults to home directory. Can drill into specific directories with a file-level inventory.
 
 ### `/organize [directory]`
 
