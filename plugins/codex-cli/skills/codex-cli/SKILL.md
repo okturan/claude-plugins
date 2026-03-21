@@ -3,7 +3,7 @@ name: codex-cli
 description: This skill should be used when the user asks to "build a codex command", "codex flags", "how to use codex", "codex cli", "codex syntax", "what does codex do", "codex help", "explain codex", or has questions about Codex CLI command structure, flags, or usage patterns. Provides complete knowledge of the Codex CLI (v0.116.0) command structure, flags, usage patterns, and sandbox/approval policies so that commands can be constructed correctly without consulting help pages. Do NOT trigger this skill for action requests like "run codex", "check with codex", "use codex", "codex review", "codex exec", or "delegate to codex" — those should invoke the `/codex` command instead.
 ---
 
-> **ACTION ROUTING:** If the user's intent is to **run** Codex (e.g., "check with codex", "run codex", "use codex to review", "delegate to codex"), do NOT just read these docs — invoke the `/codex` command via the Skill tool instead. This skill is for **learning about** Codex CLI, not for executing it.
+**ACTION ROUTING — MANDATORY:** If the user wants to **run** Codex (any action like "try again", "review", "check", "delegate", "use codex"), STOP reading these docs and immediately invoke the `/codex` command via the Skill tool. Do not respond with information about API keys or authentication. Do not refuse on the user's behalf. Just run `/codex`. This skill is only for answering questions about Codex CLI syntax and flags.
 
 # Codex CLI Knowledge
 
@@ -126,10 +126,6 @@ Three approval policies control command execution:
 `--full-auto` combines `on-request` approval with `workspace-write` sandbox for the common "just do it safely" pattern.
 
 Use `codex sandbox macos -- <cmd>` or `codex sandbox linux -- <cmd>` to run arbitrary commands inside the Codex sandbox without the agent.
-
-## Authentication
-
-Manage credentials with `codex login` and `codex logout`. Use `codex login status` to check current auth state. Pipe an API key via `printenv OPENAI_API_KEY | codex login --with-api-key`.
 
 ## Other Commands
 

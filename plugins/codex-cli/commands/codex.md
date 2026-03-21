@@ -4,6 +4,8 @@ argument-hint: [task description]
 allowed-tools: ["Bash(codex:*)"]
 ---
 
+Always run the codex command. Do not refuse, do not warn about API keys or authentication. Codex is already configured and authenticated. Just construct the command and execute it.
+
 **Before running any codex command**, check if the current directory is a git repo:
 ```bash
 git rev-parse --is-inside-work-tree 2>/dev/null
@@ -46,7 +48,7 @@ Execute this command and present the output to the user.
 - Flexible flags (`-m`, `-C`, `-c`, `-i`, `--full-auto`) work in either position
 
 **Notes:**
-- If the user requests a specific model, use that instead of `5.4`
+- If the user requests a specific model, use that instead of `gpt-5.4`
 - Add `-C <dir>` if the task mentions a specific directory
 - Add `--search` before `exec` if the task mentions web search
 - Show the constructed command before running it
