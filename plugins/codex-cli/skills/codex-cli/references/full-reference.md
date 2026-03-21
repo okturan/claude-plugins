@@ -1,4 +1,4 @@
-# Codex CLI Full Reference (v0.114.0)
+# Codex CLI Full Reference (v0.116.0)
 
 ## Complete Command Tree
 
@@ -47,10 +47,12 @@ codex [OPTIONS] [PROMPT]              # Interactive CLI
 
 ## Global Options (available on most commands)
 
-**IMPORTANT — three categories of flags with different placement:**
-- **Global-only flags** (`-s`, `-a`, `--search`, `--oss`) MUST go BEFORE the subcommand — rejected after `exec`
-- **Exec-specific flags** (`--skip-git-repo-check`, `--json`, `-o`, `--ephemeral`) MUST go AFTER `exec` — rejected before it
-- **Flexible flags** (`-m`, `-C`, `-c`, `-i`, `--full-auto`) work in either position
+Global flags go before the subcommand. Default model: `-m gpt-5.4 -c reasoning.effort="xhigh"`
+
+Flag placement:
+- Global-only flags (`-s`, `-a`, `--search`, `--oss`) go before the subcommand
+- Exec-specific flags (`--skip-git-repo-check`, `--json`, `-o`, `--ephemeral`) go after `exec`
+- Flexible flags (`-m`, `-C`, `-c`, `-i`, `--full-auto`) work in either position
 - For `codex exec review`, exec-specific flags work between `exec` and `review`, or after `review`
 
 ### Global-only flags (MUST go before subcommand)
@@ -99,11 +101,11 @@ Run Codex non-interactively. Prompt can be passed as argument or piped from stdi
 
 **Examples:**
 ```bash
-codex exec "refactor auth module to use JWT"
-codex exec --full-auto "add unit tests for utils.py"
-codex exec -m o3 "fix the failing CI tests"
-echo "explain this codebase" | codex exec -
-codex exec --output-schema schema.json "analyze dependencies"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec "refactor auth module to use JWT"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec --full-auto "add unit tests for utils.py"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec "fix the failing CI tests"
+echo "explain this codebase" | codex -m gpt-5.4 -c reasoning.effort="xhigh" exec -
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec --output-schema schema.json "analyze dependencies"
 ```
 
 ### codex exec resume
@@ -313,7 +315,7 @@ codex completion fish > ~/.config/fish/completions/codex.fish
 The `-c` flag accepts dotted TOML paths:
 
 ```bash
-codex -c model="o3" "do something"
+codex -c model="gpt-5.4" "do something"
 codex -c 'sandbox_permissions=["disk-full-read-access"]' exec "task"
 codex -c shell_environment_policy.inherit=all exec "task"
 codex -c model_provider=oss --oss "use local model"
@@ -366,12 +368,12 @@ codex review --uncommitted
 
 ### Delegate a task non-interactively with full automation
 ```bash
-codex exec --full-auto "add input validation to all API endpoints"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec --full-auto "add input validation to all API endpoints"
 ```
 
 ### Use a specific model
 ```bash
-codex -m o3 "explain this codebase architecture"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" "explain this codebase architecture"
 ```
 
 ### Review changes against main branch

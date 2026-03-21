@@ -1,6 +1,6 @@
 ---
 name: codex-cli
-description: This skill should be used when the user asks to "build a codex command", "codex flags", "how to use codex", "codex cli", "codex syntax", "what does codex do", "codex help", "explain codex", or has questions about Codex CLI command structure, flags, or usage patterns. Provides complete knowledge of the Codex CLI (v0.114.0) command structure, flags, usage patterns, and sandbox/approval policies so that commands can be constructed correctly without consulting help pages. Do NOT trigger this skill for action requests like "run codex", "check with codex", "use codex", "codex review", "codex exec", or "delegate to codex" — those should invoke the `/codex` command instead.
+description: This skill should be used when the user asks to "build a codex command", "codex flags", "how to use codex", "codex cli", "codex syntax", "what does codex do", "codex help", "explain codex", or has questions about Codex CLI command structure, flags, or usage patterns. Provides complete knowledge of the Codex CLI (v0.116.0) command structure, flags, usage patterns, and sandbox/approval policies so that commands can be constructed correctly without consulting help pages. Do NOT trigger this skill for action requests like "run codex", "check with codex", "use codex", "codex review", "codex exec", or "delegate to codex" — those should invoke the `/codex` command instead.
 ---
 
 > **ACTION ROUTING:** If the user's intent is to **run** Codex (e.g., "check with codex", "run codex", "use codex to review", "delegate to codex"), do NOT just read these docs — invoke the `/codex` command via the Skill tool instead. This skill is for **learning about** Codex CLI, not for executing it.
@@ -9,22 +9,27 @@ description: This skill should be used when the user asks to "build a codex comm
 
 Codex CLI (`codex`) is OpenAI's command-line coding agent. It runs interactively or non-interactively, can review code, manage sessions, connect MCP servers, and delegate tasks to cloud infrastructure.
 
+## Default Model
+
+Default flags for every codex invocation: `-m gpt-5.4 -c reasoning.effort="xhigh"`
+
+Only use a different model if the user explicitly requests it.
+
 ## Core Commands
 
 ### Running Tasks
 
 **Interactive** (opens TUI):
 ```bash
-codex "describe the task"
-codex -m o3 "use a specific model"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" "describe the task"
 ```
 
 **Non-interactive** (`exec`):
 ```bash
-codex exec "task description"
-codex exec --full-auto "task with auto-approval and workspace-write sandbox"
-codex exec -m o3 --json "structured output"
-echo "task" | codex exec -    # read from stdin
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec "task description"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec --full-auto "task with auto-approval and workspace-write sandbox"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec --json "structured output"
+echo "task" | codex -m gpt-5.4 -c reasoning.effort="xhigh" exec -    # read from stdin
 ```
 
 ### Code Review (non-interactive)
@@ -64,7 +69,7 @@ These flags are rejected if placed after `exec`:
 
 | Flag | Purpose |
 |------|---------|
-| `-m, --model <MODEL>` | Select model (e.g., `o3`) |
+| `-m, --model <MODEL>` | Select model (default: `gpt-5.4`) |
 | `-C, --cd <DIR>` | Set working directory |
 | `-c, --config <key=value>` | Override config.toml values (dotted TOML paths) |
 | `-i, --image <FILE>` | Attach image to prompt |
@@ -136,39 +141,27 @@ Manage credentials with `codex login` and `codex logout`. Use `codex login statu
 
 When building a `codex` invocation:
 
-**CRITICAL — flag placement rules:**
-- **Global-only flags** (`--search`, `-s`, `-a`) MUST go **BEFORE** the subcommand
-- **Exec-specific flags** (`--skip-git-repo-check`, `--json`, `-o`, `--ephemeral`) MUST go **AFTER** `exec`
-- **Flexible flags** (`-m`, `-C`, `-c`, `-i`, `--full-auto`) work in either position
-- Getting this wrong causes `unexpected argument` errors
+Flag placement:
+- Global-only flags (`--search`, `-s`, `-a`) go before the subcommand
+- Exec-specific flags (`--skip-git-repo-check`, `--json`, `-o`, `--ephemeral`) go after `exec`
+- Flexible flags (`-m`, `-C`, `-c`, `-i`, `--full-auto`) work in either position
 
 ```
 codex [GLOBAL-ONLY / FLEXIBLE FLAGS] exec [EXEC-SPECIFIC / FLEXIBLE FLAGS] "prompt"
 ```
 
-**Correct examples:**
+**Examples:**
 ```bash
-codex -m o3 exec --full-auto "task"                          # -m before exec (works)
-codex exec -m o3 --full-auto "task"                          # -m after exec (also works)
-codex exec --skip-git-repo-check --full-auto "task"          # exec flag after exec
-codex -m o3 exec --skip-git-repo-check --full-auto "task"    # combined
-codex exec --json review --uncommitted                       # --json between exec and review
-codex exec review --uncommitted --json                       # --json after review (also works)
-```
-
-**WRONG — will error:**
-```bash
-codex --skip-git-repo-check exec --full-auto "task"          # exec-specific before exec ✗
-codex --json exec "task"                                      # exec-specific before exec ✗
-codex exec --search "task"                                    # global-only after exec ✗
-codex exec -a never "task"                                    # global-only after exec ✗
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec --full-auto "task"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec --skip-git-repo-check --full-auto "task"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec --json review --uncommitted
 ```
 
 ### Steps:
 1. **Choose interactive vs non-interactive**: Use `codex exec` for scripted/automated use, plain `codex` for interactive TUI sessions
-2. **Set the model** if needed: `-m o3` or via `-c model="model-name"` — place before subcommand
-3. **Check for git repo**: If the directory is NOT a git repo, add `--skip-git-repo-check` AFTER `exec`
-4. **Choose sandbox level**: Default to `--full-auto` for safe autonomous execution. Use `--sandbox danger-full-access` only when explicitly needed
+2. **Set the model**: `-m gpt-5.4 -c reasoning.effort="xhigh"` before the subcommand
+3. **Check for git repo**: If not a git repo, add `--skip-git-repo-check` after `exec`
+4. **Choose sandbox level**: Default to `--full-auto`. Use `--sandbox danger-full-access` only when explicitly needed
 5. **Pass the prompt**: As a positional argument or pipe via stdin with `-`
 6. **Capture output**: Use `--json` for JSONL events, `-o file` to save last message
 
