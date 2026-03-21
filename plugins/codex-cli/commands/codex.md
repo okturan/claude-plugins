@@ -1,5 +1,5 @@
 ---
-description: Run Codex CLI — review (no args) or exec (with args)
+description: Use when the user asks to "run codex", "check with codex", "use codex to review", "delegate to codex", "codex review", "codex exec", "have codex look at this", or any request to execute Codex CLI. Runs review (no args) or exec with task (with args).
 argument-hint: [task description]
 allowed-tools: ["Bash(codex:*)"]
 ---
