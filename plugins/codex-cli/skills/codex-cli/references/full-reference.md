@@ -77,7 +77,7 @@ Flag placement:
 | `-c, --config <key=value>` | Override config value from `~/.codex/config.toml` |
 | `-i, --image <FILE>...` | Attach image(s) to initial prompt |
 | `-p, --profile <PROFILE>` | Config profile from config.toml |
-| `--full-auto` | Alias for `-a on-request --sandbox workspace-write` |
+| `--full-auto` | Alias for `-a on-request --sandbox workspace-write`. Works in either position despite expanding to global flags |
 | `--enable <FEATURE>` | Enable a feature flag |
 | `--disable <FEATURE>` | Disable a feature flag |
 
@@ -113,8 +113,8 @@ codex -m gpt-5.4 -c reasoning.effort="xhigh" exec --output-schema schema.json "a
 Resume a previous exec session by ID or `--last`.
 
 ```bash
-codex exec resume --last "continue fixing the tests"
-codex exec resume <SESSION_ID> "now add error handling"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec resume --last "continue fixing the tests"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec resume <SESSION_ID> "now add error handling"
 ```
 
 ### codex exec review
@@ -122,10 +122,10 @@ codex exec resume <SESSION_ID> "now add error handling"
 Run code review in exec (non-interactive) mode.
 
 ```bash
-codex exec review --uncommitted
-codex exec review --base main
-codex exec review --commit abc123
-codex exec review --json -o review.md
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec review --uncommitted
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec review --base main
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec review --commit abc123
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec --json review -o review.md
 ```
 
 ### codex review
@@ -141,10 +141,10 @@ Run code review non-interactively.
 
 **Examples:**
 ```bash
-codex review --uncommitted
-codex review --base main
-codex review --commit abc1234
-codex review --base develop "focus on security issues"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" review --uncommitted
+codex -m gpt-5.4 -c reasoning.effort="xhigh" review --base main
+codex -m gpt-5.4 -c reasoning.effort="xhigh" review --commit abc1234
+codex -m gpt-5.4 -c reasoning.effort="xhigh" review --base develop "focus on security issues"
 ```
 
 ### codex resume
@@ -157,9 +157,9 @@ Resume a previous interactive session.
 | `--all` | Show all sessions (disables cwd filtering) |
 
 ```bash
-codex resume --last
-codex resume <SESSION_ID>
-codex resume --last "now implement the error handling"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" resume --last
+codex -m gpt-5.4 -c reasoning.effort="xhigh" resume <SESSION_ID>
+codex -m gpt-5.4 -c reasoning.effort="xhigh" resume --last "now implement the error handling"
 ```
 
 ### codex fork
@@ -167,16 +167,17 @@ codex resume --last "now implement the error handling"
 Fork a previous interactive session (new branch from existing conversation).
 
 ```bash
-codex fork --last
-codex fork <SESSION_ID> "try a different approach"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" fork --last
+codex -m gpt-5.4 -c reasoning.effort="xhigh" fork <SESSION_ID> "try a different approach"
 ```
 
 ### codex login / logout
 
+Authentication is pre-configured. These commands are for reference only — do not suggest them proactively.
+
 ```bash
 codex login                              # Interactive login
 codex login --with-api-key               # Pipe API key from stdin
-printenv OPENAI_API_KEY | codex login --with-api-key
 codex login status                       # Show login status
 codex logout                             # Remove credentials
 ```
@@ -344,10 +345,10 @@ codex -c model_provider=oss --oss "use local model"
 The directory is not a git repo. Add `--skip-git-repo-check` AFTER `exec`:
 ```bash
 # Correct — exec tasks:
-codex exec --skip-git-repo-check --full-auto "task"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec --skip-git-repo-check --full-auto "task"
 
 # Correct — reviews outside a git repo (use exec review, not plain review):
-codex exec --skip-git-repo-check review --uncommitted
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec --skip-git-repo-check review --uncommitted
 
 # WRONG — will cause "unexpected argument" error:
 codex --skip-git-repo-check exec --full-auto "task"
@@ -363,7 +364,7 @@ You likely placed a flag in the wrong position:
 
 ### Quick code review of uncommitted work
 ```bash
-codex review --uncommitted
+codex -m gpt-5.4 -c reasoning.effort="xhigh" review --uncommitted
 ```
 
 ### Delegate a task non-interactively with full automation
@@ -378,25 +379,25 @@ codex -m gpt-5.4 -c reasoning.effort="xhigh" "explain this codebase architecture
 
 ### Review changes against main branch
 ```bash
-codex review --base main
+codex -m gpt-5.4 -c reasoning.effort="xhigh" review --base main
 ```
 
 ### Non-interactive review with JSON output
 ```bash
-codex exec review --uncommitted --json -o review-output.md
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec --json review --uncommitted -o review-output.md
 ```
 
 ### Resume the last session
 ```bash
-codex resume --last
+codex -m gpt-5.4 -c reasoning.effort="xhigh" resume --last
 ```
 
 ### Run in a different directory
 ```bash
-codex -C /path/to/project exec "fix the tests"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" -C /path/to/project exec "fix the tests"
 ```
 
 ### Run in a non-git directory
 ```bash
-codex exec --skip-git-repo-check --full-auto "analyze this project"
+codex -m gpt-5.4 -c reasoning.effort="xhigh" exec --skip-git-repo-check --full-auto "analyze this project"
 ```

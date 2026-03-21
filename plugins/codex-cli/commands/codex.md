@@ -44,7 +44,7 @@ Execute this command and present the output to the user.
 
 **Flag placement:**
 - Global-only flags (`--search`, `-s`, `-a`) go before the subcommand
-- Exec-specific flags (`--skip-git-repo-check`, `--json`, `-o`) go after `exec`
+- Exec-specific flags (`--skip-git-repo-check`, `--json`, `-o`, `--ephemeral`) go after `exec`
 - Flexible flags (`-m`, `-C`, `-c`, `-i`, `--full-auto`) work in either position
 
 **Notes:**
