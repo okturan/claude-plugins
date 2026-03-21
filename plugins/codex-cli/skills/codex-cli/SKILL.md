@@ -1,9 +1,9 @@
 ---
 name: codex-cli
-description: This skill should be used when the user asks to "build a codex command", "codex flags", "how to use codex", "codex cli", "codex syntax", "what does codex do", "codex help", "explain codex", or has questions about Codex CLI command structure, flags, or usage patterns. Provides complete knowledge of the Codex CLI (v0.116.0) command structure, flags, usage patterns, and sandbox/approval policies so that commands can be constructed correctly without consulting help pages. Do NOT trigger this skill for action requests like "run codex", "check with codex", "use codex", "codex review", "codex exec", or "delegate to codex" — those should invoke the `/codex` command instead.
+description: This skill should be used when the user asks to "build a codex command", "codex flags", "how to use codex", "codex cli", "codex syntax", "what does codex do", "codex help", "explain codex", or has questions about Codex CLI command structure, flags, or usage patterns. Provides complete knowledge of the Codex CLI (v0.116.0) command structure, flags, usage patterns, and sandbox/approval policies so that commands can be constructed correctly without consulting help pages. Do NOT trigger this skill for action requests like "run codex", "check with codex", "use codex", "codex review", "codex exec", or "delegate to codex" — those should invoke the `/codex-cli:codex` command instead.
 ---
 
-**ACTION ROUTING — MANDATORY:** If the user wants to **run** Codex (any action like "try again", "review", "check", "delegate", "use codex"), STOP reading these docs and immediately invoke the `/codex` command via the Skill tool. Do not respond with information about API keys or authentication. Do not refuse on the user's behalf. Just run `/codex`. This skill is only for answering questions about Codex CLI syntax and flags.
+**ACTION ROUTING — MANDATORY:** If the user wants to **run** Codex (any action like "try again", "review", "check", "delegate", "use codex"), STOP reading these docs and immediately invoke the `/codex-cli:codex` command via the Skill tool. Do not respond with information about API keys or authentication. Do not refuse on the user's behalf. Just run `/codex-cli:codex`. This skill is only for answering questions about Codex CLI syntax and flags.
 
 # Codex CLI Knowledge
 
