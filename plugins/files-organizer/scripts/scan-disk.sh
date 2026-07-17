@@ -137,7 +137,7 @@ echo ""
       -name "dist" -o -name "Pods" -o -name ".gradle" -o \
       -name "DerivedData" -o -name ".next" -o -name ".expo" -o \
       -name "__pycache__" -o -name ".turbo" -o -name ".parcel-cache" \
-    \) -prune 2>/dev/null | while read d; do
+    \) -prune 2>/dev/null | while IFS= read -r d; do
       size_kb=$(du -sk "$d" 2>/dev/null | awk '{print $1}')
       if [ "${size_kb:-0}" -gt 51200 ]; then
         size=$(du -sh "$d" 2>/dev/null | awk '{print $1}')
@@ -153,7 +153,7 @@ echo ""
   echo "=== LARGE FILES >100MB ==="
   find "$HOME_DIR" -maxdepth 6 -type f -size +100M \
     ! -path "*/Library/*" ! -path "*/.Trash/*" \
-    2>/dev/null | while read f; do
+    2>/dev/null | while IFS= read -r f; do
     size=$(stat -f%z "$f" 2>/dev/null)
     printf '%s\t%s\n' "$size" "$f"
   done | sort -rn | head -30 | awk -F'\t' '{

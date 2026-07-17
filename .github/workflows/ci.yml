@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 22
+
+      - name: Validate marketplace contract
+        run: node scripts/validate-marketplace.mjs
+
+      - name: Check shell syntax
+        run: bash -n plugins/files-organizer/scripts/*.sh scripts/test-files-organizer.sh
+
+      - name: Lint shell scripts
+        if: runner.os == 'Linux'
+        run: shellcheck plugins/files-organizer/scripts/*.sh scripts/test-files-organizer.sh
+
+      - name: Test file-organizer helpers
+        run: bash scripts/test-files-organizer.sh

@@ -79,6 +79,10 @@ npx skills update                                  # skills.sh installs
 claude plugin marketplace update okturan-plugins   # Claude Code plugin installs
 ```
 
+## Verification
+
+Every pull request is checked on both macOS and Linux. CI verifies that marketplace entries and plugin manifests stay in sync, skill and command frontmatter is complete, local documentation links resolve, and the file-organizer shell tools pass syntax, lint, and fixture-based behavior checks. The deep disk scanner is never executed in CI.
+
 ## Plugin Structure
 
 Each plugin lives under `plugins/` with its own manifest and components:
