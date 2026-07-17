@@ -39,6 +39,16 @@ Audit any git repo and score it out of 100 across 9 categories.
 
 Categories: Git Health (15), Structure (15), Code Quality (15), Config (10), Database (10), Docs (10), Testing & CI (15), Dependencies (5), Security (5).
 
+### human-writing
+
+Write outward-facing prose that reads like a person wrote it, and strip AI tells from existing drafts.
+
+| Command | What it does |
+|---------|-------------|
+| `/humanize [text or file]` | Two-pass rewrite: identify AI tells, then rewrite keeping voice and meaning |
+
+The skill also auto-activates when drafting posts, READMEs, announcements, emails, or marketing copy. Based on Wikipedia's Signs of AI writing catalog plus positive craft rules: real specifics, varied rhythm, one rhetorical device per piece, never invent details.
+
 ## Plugin Structure
 
 Each plugin lives under `plugins/` with its own manifest and components:

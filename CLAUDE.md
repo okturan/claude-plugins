@@ -19,7 +19,11 @@ claude-plugins/
     │   ├── agents/
     │   ├── skills/
     │   └── scripts/
-    └── project-health/            # Repo audit scorer (100 pts)
+    ├── project-health/            # Repo audit scorer (100 pts)
+    │   ├── .claude-plugin/plugin.json
+    │   ├── commands/
+    │   └── skills/
+    └── human-writing/             # Anti-AI-slop prose writing
         ├── .claude-plugin/plugin.json
         ├── commands/
         └── skills/
@@ -39,3 +43,9 @@ Audit any git repo and score it out of 100 across 9 categories.
 
 - `/project-health` - full audit
 - `/project-health --category testing` - single category
+
+### human-writing
+Write prose that doesn't read as AI, and strip AI tells from existing drafts.
+
+- `/humanize draft.md` - two-pass rewrite of a file
+- Skill auto-activates when drafting posts, READMEs, announcements, emails

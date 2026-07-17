@@ -24,6 +24,16 @@
       "source": "./plugins/project-health",
       "category": "analysis",
       "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/project-health"
+    },
+    {
+      "name": "human-writing",
+      "description": "Write outward-facing prose that reads like a person wrote it, and strip AI tells from existing drafts. Drafting guidance plus a /humanize rewrite pass.",
+      "author": {
+        "name": "okturan"
+      },
+      "source": "./plugins/human-writing",
+      "category": "writing",
+      "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/human-writing"
     }
   ]
 }

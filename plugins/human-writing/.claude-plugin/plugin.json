@@ -1,0 +1,11 @@
+{
+  "name": "human-writing",
+  "version": "0.1.0",
+  "description": "Write outward-facing prose that reads like a person wrote it, and strip AI tells from existing drafts. Drafting guidance plus a /humanize rewrite pass.",
+  "author": {
+    "name": "okturan"
+  },
+  "repository": "https://github.com/okturan/claude-plugins",
+  "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/human-writing",
+  "license": "MIT"
+}
