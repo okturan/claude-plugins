@@ -4,6 +4,10 @@
 
 Claude Code plugins and agent skills by [okturan](https://github.com/okturan): file organization, repo health audits, and prose that doesn't read as AI.
 
+![Capability map for the okturan plugin marketplace](docs/marketplace-map.svg)
+
+The map is generated from the real marketplace and plugin manifests, including their current versions and component counts. CI regenerates the same model on macOS and Linux and fails if the committed proof drifts from the installable repository structure.
+
 ## Quickstart (any agent)
 
 Works with any agent that supports skills — Claude Code, Cursor, Codex, and others:
