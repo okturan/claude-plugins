@@ -104,3 +104,5 @@ plugins/plugin-name/
 ## License
 
 MIT
+
+Security issues involving plugin scripts, trust boundaries, marketplace integrity, or unintended data exposure should be reported privately through [SECURITY.md](SECURITY.md).
