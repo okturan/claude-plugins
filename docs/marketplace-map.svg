@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="720" viewBox="0 0 1640 720" role="img" aria-labelledby="title desc">
   <title id="title">okturan plugin marketplace capability map</title>
-  <desc id="desc">Three installable Claude Code plugins and four reusable agent skills, generated from the repository marketplace and plugin manifests.</desc>
+  <desc id="desc">4 installable Claude Code plugins and 5 reusable agent skills, generated from the repository marketplace and plugin manifests.</desc>
   <defs>
     <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#020617" />
@@ -28,17 +28,17 @@
       .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
     </style>
   </defs>
-  <rect width="1280" height="720" fill="url(#background)" />
-  <rect width="1280" height="720" fill="url(#glow)" />
+  <rect width="1640" height="720" fill="url(#background)" />
+  <rect width="1640" height="720" fill="url(#glow)" />
   <text x="56" y="55" class="eyebrow">okturan-plugins · OWNER-AUTHORED MARKETPLACE</text>
   <text x="56" y="108" class="hero">Small tools with sharp boundaries.</text>
-  <text x="56" y="145" class="sub">3 installable plugins · 4 reusable skills · one validated cross-platform contract</text>
+  <text x="56" y="145" class="sub">4 installable plugins · 5 reusable skills · one validated cross-platform contract</text>
   <g transform="translate(56 174)">
-    <rect width="548" height="34" rx="17" fill="#172554" stroke="#1d4ed8" />
+    <rect width="740" height="34" rx="17" fill="#172554" stroke="#1d4ed8" />
     <text x="18" y="22" class="footer-body mono" fill="#bfdbfe">npx skills@latest add okturan/claude-plugins</text>
   </g>
-  <g transform="translate(620 174)">
-    <rect width="604" height="34" rx="17" fill="#1e1b4b" stroke="#6d28d9" />
+  <g transform="translate(820 174)">
+    <rect width="740" height="34" rx="17" fill="#1e1b4b" stroke="#6d28d9" />
     <text x="18" y="22" class="footer-body mono" fill="#ddd6fe">/plugin marketplace add okturan/claude-plugins</text>
   </g>
   <g transform="translate(56 226)">
@@ -122,12 +122,39 @@
     <text x="46" y="41" text-anchor="middle" class="metric-label">SKILLS</text>
   </g>
   </g>
+<g transform="translate(1223 226)">
+    <rect width="352" height="322" rx="24" fill="#0f172a" stroke="#334155" stroke-width="2" />
+    <rect x="1" y="1" width="350" height="7" rx="4" fill="#34d399" />
+    <circle cx="42" cy="51" r="18" fill="#34d399" fill-opacity="0.16" />
+    <circle cx="42" cy="51" r="7" fill="#34d399" />
+    <text x="72" y="48" class="card-title">shape the work</text>
+    <text x="72" y="68" class="version">v0.1.0</text>
+    <text x="24" y="104" class="label" fill="#34d399">ROUTE · HAND OFF · VERIFY</text>
+    <text x="24" y="140" class="body">One mode for each work phase</text>
+    <text x="24" y="166" class="body">Explicit exits and handoffs</text>
+    <text x="24" y="192" class="body">Read-only dependency check</text>
+    <g transform="translate(24 232)">
+    <rect width="92" height="54" rx="12" fill="#111827" stroke="#334155" />
+    <text x="46" y="23" text-anchor="middle" class="metric-value" fill="#34d399">1</text>
+    <text x="46" y="41" text-anchor="middle" class="metric-label">COMMANDS</text>
+  </g>
+    <g transform="translate(130 232)">
+    <rect width="92" height="54" rx="12" fill="#111827" stroke="#334155" />
+    <text x="46" y="23" text-anchor="middle" class="metric-value" fill="#34d399">0</text>
+    <text x="46" y="41" text-anchor="middle" class="metric-label">AGENTS</text>
+  </g>
+    <g transform="translate(236 232)">
+    <rect width="92" height="54" rx="12" fill="#111827" stroke="#334155" />
+    <text x="46" y="23" text-anchor="middle" class="metric-value" fill="#34d399">1</text>
+    <text x="46" y="41" text-anchor="middle" class="metric-label">SKILLS</text>
+  </g>
+  </g>
   <g transform="translate(56 581)">
-    <rect width="1168" height="91" rx="18" fill="#0b1220" stroke="#1e293b" />
+    <rect width="1528" height="91" rx="18" fill="#0b1220" stroke="#1e293b" />
     <text x="24" y="32" class="footer-title">Repository contract</text>
     <text x="24" y="59" class="footer-body">marketplace.json → plugin manifests → skills, commands and agents → macOS + Linux CI</text>
-    <text x="772" y="32" class="footer-title">Distribution</text>
-    <text x="772" y="59" class="footer-body">skills.sh for reusable skills · Claude Code for full plugins</text>
+    <text x="1120" y="32" class="footer-title">Distribution</text>
+    <text x="1120" y="59" class="footer-body">skills.sh for reusable skills · Claude Code for full plugins</text>
   </g>
   <text x="56" y="703" fill="#475569" font-size="11">Generated from .claude-plugin/marketplace.json and each plugin manifest; verified by scripts/render-marketplace-proof.mjs --check</text>
 </svg>

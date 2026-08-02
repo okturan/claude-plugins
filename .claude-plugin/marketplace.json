@@ -34,6 +34,16 @@
       "source": "./plugins/human-writing",
       "category": "writing",
       "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/human-writing"
+    },
+    {
+      "name": "shape-the-work",
+      "description": "Route work to OpenSpec Explore, Wayfinder, Long-Horizon Prompting, or no special mode. Includes a dependency check and explicit handoff rules.",
+      "author": {
+        "name": "okturan"
+      },
+      "source": "./plugins/shape-the-work",
+      "category": "development",
+      "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/shape-the-work"
     }
   ]
 }

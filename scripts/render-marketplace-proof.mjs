@@ -25,6 +25,11 @@ const proofCopy = {
     lines: ["AI-tell detection catalog", "Two-pass /humanize command", "Specifics without invented detail"],
     accent: "#fb7185",
   },
+  "shape-the-work": {
+    label: "ROUTE · HAND OFF · VERIFY",
+    lines: ["One mode for each work phase", "Explicit exits and handoffs", "Read-only dependency check"],
+    accent: "#34d399",
+  },
 };
 
 function escapeXml(value) {
@@ -118,9 +123,9 @@ function render({ marketplace, plugins }) {
   const cards = plugins.map((plugin, index) => pluginCard(plugin, 56 + index * 389)).join("\n");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="720" viewBox="0 0 1640 720" role="img" aria-labelledby="title desc">
   <title id="title">okturan plugin marketplace capability map</title>
-  <desc id="desc">Three installable Claude Code plugins and four reusable agent skills, generated from the repository marketplace and plugin manifests.</desc>
+  <desc id="desc">${pluginTotal} installable Claude Code plugins and ${skillTotal} reusable agent skills, generated from the repository marketplace and plugin manifests.</desc>
   <defs>
     <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#020617" />
@@ -147,26 +152,26 @@ function render({ marketplace, plugins }) {
       .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
     </style>
   </defs>
-  <rect width="1280" height="720" fill="url(#background)" />
-  <rect width="1280" height="720" fill="url(#glow)" />
+  <rect width="1640" height="720" fill="url(#background)" />
+  <rect width="1640" height="720" fill="url(#glow)" />
   <text x="56" y="55" class="eyebrow">${escapeXml(marketplace.name)} · OWNER-AUTHORED MARKETPLACE</text>
   <text x="56" y="108" class="hero">Small tools with sharp boundaries.</text>
   <text x="56" y="145" class="sub">${pluginTotal} installable plugins · ${skillTotal} reusable skills · one validated cross-platform contract</text>
   <g transform="translate(56 174)">
-    <rect width="548" height="34" rx="17" fill="#172554" stroke="#1d4ed8" />
+    <rect width="740" height="34" rx="17" fill="#172554" stroke="#1d4ed8" />
     <text x="18" y="22" class="footer-body mono" fill="#bfdbfe">npx skills@latest add okturan/claude-plugins</text>
   </g>
-  <g transform="translate(620 174)">
-    <rect width="604" height="34" rx="17" fill="#1e1b4b" stroke="#6d28d9" />
+  <g transform="translate(820 174)">
+    <rect width="740" height="34" rx="17" fill="#1e1b4b" stroke="#6d28d9" />
     <text x="18" y="22" class="footer-body mono" fill="#ddd6fe">/plugin marketplace add okturan/claude-plugins</text>
   </g>
   ${cards}
   <g transform="translate(56 581)">
-    <rect width="1168" height="91" rx="18" fill="#0b1220" stroke="#1e293b" />
+    <rect width="1528" height="91" rx="18" fill="#0b1220" stroke="#1e293b" />
     <text x="24" y="32" class="footer-title">Repository contract</text>
     <text x="24" y="59" class="footer-body">marketplace.json → plugin manifests → skills, commands and agents → macOS + Linux CI</text>
-    <text x="772" y="32" class="footer-title">Distribution</text>
-    <text x="772" y="59" class="footer-body">skills.sh for reusable skills · Claude Code for full plugins</text>
+    <text x="1120" y="32" class="footer-title">Distribution</text>
+    <text x="1120" y="59" class="footer-body">skills.sh for reusable skills · Claude Code for full plugins</text>
   </g>
   <text x="56" y="703" fill="#475569" font-size="11">Generated from .claude-plugin/marketplace.json and each plugin manifest; verified by scripts/render-marketplace-proof.mjs --check</text>
 </svg>

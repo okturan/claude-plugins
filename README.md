@@ -2,7 +2,7 @@
 
 [![skills.sh](https://skills.sh/b/okturan/claude-plugins)](https://skills.sh/okturan/claude-plugins)
 
-Claude Code plugins and agent skills by [okturan](https://github.com/okturan): file organization, repo health audits, and prose that doesn't read as AI.
+Claude Code plugins and agent skills by [okturan](https://github.com/okturan): file organization, repo health audits, plain-language writing, and a router for work that needs more structure.
 
 ![Capability map for the okturan plugin marketplace](docs/marketplace-map.svg)
 
@@ -34,10 +34,11 @@ claude plugin marketplace add okturan/claude-plugins
 claude plugin install human-writing@okturan-plugins
 ```
 
-Same pattern for `files-organizer` and `project-health`.
+Same pattern for `files-organizer`, `project-health`, and `shape-the-work`.
 
 ## Skills
 
+- **[shape-the-work](plugins/shape-the-work/skills/shape-the-work/SKILL.md)** — Route a task to ordinary execution, OpenSpec Explore, Wayfinder, or Long-Horizon Prompting, with one mode per phase and explicit handoffs.
 - **[human-writing](plugins/human-writing/skills/human-writing/SKILL.md)** — Write outward-facing prose that reads like a person wrote it, and strip AI tells from existing drafts. Ships with a [full catalog of AI tells](plugins/human-writing/skills/human-writing/references/ai-tells.md).
 - **[repo-audit](plugins/project-health/skills/repo-audit/SKILL.md)** — Audit any git repo across 9 categories and score it out of 100.
 - **[mac-file-patterns](plugins/files-organizer/skills/mac-file-patterns/SKILL.md)** — Classify macOS files, recommend folder hierarchies, and identify cleanup targets.
@@ -46,6 +47,16 @@ Same pattern for `files-organizer` and `project-health`.
 ## Plugins
 
 Plugins bundle the skills above with slash commands (Claude Code only).
+
+### shape-the-work
+
+Choose the smallest work-shaping mode that fits the current phase. The router does not assume a particular product or repository.
+
+| Command | What it does |
+|---------|-------------|
+| `/shape-work [task]` | Check child-skill availability, select one mode, and declare its output and exit condition |
+
+OpenSpec Explore, Wayfinder, and Long-Horizon Prompting remain external dependencies maintained by their upstream projects. The included checker reports which ones are installed without changing the machine. See the [plugin README](plugins/shape-the-work/README.md) for sources and installation options.
 
 ### human-writing
 
@@ -85,7 +96,7 @@ claude plugin marketplace update okturan-plugins   # Claude Code plugin installs
 
 ## Verification
 
-Every pull request is checked on both macOS and Linux. CI verifies that marketplace entries and plugin manifests stay in sync, skill and command frontmatter is complete, local documentation links resolve, and the file-organizer shell tools pass syntax, lint, and fixture-based behavior checks. The deep disk scanner is never executed in CI.
+Every pull request is checked on both macOS and Linux. CI verifies that marketplace entries and plugin manifests stay in sync, skill and command frontmatter is complete, local documentation links resolve, and bundled shell tools pass syntax, lint, and fixture-based behavior checks. The deep disk scanner is never executed in CI.
 
 ## Plugin Structure
 

@@ -1,0 +1,11 @@
+{
+  "name": "shape-the-work",
+  "version": "0.1.0",
+  "description": "Route work to OpenSpec Explore, Wayfinder, Long-Horizon Prompting, or no special mode. Includes a dependency check and explicit handoff rules.",
+  "author": {
+    "name": "okturan"
+  },
+  "repository": "https://github.com/okturan/claude-plugins",
+  "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/shape-the-work",
+  "license": "MIT"
+}

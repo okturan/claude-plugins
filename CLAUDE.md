@@ -23,7 +23,11 @@ claude-plugins/
     │   ├── .claude-plugin/plugin.json
     │   ├── commands/
     │   └── skills/
-    └── human-writing/             # Anti-AI-slop prose writing
+    ├── human-writing/             # Anti-AI-slop prose writing
+    │   ├── .claude-plugin/plugin.json
+    │   ├── commands/
+    │   └── skills/
+    └── shape-the-work/            # Work-shaping mode router
         ├── .claude-plugin/plugin.json
         ├── commands/
         └── skills/
@@ -49,3 +53,10 @@ Write prose that doesn't read as AI, and strip AI tells from existing drafts.
 
 - `/humanize draft.md` - two-pass rewrite of a file
 - Skill auto-activates when drafting posts, READMEs, announcements, emails
+
+### shape-the-work
+Route a task to ordinary execution, OpenSpec Explore, Wayfinder, or Long-Horizon Prompting.
+
+- `/shape-work <task>` - select one mode for the current phase
+- Child skills stay external and are checked before use
+- The router is general-purpose and explicit-only in Codex

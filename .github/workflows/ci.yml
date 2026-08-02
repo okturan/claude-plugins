@@ -40,11 +40,24 @@ jobs:
         run: node scripts/render-marketplace-proof.mjs --check
 
       - name: Check shell syntax
-        run: bash -n plugins/files-organizer/scripts/*.sh scripts/test-files-organizer.sh
+        run: >-
+          bash -n
+          plugins/files-organizer/scripts/*.sh
+          plugins/shape-the-work/skills/shape-the-work/scripts/check-dependencies.sh
+          scripts/test-files-organizer.sh
+          scripts/test-shape-the-work.sh
 
       - name: Lint shell scripts
         if: runner.os == 'Linux'
-        run: shellcheck plugins/files-organizer/scripts/*.sh scripts/test-files-organizer.sh
+        run: >-
+          shellcheck
+          plugins/files-organizer/scripts/*.sh
+          plugins/shape-the-work/skills/shape-the-work/scripts/check-dependencies.sh
+          scripts/test-files-organizer.sh
+          scripts/test-shape-the-work.sh
 
       - name: Test file-organizer helpers
         run: bash scripts/test-files-organizer.sh
+
+      - name: Test shape-the-work dependency checks
+        run: bash scripts/test-shape-the-work.sh
