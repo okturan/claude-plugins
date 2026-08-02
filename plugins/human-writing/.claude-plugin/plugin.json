@@ -1,7 +1,7 @@
 {
   "name": "human-writing",
   "version": "0.1.0",
-  "description": "Write outward-facing prose that reads like a person wrote it, and strip AI tells from existing drafts. Drafting guidance plus a /humanize rewrite pass.",
+  "description": "Draft plain prose and rewrite text that carries common AI-writing patterns. Includes the /humanize command.",
   "author": {
     "name": "okturan"
   },

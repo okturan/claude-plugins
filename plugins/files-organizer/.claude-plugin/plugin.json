@@ -1,7 +1,7 @@
 {
   "name": "files-organizer",
   "version": "0.1.0",
-  "description": "Scan Mac file systems, find duplicates, analyze folder structure, detect orphan files, and generate interactive HTML dashboards with reorganization recommendations.",
+  "description": "Scan macOS storage, find duplicate and misplaced files, and build a self-contained HTML file map.",
   "author": {
     "name": "okturan"
   },

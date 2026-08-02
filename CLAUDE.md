@@ -23,7 +23,7 @@ claude-plugins/
     │   ├── .claude-plugin/plugin.json
     │   ├── commands/
     │   └── skills/
-    ├── human-writing/             # Anti-AI-slop prose writing
+    ├── human-writing/             # Prose drafting and rewrite guidance
     │   ├── .claude-plugin/plugin.json
     │   ├── commands/
     │   └── skills/
@@ -36,23 +36,23 @@ claude-plugins/
 ## Plugins
 
 ### files-organizer
-Find duplicates, analyze folder structure, and generate an HTML dashboard for any directory.
+Scan a directory, group duplicate candidates, review file placement, and write an HTML report.
 
-- `/scan ~/Documents` - file inventory
-- `/organize ~/Documents` - full analysis with 3 parallel agents
-- `/file-map output.html` - interactive HTML dashboard
+- `/scan ~/Documents` - inventory file sizes and types
+- `/organize ~/Documents` - run the three file-analysis agents
+- `/file-map output.html` - write a standalone HTML report
 
 ### project-health
-Audit any git repo and score it out of 100 across 9 categories.
+Score a Git repository out of 100 across nine categories.
 
-- `/project-health` - full audit
-- `/project-health --category testing` - single category
+- `/project-health` - run all category checks
+- `/project-health --category testing` - run one category
 
 ### human-writing
-Write prose that doesn't read as AI, and strip AI tells from existing drafts.
+Draft plain prose and rewrite text with common AI-writing patterns.
 
-- `/humanize draft.md` - two-pass rewrite of a file
-- Skill auto-activates when drafting posts, READMEs, announcements, emails
+- `/humanize draft.md` - report the patterns found, then rewrite the file
+- The skill loads when drafting posts, READMEs, announcements, or emails
 
 ### shape-the-work
 Route a task to ordinary execution, OpenSpec Explore, Wayfinder, or Long-Horizon Prompting.

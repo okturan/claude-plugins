@@ -1,43 +1,43 @@
 ---
-description: Deep scan of disk usage — covers everything including hidden dotfiles, Library, Applications, system dirs, APFS volumes, and cleanable caches
+description: Scan disk usage across home folders, selected system paths, APFS volumes, and common caches
 argument-hint: [directory-path]
 allowed-tools: Read, Bash, Glob, Grep
 ---
 
-Perform a comprehensive disk usage scan. This is a two-phase process: first a fast system-wide overview, then an optional file-level inventory if the user wants to drill deeper.
+Scan disk usage in two phases. Start with a directory-level overview, then collect file metadata only when the user needs a closer look.
 
 Target path: $ARGUMENTS
 
-## Phase 1: Deep Disk Scan (always run)
+## Phase 1: Disk overview (always run)
 
-Run the deep disk scan script. This is fast (uses du, not per-file stat) and covers everything the old scan missed: hidden dotfiles, ~/Library, /Applications, /Library, /opt, APFS volumes, build artifacts, and cleanable caches.
+Run the disk scan script. It uses `du` instead of per-file `stat` calls and checks hidden folders, `~/Library`, `/Applications`, `/Library`, `/opt`, APFS volumes, build outputs, and common caches. It may miss unreadable directories, snapshots, and purgeable APFS space.
 
 ```
 bash ${CLAUDE_PLUGIN_ROOT}/scripts/scan-disk.sh "${ARGUMENTS:-$HOME}"
 ```
 
-Parse the output and present a **complete disk usage map** organized as:
+Parse the output into a disk-usage report with these sections:
 
 ### 1. Disk Overview
 - APFS container: total, used, free, percentage
 - Per-volume breakdown (System, Data, VM, Preboot, Recovery, any simulator volumes)
 
-### 2. Where The Space Goes
-Present a single table that accounts for ALL space on the data volume. Group into:
+### 2. Where the space goes
+Present one table for the storage the script could measure. Group it into:
 - **Home visible dirs** (~/code, ~/Documents, ~/Downloads, etc.)
-- **Home dotfiles** (~/.cache, ~/.npm, ~/.colima, etc.) — this is the category most scans miss entirely
+- **Home dotfiles** (`~/.cache`, `~/.npm`, `~/.colima`, and similar paths)
 - **~/Library** (Application Support, Caches, Containers, Developer, etc.)
 - **/Applications**
 - **System** (/Library, /opt/homebrew, /private/var)
 
-The goal is that these categories sum to roughly match the APFS data volume usage. If there's a gap > 5GB, investigate (APFS snapshots, purgeable space, missed directories).
+Compare the measured total with APFS data-volume usage. If the gap is larger than 5 GB, report it and check for permission errors, snapshots, purgeable space, or missed directories.
 
 ### 3. Largest Items
 - Top code projects by size
 - Largest individual files (>100MB)
 - Build artifacts & node_modules (with total)
 
-### 4. Cleanable Space
+### 4. Cleanup candidates
 Present a table of reclaimable items with:
 - What it is
 - Size
@@ -53,8 +53,8 @@ Categorize cleanable items:
 - **App caches**: ~/Library/Caches (browser, Homebrew, etc.)
 - **Stale data**: old worktrees, archived sessions
 
-### 5. Actionable Summary
-End with a concise "quick wins" table: the top 5-10 cleanup actions sorted by space recovered, with the exact command to run each.
+### 5. Cleanup summary
+End with 5 to 10 measured cleanup candidates sorted by recoverable space. Include a command only when the target path is explicit, and label whether it is a read-only check or a destructive action.
 
 ## Phase 2: File Inventory (only if needed)
 
@@ -64,12 +64,12 @@ If the user asks to drill into a specific directory, or if `/organize` or `/file
 bash ${CLAUDE_PLUGIN_ROOT}/scripts/scan-files.sh "<target-path>" <max-depth>
 ```
 
-This produces per-file metadata (path, size, extension, date) useful for duplicate detection, age analysis, and file type distribution.
+This produces paths, sizes, extensions, and modification dates for duplicate checks, age analysis, and file-type counts.
 
 ## Presentation
 
-- Use tables for everything — they're scannable
+- Use tables for repeated fields and comparisons
 - Always show sizes in human-readable form (GB/MB)
-- Bold the biggest items and quick wins
+- Call out the largest measured items
 - If totals don't add up, say so and explain why (APFS overhead, snapshots, etc.)
-- Keep it concise — the user can ask to drill deeper into anything
+- Keep the report concise and preserve any measurement gaps or warnings

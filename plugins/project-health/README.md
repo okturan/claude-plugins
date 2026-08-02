@@ -1,14 +1,14 @@
 # project-health
 
-A Claude Code plugin for auditing any code repository.
+A Claude Code plugin for scoring a Git repository against a documented checklist.
 
-Scores repos out of 100 across 9 categories. Language-agnostic — works on any git repo with Python, JavaScript, TypeScript, Go, Rust, or Java.
+The checklist has nine categories and a total of 100 points. Most checks apply to any Git repository. Code-specific checks recognize Python, JavaScript, TypeScript, Go, Rust, and Java.
 
 ## Commands
 
 ### `/project-health`
 
-Full audit of the current repository. Runs all 9 categories in parallel, scores each, and presents an actionable report with concrete improvements.
+Runs all nine categories in parallel. The report shows each score, the evidence behind deductions, and a concrete next step for every suggested change.
 
 ### `/project-health --category <name>`
 

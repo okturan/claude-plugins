@@ -1,6 +1,6 @@
 ---
 name: mac-file-patterns
-description: This skill should be used when a task involves analyzing macOS file structures, recommending folder hierarchies, classifying files by type or purpose, identifying cleanup targets, or suggesting reorganization strategies for personal Mac file systems. Covers standard Mac directories, file extension categories, bilingual (English/Spanish) filename patterns, and safe-to-delete file types.
+description: Analyze macOS file structures, classify files, review cleanup candidates, or plan a folder reorganization. Covers standard Mac directories, file extensions, and English or Spanish filename patterns. Treat every deletion as a review step.
 version: 0.2.0
 user-invocable: false
 ---
@@ -11,13 +11,13 @@ user-invocable: false
 
 | Directory | Purpose | Common clutter |
 |-----------|---------|----------------|
-| ~/Documents | Long-term personal & work files | Becomes a dumping ground for everything |
-| ~/Downloads | Temporary landing zone | Never cleaned up, accumulates for years |
-| ~/Desktop | Quick access, active work | Screenshots, temp files pile up |
+| ~/Documents | Long-term personal & work files | Loose files that may belong in existing project folders |
+| ~/Downloads | Temporary landing zone | Installers, partial downloads, and copied archives |
+| ~/Desktop | Quick access, active work | Screenshots and temporary working files |
 | ~/Pictures | Photos Library (managed by Apple) | Rarely needs manual organization |
-| ~/Movies | iMovie projects, media | Usually small unless active video editing |
+| ~/Movies | iMovie projects, media | Exports and old project media |
 | ~/Music | Music app, GarageBand | Managed by apps |
-| ~/Dropbox | Cloud sync | Often abandoned with large orphan files |
+| ~/Dropbox | Cloud sync | Local copies from inactive sync folders |
 
 ## Recommended Personal Folder Structure
 
@@ -72,85 +72,83 @@ Files may use Spanish or English naming. Common pairs:
 
 ## Hidden Dotfiles & Developer Caches
 
-Dotfiles (directories starting with `.` in the home folder) are invisible in Finder and often overlooked by file scanners. They routinely consume 20-80+ GB on developer machines. Always scan these — they are often the single largest category of reclaimable space.
+Finder hides home-directory names that start with `.`, and shallow scans often omit them. Measure these directories before estimating how much space they use. Some hold caches; others hold active configuration, databases, credentials, or tool state.
 
 ### Common large dotdirs
 
-| Directory | What it is | Typical size | Cleanup command |
-|-----------|-----------|-------------|-----------------|
-| `~/.cache/huggingface` | Downloaded ML models | 5-50 GB | `rm -rf ~/.cache/huggingface/` |
-| `~/.npm` | npm package cache | 2-10 GB | `npm cache clean --force` |
-| `~/.cache/uv` | Python uv cache | 1-5 GB | `uv cache clean` |
-| `~/.cache/pip` | pip download cache | 0.5-3 GB | `pip cache purge` |
-| `~/.bun` | Bun runtime cache | 1-3 GB | `rm -rf ~/.bun/install/cache` |
-| `~/.gradle` | Gradle build cache | 1-5 GB | `rm -rf ~/.gradle/caches/` |
-| `~/.m2` | Maven repository cache | 0.5-3 GB | `rm -rf ~/.m2/repository/` |
-| `~/.cargo/registry` | Rust crate cache | 0.5-3 GB | `cargo cache --autoclean` |
-| `~/.colima` / `~/.lima` | Container VM images | 5-20 GB | `colima delete` |
-| `~/.codex/worktrees` | Codex stale worktrees | 1-10 GB | `rm -rf ~/.codex/worktrees/` |
-| `~/.cache/puppeteer` | Puppeteer browsers | 0.5-2 GB | `rm -rf ~/.cache/puppeteer/` |
-| `~/.cache/torch` | PyTorch model cache | 0.5-5 GB | `rm -rf ~/.cache/torch/` |
-| `~/.rustup` | Rust toolchains | 1-3 GB | Keep if using Rust |
-| `~/.platformio` | PlatformIO (IoT) | 0.5-2 GB | Keep if using PlatformIO |
-| `~/.rbenv` | Ruby versions | 0.5-2 GB | Keep if using Ruby |
-| `~/.vscode` | VS Code extensions | 1-3 GB | Manage in VS Code |
+| Directory | What it is | Review or cleanup path |
+|-----------|------------|------------------------|
+| `~/.cache/huggingface` | Downloaded ML models | Review model names and confirm they can be downloaded again |
+| `~/.npm` | npm package cache | Inspect with `npm cache verify`; use npm's cleanup command if needed |
+| `~/.cache/uv` | Python uv cache | `uv cache clean` |
+| `~/.cache/pip` | pip download cache | `pip cache purge` |
+| `~/.bun/install/cache` | Bun package cache | Measure this exact subdirectory; do not remove the rest of `~/.bun` |
+| `~/.gradle/caches` | Gradle caches | Check for offline-build requirements before removal |
+| `~/.m2/repository` | Maven dependencies | Check for local-only artifacts and offline-build requirements |
+| `~/.cargo/registry` | Rust crate cache | Use `cargo cache` if installed, or review entries manually |
+| `~/.colima` / `~/.lima` | Container VM images and state | `colima delete` removes the VM; confirm its data is disposable first |
+| `~/.codex/worktrees` | Codex worktrees | Confirm each worktree is stale and has no uncommitted changes |
+| `~/.cache/puppeteer` | Downloaded Puppeteer browsers | Confirm affected projects can download the browsers again |
+| `~/.cache/torch` | Downloaded PyTorch assets | Review model and checkpoint files before removal |
+| `~/.rustup` | Rust toolchains | List toolchains with `rustup toolchain list`; uninstall only unused ones |
+| `~/.platformio` | PlatformIO packages and state | Keep if PlatformIO projects still use it |
+| `~/.rbenv` | Ruby versions | List versions with `rbenv versions`; remove only unused versions |
+| `~/.vscode` | VS Code extensions and data | Manage extensions in VS Code; do not treat the whole directory as cache |
 
-All cache directories regenerate on demand — cleaning them is always safe, just costs a re-download next time they're needed.
+Some entries are disposable caches, while others mix cache data with active state. Prefer each tool's own cleanup command. Before suggesting manual deletion, name the exact path, measure it, and explain what will need to be downloaded or rebuilt.
 
 ### ~/Library hidden costs
 
-`~/Library` is excluded from many scans but often holds 20-50+ GB:
+Many scans exclude `~/Library`. Measure it rather than assuming which application uses the most space:
 
-| Subdirectory | What it is | Typical offenders |
-|-------------|-----------|-------------------|
-| `Application Support/Google/Chrome` | Chrome profiles, data, extensions | 5-15 GB |
-| `Application Support/Code` | VS Code extensions, cache, WebStorage | 2-5 GB |
-| `Caches/` | App caches (Chrome, Homebrew, Playwright, pip) | 3-10 GB |
-| `Containers/` | Sandboxed app data (iMessage, Slack) | 2-5 GB |
-| `Developer/Xcode/DerivedData` | Xcode build cache | 1-5 GB |
-| `Developer/CoreSimulator` | iOS simulator runtime data | 1-5 GB |
+| Subdirectory | What it contains | What to check |
+|-------------|------------------|---------------|
+| `Application Support/Google/Chrome` | Chrome profiles, databases, and extensions | Profile ownership and sync status |
+| `Application Support/Code` | VS Code extensions, caches, and WebStorage | Extension and workspace state |
+| `Caches/` | Per-application caches | The owning app's cleanup or reset instructions |
+| `Containers/` | Sandboxed application data | Whether the app still uses the container |
+| `Developer/Xcode/DerivedData` | Xcode build output | Close Xcode and confirm builds can be regenerated |
+| `Developer/CoreSimulator` | Simulator data | Installed runtimes and devices in Xcode |
 
-Clean Caches: `rm -rf ~/Library/Caches/*` (regenerates automatically)
-Clean DerivedData: `rm -rf ~/Library/Developer/Xcode/DerivedData/`
+Do not delete all of `~/Library/Caches` as one operation. Review the largest child directories and use application-specific cleanup where possible.
 
 ### System-level space consumers
 
-| Location | What it is | Typical size |
-|----------|-----------|-------------|
-| `/Library/Developer/CoreSimulator` | iOS Simulator runtimes (separate APFS volumes!) | 10-30 GB |
-| `/Library/Frameworks/Python.framework` | System Python installs | 2-5 GB |
-| `/opt/homebrew` | Homebrew packages | 3-10 GB |
-| `/Applications/Xcode.app` | Xcode IDE | 5-15 GB |
+| Location | What it is | Review path |
+|----------|------------|-------------|
+| `/Library/Developer/CoreSimulator` | iOS Simulator runtimes and APFS volumes | Check Xcode's installed platforms and `xcrun simctl list` |
+| `/Library/Frameworks/Python.framework` | Python installations | Confirm which interpreter each project uses |
+| `/opt/homebrew` | Homebrew packages and support files | Run `brew cleanup --dry-run` before `brew cleanup` |
+| `/Applications/Xcode.app` | Xcode | Remove only if Xcode is no longer needed |
 
-Clean old simulators: `xcrun simctl delete unavailable`
-Clean Homebrew: `brew cleanup --prune=all`
+`xcrun simctl delete unavailable` removes devices tied to unavailable runtimes. Review `xcrun simctl list` first.
 
 ## Common Cleanup Targets
 
-### Always safe to delete
-- `~$*.docx` / `~$*.xlsx` - Office temp lock files
-- `.DS_Store` - macOS folder metadata
-- `$RECYCLE.BIN/` - Windows recycle bin (from external drives)
-- `Thumbs.db` - Windows thumbnail cache
-- `.Spotlight-V100/` - Spotlight index data
-- `.Trashes/` - macOS trash on external drives
+### Review before deleting
+- `~$*.docx` / `~$*.xlsx`: Office lock files; remove only after closing the document and confirming the lock is stale
+- `.DS_Store`: Finder metadata that macOS can recreate
+- `$RECYCLE.BIN/`: recoverable files from a Windows recycle bin; inspect before emptying
+- `Thumbs.db`: Windows thumbnail cache
+- `.Spotlight-V100/`: Spotlight index data that macOS may rebuild
+- `.Trashes/`: recoverable files from macOS Trash on external drives; inspect before emptying
 
-### Usually safe to delete (verify first)
-- `.dmg` files in Downloads (installers, delete after install)
-- `*.partial` / `*.crdownload` - Incomplete downloads
+### Other cleanup candidates
+- `.dmg` files in Downloads, after confirming the installer is no longer needed
+- `*.partial` / `*.crdownload` files, after confirming no download is active
 - Duplicate downloads: `file (1).pdf`, `file (2).pdf`
 - wetransfer folders with hash names (after extracting content)
 - Empty directories
 
 ### Build artifacts in code projects
-These regenerate automatically when you build/install again:
-- `node_modules/` — `rm -rf` per project, `npm install` to restore
-- `build/`, `dist/`, `.next/`, `.expo/` — build outputs
-- `DerivedData/`, `.build/` — Xcode/Swift build caches
-- `Pods/` — CocoaPods dependencies
-- `.gradle/` — Gradle build cache (project-level)
+These are often reproducible, but removal can break offline work or discard local-only output. Check the project and its lock files first:
+- `node_modules/` (restore with the project's package manager)
+- `build/`, `dist/`, `.next/`, `.expo/` (build output)
+- `DerivedData/`, `.build/` (Xcode and Swift build output)
+- `Pods/` (CocoaPods dependencies)
+- `.gradle/` (project-level Gradle cache)
 
 ## Additional Resources
 
 ### Reference Files
-- **`references/cleanup-checklist.md`** - Detailed cleanup procedures with bash commands by priority
+- **`references/cleanup-checklist.md`**: read-only inventory commands grouped by review effort

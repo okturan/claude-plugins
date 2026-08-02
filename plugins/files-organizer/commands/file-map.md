@@ -1,10 +1,10 @@
 ---
-description: Generate an interactive HTML dashboard visualizing file structure and recommendations
+description: Write a standalone HTML report of file structure, storage use, and suggested actions
 argument-hint: [output-filename]
 allowed-tools: Read, Write, Bash, Glob, Grep
 ---
 
-Generate an interactive HTML file map dashboard. Use the generate-file-map skill for design patterns and the mac-file-patterns skill for organization knowledge.
+Write a standalone HTML file map. Use the `generate-file-map` skill for the report structure and the `mac-file-patterns` skill for file classification.
 
 Output file: $ARGUMENTS (default: file-map.html in current directory)
 
@@ -15,9 +15,9 @@ Output file: $ARGUMENTS (default: file-map.html in current directory)
    bash ${CLAUDE_PLUGIN_ROOT}/scripts/scan-files.sh ~
    ```
 
-2. **Read the template** for design patterns — use the Read tool to load `${CLAUDE_PLUGIN_ROOT}/skills/generate-file-map/assets/template.html`
+2. **Read the template.** Use the Read tool to load `${CLAUDE_PLUGIN_ROOT}/skills/generate-file-map/assets/template.html`.
 
-3. **Generate the HTML dashboard** with these sections:
+3. **Generate the HTML report** with these sections:
 
    a. **Header** - Title, scan date, total storage summary
 

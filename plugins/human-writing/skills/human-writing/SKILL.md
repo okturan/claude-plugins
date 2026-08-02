@@ -1,6 +1,6 @@
 ---
 name: human-writing
-description: "Write outward-facing prose that reads like a person wrote it, and remove AI tells from existing drafts. Use when writing or editing social posts, blog posts, READMEs, announcements, emails, marketing copy, or docs prose — or when the user asks to humanize text, remove AI slop, or make writing sound less like AI."
+description: "Write or edit outward-facing prose in a plain, specific voice. Use for social posts, blog posts, READMEs, announcements, emails, marketing copy, and docs prose. Also use when the user asks to humanize text, remove AI slop, or make writing sound less like AI."
 ---
 
 # Human Writing

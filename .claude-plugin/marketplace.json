@@ -1,13 +1,13 @@
 {
   "name": "okturan-plugins",
-  "description": "Personal plugin marketplace by okturan",
+  "description": "Claude Code plugins for file organization, repository audits, prose editing, and work-shaping.",
   "owner": {
     "name": "okturan"
   },
   "plugins": [
     {
       "name": "files-organizer",
-      "description": "Scan Mac file systems, find duplicates, analyze folder structure, detect orphan files, and generate interactive HTML dashboards with reorganization recommendations.",
+      "description": "Scan macOS storage, find duplicate and misplaced files, and build a self-contained HTML file map.",
       "author": {
         "name": "okturan"
       },
@@ -17,7 +17,7 @@
     },
     {
       "name": "project-health",
-      "description": "Deep audit any code repository with a score out of 100 across 9 categories: git health, structure, code quality, config, database, docs, testing, dependencies, and security.",
+      "description": "Score a Git repository across nine categories and show the checks and findings behind the score.",
       "author": {
         "name": "okturan"
       },
@@ -27,7 +27,7 @@
     },
     {
       "name": "human-writing",
-      "description": "Write outward-facing prose that reads like a person wrote it, and strip AI tells from existing drafts. Drafting guidance plus a /humanize rewrite pass.",
+      "description": "Draft plain prose and rewrite text that carries common AI-writing patterns. Includes the /humanize command.",
       "author": {
         "name": "okturan"
       },

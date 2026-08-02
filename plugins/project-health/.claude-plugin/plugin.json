@@ -1,7 +1,7 @@
 {
   "name": "project-health",
   "version": "0.1.0",
-  "description": "Deep audit any code repository with a score out of 100 across 9 categories: git health, structure, code quality, config, database, docs, testing, dependencies, and security.",
+  "description": "Score a Git repository across nine categories and show the checks and findings behind the score.",
   "author": {
     "name": "okturan"
   },

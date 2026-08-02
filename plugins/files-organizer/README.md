@@ -1,28 +1,28 @@
 # files-organizer
 
-A Claude Code plugin for organizing Mac file systems.
+A Claude Code plugin for reviewing files on macOS.
 
-Scans directories, finds duplicates, analyzes folder structure, detects misplaced files, and generates interactive HTML dashboards with reorganization recommendations.
+It inventories disk usage, groups exact duplicate candidates, flags files that may be misplaced, and writes a standalone HTML report. The plugin reports commands for review; it does not move or delete files on its own.
 
 ## Commands
 
 ### `/scan [directory]`
 
-Deep disk usage scan covering everything including hidden dotfiles, Library, Applications, system dirs, APFS volumes, and cleanable caches. Defaults to home directory. Can drill into specific directories with a file-level inventory.
+Runs a broad disk-usage scan that includes hidden folders, `~/Library`, applications, selected system paths, APFS volumes, and common caches. It defaults to the home directory. Permission errors and APFS accounting can leave gaps, which the report must show.
 
 ### `/organize [directory]`
 
-Full analysis. Launches three agents in parallel:
+Launches three agents in parallel:
 
-- **dedup-finder** (cyan) — Exact duplicates via MD5, near-duplicates by similar names, redundant archives (ZIP alongside extracted folder), temp/junk files
-- **structure-advisor** (green) — Scattered content detection, folder merge candidates, proposed directory hierarchy, migration commands
-- **orphan-detector** (yellow) — Misplaced files, stray downloads, lonely files, abandoned directories
+- **dedup-finder:** groups content-identical files, similar filenames, archives with nearby extracted folders, and temporary-file candidates
+- **structure-advisor:** finds related files in different locations and proposes a smaller directory structure
+- **orphan-detector:** flags files that appear misplaced and suggests existing folders that may fit better
 
-Produces prioritized recommendations (quick wins, high impact, reorganization) with risk levels and copy-paste shell commands.
+The report separates low-risk review items from moves and deletions that need closer inspection. Suggested shell commands are printed for review, not executed.
 
 ### `/file-map [output.html]`
 
-Generates a self-contained HTML dashboard. Dark theme, collapsible folder explorer, file type badges, recommendation cards with copy-to-clipboard buttons, search/filter. Open directly in a browser — no server needed.
+Writes one HTML file with folder sizes, file counts, duplicate candidates, a collapsible directory view, search, and copyable commands. It opens directly in a browser without a server.
 
 ## Components
 

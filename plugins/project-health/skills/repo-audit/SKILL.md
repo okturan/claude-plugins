@@ -1,11 +1,11 @@
 ---
 name: repo-audit
-description: "Comprehensive repository health audit methodology with 9 scoring categories and diagnostic procedures. Use this skill when performing a project health check, repo audit, code quality assessment, or when the /project-health command is invoked."
+description: "Score a repository with nine documented categories and diagnostic checks. Use for project health checks, repository audits, code quality assessments, or the /project-health command."
 ---
 
 # Repository Audit
 
-Methodology for auditing any git repository across 9 categories, scoring each, and producing an actionable report. All categories are independent — run their diagnostic commands in parallel.
+Audit a Git repository across nine categories and score each one. The report must show evidence and concrete next steps. The categories are independent, so run their diagnostic commands in parallel.
 
 Common exclusions for all `find`/`grep` commands: `.git`, `node_modules`, `.claude`, `__pycache__`, `.venv`, `vendor`, `dist`, `build`, `target`.
 
@@ -41,7 +41,7 @@ git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objec
 - Remote configured (3 pts)
 - Clean working tree (3 pts)
 - Descriptive commit messages (3 pts)
-- No huge blobs in history — files > 10MB (3 pts)
+- No unexplained blobs larger than 10 MB in history (3 pts)
 - Sensible branching strategy (3 pts)
 
 ### 2. Project Structure & Organization (15 pts)
@@ -57,7 +57,7 @@ find . -type f -not -path './.git/*' -not -path './.claude/*' -not -path '*/node
 - Logical module/directory naming (3 pts)
 - No loose files that belong in subdirs (3 pts)
 - Config/data/code properly separated (3 pts)
-- No clutter — temp files, old backups, duplicates (2 pts)
+- No clutter such as temp files, old backups, or duplicates (2 pts)
 
 ### 3. Code Quality (15 pts)
 
@@ -65,7 +65,7 @@ Detect the primary language first, then run appropriate checks.
 
 **For any language:**
 ```bash
-# Line counts — only show files over 500 lines (god file candidates)
+# Line counts; only show files over 500 lines for review
 find . -type f \( -name '*.py' -o -name '*.js' -o -name '*.ts' -o -name '*.go' -o -name '*.rs' -o -name '*.java' \) -not -path '*/node_modules/*' -not -path './.git/*' -not -path '*/.venv/*' -exec wc -l {} + | awk '$1 > 500' | sort -rn
 ```
 
@@ -92,7 +92,7 @@ cat .gitignore 2>/dev/null
 
 **Scoring:**
 - Comprehensive .gitignore (3 pts)
-- No credentials committed (3 pts) — run the sensitive-file scan from Category 9 (if running this category in isolation, run the Category 9 scan commands as well)
+- No credentials committed (3 pts). Run the sensitive-file scan from Category 9; if this category is running alone, run those commands here.
 - .env.example or equivalent provided (2 pts)
 - Proper packaging config present (2 pts)
 
@@ -110,7 +110,7 @@ grep -rn 'CREATE TABLE\|ALTER TABLE\|migration\|schema_version' --include='*.py'
 - Data files organized, not in root (2 pts)
 - Reasonable DB sizes (2 pts)
 
-If no database is used, award 10/10 and note "N/A — no database" (deduct only if stale data files or messy data organization found).
+If no database is used, award 10/10 and note "N/A: no database". Deduct only if stale data files or disorganized data are present.
 
 ### 6. Documentation (10 pts)
 
@@ -123,7 +123,7 @@ wc -l README.md 2>/dev/null
 - README with setup instructions (3 pts)
 - LICENSE present (2 pts)
 - CHANGELOG or version history (2 pts)
-- AI-aware docs — CLAUDE.md, etc. (1 pt) — award if present, or award and note "N/A" if not a Claude Code project
+- Agent instructions such as `CLAUDE.md` (1 pt). Award if present; otherwise award and note "N/A" when the repository does not use Claude Code.
 - Code-level documentation adequate (2 pts)
 
 ### 7. Testing & CI (15 pts)
@@ -165,12 +165,12 @@ find . \( -name '.env' -o -name '*.pem' -o -name '*.key' -o -name 'credentials*'
 git log --diff-filter=A --name-only --pretty=format: | grep -iE '\.env$|\.pem$|\.key$|credentials|secret' | head -10
 ```
 
-The sensitive-file scan here also serves Category 4 (credentials check) — no need to run it twice.
+The sensitive-file scan also covers the credentials check in Category 4. Do not run it twice.
 
 **Scoring:**
 - No hardcoded secrets in code (2 pts)
-- Sensitive files have restrictive permissions — check `ls -la` output, files like `.env`/`.pem`/`.key` should not be world-readable (1 pt)
-- No secrets in git history — check if sensitive files were ever committed (1 pt)
+- Sensitive files have restrictive permissions. Check `ls -la`; files such as `.env`, `.pem`, and `.key` should not be world-readable. (1 pt)
+- No secrets in Git history. Check whether sensitive files were ever committed. (1 pt)
 - No overly broad API scopes or credentials stored in plaintext config (1 pt)
 
 ## Report Format
@@ -216,9 +216,9 @@ Progress bars: 10 chars wide. `filled = round(score / max_score * 10)`. Use `#` 
 
 ## Notes
 
-- Be honest and specific — vague "could be better" is useless
+- Be specific. Do not use vague findings such as "could be better."
 - Each improvement must have a concrete next step
 - Acknowledge what's already good
-- This is read-only analysis — never modify files
+- This is read-only analysis. Never modify files.
 - Auto-detect the primary language and adapt checks accordingly
-- Skip categories that don't apply (e.g., database for a pure frontend project) — award full points and note "N/A"
+- Skip categories that do not apply, such as database checks for a frontend-only project. Award full points and note "N/A."

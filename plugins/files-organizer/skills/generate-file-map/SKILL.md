@@ -1,12 +1,12 @@
 ---
 name: generate-file-map
-description: This skill should be used when the user asks to "generate a file map", "create an HTML dashboard", "visualize my files", "create a file map HTML", "update the file map", "build a storage dashboard", "map my folders", "scan my files into a dashboard", or "create a file structure report". It produces a self-contained HTML file visualizing file structure, storage usage, and organization recommendations.
+description: Create or update a self-contained HTML report of file structure, storage use, and suggested actions. Use when the user asks for a file map, storage dashboard, folder map, or file-structure report.
 version: 0.2.0
 ---
 
 # Generate File Map
 
-Create interactive, self-contained HTML dashboards that visualize file structure, storage usage, and organization recommendations for Mac file systems.
+Write one HTML file that reports file structure, storage use, and suggested actions for a macOS directory.
 
 ## Data Gathering
 

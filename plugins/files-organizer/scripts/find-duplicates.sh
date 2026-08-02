@@ -80,7 +80,7 @@ if [ "$total_dupes" -gt 0 ]; then
     [ -z "$hash" ] && continue
     awk -F'\t' -v h="$hash" '$1 == h' "$HASHFILE" | tail -n +2 | cut -f2
   done | awk '{sum+=$1} END {print sum+0}')
-  echo "Space wasted by duplicates: $(format_size "$wasted")"
+  echo "Bytes used by copies beyond the first: $(format_size "$wasted")"
 fi
 
 echo ""

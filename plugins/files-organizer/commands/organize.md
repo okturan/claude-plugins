@@ -1,22 +1,22 @@
 ---
-description: Analyze file structure and generate reorganization recommendations
+description: Review duplicates, file placement, and folder structure before proposing changes
 argument-hint: [directory-path]
 allowed-tools: Read, Bash, Glob, Grep, Agent, Write
 model: opus
 ---
 
-Run a comprehensive file organization analysis on the specified directory (default: user's home personal directories) and generate actionable reorganization recommendations.
+Review the specified directory and propose file moves or removals. Default to the user's personal home directories. Do not change the filesystem.
 
 Target: $ARGUMENTS
 
-**Phase 1 - Scan the filesystem:**
+**Phase 1: Scan the filesystem**
 
 If a recent scan hasn't been done, run the file-level scan script (note: this is `scan-files.sh`, not the deep disk scan from `/scan`):
 ```
 bash ${CLAUDE_PLUGIN_ROOT}/scripts/scan-files.sh "<target-path>"
 ```
 
-**Phase 2 - Launch analysis agents in parallel:**
+**Phase 2: Launch analysis agents in parallel**
 
 Use the Agent tool to launch these three specialized agents concurrently (all in a single message):
 
@@ -26,30 +26,30 @@ Use the Agent tool to launch these three specialized agents concurrently (all in
 
 2. **structure-advisor** agent - Analyze folder relationships and suggest consolidation
    - Provide the target directory path and the scan results summary
-   - Ask it to identify scattered related content and propose a cleaner folder structure
+   - Ask it to identify related content in different locations and propose a smaller folder structure
 
 3. **orphan-detector** agent - Find misplaced files and suggest relocation
    - Provide the target directory path
    - Ask it to identify files that don't belong where they are
 
-**Phase 3 - Compile recommendations:**
+**Phase 3: Compile recommendations**
 
 After all agents complete, compile their findings into a structured report:
 
 ### Recommendations Report
 
-1. **Duplicates to remove** - Exact duplicates with sizes and `rm` commands
-2. **Near-duplicates to review** - Similar files that may be versions of each other
-3. **Folders to merge** - Directories with overlapping content that should be consolidated
-4. **Files to relocate** - Orphan files with suggested destinations
-5. **Proposed folder structure** - A clean directory tree showing where things should live
-6. **Cleanup commands** - Ready-to-copy shell commands for each action (mkdir, mv, rm)
-7. **Estimated space savings** - How much space each action would recover
+1. **Content-identical files**: sizes, paths, and a recommendation about which copy to keep
+2. **Similar files to review**: files that may be different versions despite similar names
+3. **Folders that may overlap**: directories with related content
+4. **Files that may be misplaced**: current paths and suggested destinations
+5. **Proposed folder structure**: a directory tree based on the user's existing categories
+6. **Commands to review**: quoted `mkdir`, `mv`, or `rm` commands for each proposed action
+7. **Measured space recovery**: totals based on the scanned files, without estimates for unscanned data
 
 Group recommendations by priority:
-- **Quick wins** (safe deletes: temp files, .DS_Store, ~$ files, empty dirs)
-- **High impact** (large duplicates, archive candidates)
-- **Reorganization** (moves and merges that improve structure)
+- **Low-risk review** (OS metadata, inactive Office lock files, and empty directories)
+- **Large items** (content-identical files and archive candidates)
+- **Folder changes** (moves and merges that affect the user's filing system)
 
 Present each recommendation with:
 - What to do
@@ -57,4 +57,4 @@ Present each recommendation with:
 - The shell command to execute it
 - Risk level (safe / review first / backup first)
 
-Ask the user if they want to generate an HTML dashboard with these findings using `/file-map`.
+After the report, mention that `/file-map` can turn the same findings into an HTML file.
