@@ -1,7 +1,8 @@
 ---
 name: mac-file-patterns
 description: Analyze macOS file structures, classify files, review cleanup candidates, or plan a folder reorganization. Covers standard Mac directories, file extensions, and English or Spanish filename patterns. Treat every deletion as a review step.
-version: 0.2.0
+metadata:
+  version: "0.2.0"
 user-invocable: false
 ---
 

@@ -1,6 +1,6 @@
 {
   "name": "human-writing",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Draft plain prose and rewrite text that carries common AI-writing patterns. Includes the /humanize command.",
   "author": {
     "name": "okturan"

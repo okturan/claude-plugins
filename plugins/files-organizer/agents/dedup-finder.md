@@ -1,6 +1,7 @@
 ---
 name: dedup-finder
-description: Find content-identical files, likely versions with similar names, and archives that may duplicate extracted folders. Use when the user asks about duplicate files or recoverable disk space. Examples:
+description: |
+  Find content-identical files, likely versions with similar names, and archives that may duplicate extracted folders. Use when the user asks about duplicate files or recoverable disk space. Examples:
 
   <example>
   Context: User wants to find duplicate files on their Mac

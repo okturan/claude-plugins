@@ -40,7 +40,7 @@
     <line x1="0" y1="0" x2="1168" y2="0" class="rule" />
     <rect x="0" y="18" width="4" height="52" fill="#226554" />
     <text x="20" y="39" class="row-title">files organizer</text>
-    <text x="20" y="62" class="version">v0.1.0</text>
+    <text x="20" y="62" class="version">v0.1.1</text>
     <text x="306" y="38" class="body">Scans macOS storage, flags duplicate and misplaced files,</text>
     <text x="306" y="62" class="body">and writes a standalone HTML file map.</text>
     <text x="900" y="50" class="contents mono">3 commands / 3 agents / 2 skills</text>
@@ -49,7 +49,7 @@
     <line x1="0" y1="0" x2="1168" y2="0" class="rule" />
     <rect x="0" y="18" width="4" height="52" fill="#226554" />
     <text x="20" y="39" class="row-title">project health</text>
-    <text x="20" y="62" class="version">v0.1.0</text>
+    <text x="20" y="62" class="version">v0.1.1</text>
     <text x="306" y="38" class="body">Scores a Git repository across nine documented categories</text>
     <text x="306" y="62" class="body">and shows the evidence behind every deduction.</text>
     <text x="900" y="50" class="contents mono">1 command / 1 skill</text>
@@ -58,7 +58,7 @@
     <line x1="0" y1="0" x2="1168" y2="0" class="rule" />
     <rect x="0" y="18" width="4" height="52" fill="#226554" />
     <text x="20" y="39" class="row-title">human writing</text>
-    <text x="20" y="62" class="version">v0.1.0</text>
+    <text x="20" y="62" class="version">v0.1.1</text>
     <text x="306" y="38" class="body">Drafts plain prose and rewrites common AI-writing patterns</text>
     <text x="306" y="62" class="body">without inventing details or changing technical claims.</text>
     <text x="900" y="50" class="contents mono">1 command / 1 skill</text>

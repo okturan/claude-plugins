@@ -1,6 +1,7 @@
 ---
 name: structure-advisor
-description: Use this agent when the user wants to reorganize folders, consolidate related files, merge overlapping directories, or plan a smaller file hierarchy. Examples:
+description: |
+  Use this agent when the user wants to reorganize folders, consolidate related files, merge overlapping directories, or plan a smaller file hierarchy. Examples:
 
   <example>
   Context: User wants to organize their messy Documents folder

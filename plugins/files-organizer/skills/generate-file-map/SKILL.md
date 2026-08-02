@@ -1,7 +1,8 @@
 ---
 name: generate-file-map
 description: Create or update a self-contained HTML report of file structure, storage use, and suggested actions. Use when the user asks for a file map, storage dashboard, folder map, or file-structure report.
-version: 0.2.0
+metadata:
+  version: "0.2.0"
 ---
 
 # Generate File Map

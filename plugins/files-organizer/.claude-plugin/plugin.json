@@ -1,6 +1,6 @@
 {
   "name": "files-organizer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Scan macOS storage, find duplicate and misplaced files, and build a self-contained HTML file map.",
   "author": {
     "name": "okturan"

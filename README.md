@@ -101,7 +101,7 @@ claude plugin marketplace update okturan-plugins   # Claude Code plugin installs
 
 ## Verification
 
-Every pull request is checked on macOS and Linux. CI compares marketplace entries with plugin manifests, validates skill and command frontmatter, resolves local documentation links, and tests the bundled shell helpers. It does not run the disk scanner against the CI host.
+Every pull request is checked on macOS and Linux. CI compares marketplace entries with plugin manifests, requires this README to list every plugin, skill, and command, validates component frontmatter, resolves local documentation links, and tests the bundled shell helpers. It does not run the disk scanner against the CI host.
 
 ## Plugin Structure
 

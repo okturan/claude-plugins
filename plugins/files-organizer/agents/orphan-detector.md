@@ -1,6 +1,7 @@
 ---
 name: orphan-detector
-description: Find files whose location does not match their type or neighboring content, then suggest folders that may fit better. Use when the user asks about misplaced, lone, or stray files. Examples:
+description: |
+  Find files whose location does not match their type or neighboring content, then suggest folders that may fit better. Use when the user asks about misplaced, lone, or stray files. Examples:
 
   <example>
   Context: User wants to find files that are in the wrong place

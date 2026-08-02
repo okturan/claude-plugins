@@ -41,6 +41,16 @@ function frontmatter(markdown) {
   return fields;
 }
 
+function frontmatterKeys(markdown) {
+  const match = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
+  if (!match) return [];
+
+  return match[1]
+    .split(/\r?\n/)
+    .map((line) => line.match(/^([a-z][a-z0-9-]*):(?:\s|$)/i)?.[1])
+    .filter(Boolean);
+}
+
 async function walk(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
   const files = [];
@@ -116,6 +126,25 @@ async function validateMarketplace() {
 }
 
 async function validateFrontmatter(files) {
+  const portableSkillFields = new Set([
+    "allowed-tools",
+    "compatibility",
+    "description",
+    "license",
+    "metadata",
+    "name",
+  ]);
+  const claudeSkillFields = new Set([
+    "agent",
+    "argument-hint",
+    "arguments",
+    "context",
+    "disable-model-invocation",
+    "hooks",
+    "model",
+    "user-invocable",
+  ]);
+
   for (const file of files) {
     const relative = path.relative(root, file);
     const markdown = await readFile(file, "utf8");
@@ -128,12 +157,57 @@ async function validateFrontmatter(files) {
     if (relative.endsWith("/SKILL.md")) {
       if (!fields.name) fail(`${relative}: frontmatter name is required`);
       if (!fields.description) fail(`${relative}: frontmatter description is required`);
+      for (const key of frontmatterKeys(markdown)) {
+        if (!portableSkillFields.has(key) && !claudeSkillFields.has(key)) {
+          fail(`${relative}: unsupported skill frontmatter field: ${key}`);
+        }
+      }
       const directoryName = path.basename(path.dirname(file));
       if (fields.name && fields.name !== directoryName) {
         fail(`${relative}: skill name must match directory (${directoryName})`);
       }
+    } else if (relative.includes(`${path.sep}agents${path.sep}`)) {
+      if (!fields.name) fail(`${relative}: agent frontmatter name is required`);
+      if (!fields.description) fail(`${relative}: agent frontmatter description is required`);
+      const frontmatterBlock = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/)?.[1] || "";
+      if (frontmatterBlock.includes("<example>") && !/^description:\s*[|>][-+]?\s*$/m.test(frontmatterBlock)) {
+        fail(`${relative}: multiline agent examples require a YAML block-scalar description`);
+      }
     } else if (relative.includes(`${path.sep}commands${path.sep}`) && !fields.description) {
       fail(`${relative}: command frontmatter description is required`);
+    }
+  }
+}
+
+async function validateReadmeInventory(files) {
+  const marketplace = await readJson(".claude-plugin/marketplace.json");
+  const readme = await readFile(path.join(root, "README.md"), "utf8").catch((error) => {
+    fail(`README.md: ${error.message}`);
+    return "";
+  });
+  if (!marketplace?.plugins || !readme) return;
+
+  for (const plugin of marketplace.plugins) {
+    if (!readme.includes(`### ${plugin.name}`)) {
+      fail(`README.md: missing plugin section for ${plugin.name}`);
+    }
+
+    const pluginPrefix = `${path.normalize(plugin.source)}${path.sep}`;
+    for (const file of files) {
+      const relative = path.relative(root, file);
+      if (!relative.startsWith(pluginPrefix)) continue;
+
+      if (relative.endsWith(`${path.sep}SKILL.md`)) {
+        const markdownPath = relative.split(path.sep).join("/");
+        if (!readme.includes(`(${markdownPath})`)) {
+          fail(`README.md: missing skill link for ${markdownPath}`);
+        }
+      } else if (relative.includes(`${path.sep}commands${path.sep}`) && relative.endsWith(".md")) {
+        const command = `/${path.basename(relative, ".md")}`;
+        if (!readme.includes(`\`${command}`)) {
+          fail(`README.md: missing command ${command}`);
+        }
+      }
     }
   }
 }
@@ -158,11 +232,15 @@ async function validateMarkdownLinks(markdownFiles) {
 const allFiles = await walk(root);
 const markdownFiles = allFiles.filter((file) => file.endsWith(".md"));
 const componentFiles = markdownFiles.filter(
-  (file) => file.endsWith(`${path.sep}SKILL.md`) || file.includes(`${path.sep}commands${path.sep}`),
+  (file) =>
+    file.endsWith(`${path.sep}SKILL.md`) ||
+    file.includes(`${path.sep}agents${path.sep}`) ||
+    file.includes(`${path.sep}commands${path.sep}`),
 );
 
 await validateMarketplace();
 await validateFrontmatter(componentFiles);
+await validateReadmeInventory(allFiles);
 await validateMarkdownLinks(markdownFiles);
 
 if (failures.length > 0) {
@@ -171,4 +249,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log("Marketplace, manifests, component frontmatter, and Markdown links are valid.");
+console.log("Marketplace, manifests, README inventory, component frontmatter, and Markdown links are valid.");
