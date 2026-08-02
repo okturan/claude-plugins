@@ -164,9 +164,9 @@ echo ""
   echo ""
 ) > "$TMPDIR_SCAN/08-large-files" 2>/dev/null &
 
-# 9. Cleanable space (small dirs, fast du calls)
+# 9. Common cache and build paths (small dirs, fast du calls)
 (
-  echo "=== CLEANABLE SPACE ==="
+  echo "=== COMMON CACHE AND BUILD PATHS ==="
   for d in \
     "$HOME_DIR/.cache/huggingface" "$HOME_DIR/.cache/uv" \
     "$HOME_DIR/.cache/puppeteer" "$HOME_DIR/.cache/torch" \

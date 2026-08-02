@@ -1,21 +1,23 @@
 # Mac Cleanup Checklist
 
-## Priority 1: Quick Wins (Safe, No Review Needed)
+## Step 1: Inventory small cleanup candidates
 
-### Temp/Junk Files
+These commands only list files. Review the results before constructing a deletion command.
+
+### Temporary and generated files
 ```bash
-# Remove Office temp files
-find ~ -name '~$*' -type f -delete
+# List Office lock files. Close the related document before removing a stale lock.
+find ~ -name '~$*' -type f
 
-# Remove .DS_Store files
-find ~ -name '.DS_Store' -type f -delete
+# List Finder metadata files
+find ~ -name '.DS_Store' -type f
 
-# Remove Windows artifacts
-find ~ -name 'Thumbs.db' -type f -delete
-find ~ -name '$RECYCLE.BIN' -type d -exec rm -rf {} +
+# List Windows metadata and recycle bins. Recycle bins may contain recoverable files.
+find ~ -name 'Thumbs.db' -type f
+find ~ -name '$RECYCLE.BIN' -type d
 
-# Remove incomplete downloads
-find ~/Downloads \( -name '*.crdownload' -o -name '*.partial' \) -type f -delete
+# List incomplete downloads. Confirm no download is active.
+find ~/Downloads \( -name '*.crdownload' -o -name '*.partial' \) -type f
 ```
 
 ### Empty Directories
@@ -24,11 +26,11 @@ find ~/Downloads \( -name '*.crdownload' -o -name '*.partial' \) -type f -delete
 find ~/Documents ~/Downloads -type d -empty
 ```
 
-## Priority 2: High Impact (Review First)
+## Step 2: Review larger candidates
 
 ### Downloads Cleanup
 ```bash
-# List DMG installers (usually safe to delete after install)
+# List DMG installers. Keep any installer needed for recovery or offline use.
 find ~/Downloads -name '*.dmg' -type f
 
 # List duplicate downloads (file (1).pdf pattern)
@@ -56,23 +58,23 @@ find ~/Documents/Screenshots -type f -mtime +730
 for zip in ~/Downloads/*.zip; do
   base=$(basename "$zip" .zip)
   if [ -d "$HOME/Downloads/$base" ]; then
-    echo "REDUNDANT: $zip (folder exists)"
+    echo "REVIEW: $zip (same-named folder exists; compare contents)"
   fi
 done
 ```
 
-## Priority 3: Reorganization (Careful Planning)
+## Step 3: Plan folder changes
 
 ### Find Scattered Content
 ```bash
 # CVs and resumes
-find ~ -iname '*cv*' -o -iname '*resume*' -o -iname '*curriculum*' 2>/dev/null | grep -v Library | grep -v '.git'
+find ~ \( -iname '*cv*' -o -iname '*resume*' -o -iname '*curriculum*' \) -not -path '*/Library/*' -not -path '*/.git/*' 2>/dev/null
 
 # Invoices and receipts
-find ~ -iname '*invoice*' -o -iname '*factura*' -o -iname '*receipt*' 2>/dev/null | grep -v Library
+find ~ \( -iname '*invoice*' -o -iname '*factura*' -o -iname '*receipt*' \) -not -path '*/Library/*' 2>/dev/null
 
 # Budget files
-find ~ -iname '*budget*' -o -iname '*presupuesto*' 2>/dev/null | grep -v Library
+find ~ \( -iname '*budget*' -o -iname '*presupuesto*' \) -not -path '*/Library/*' 2>/dev/null
 ```
 
 ### Large File Review
@@ -84,13 +86,6 @@ find ~ -type f -size +500M ! -path '*/Library/*' ! -path '*/.git/*' 2>/dev/null 
 find ~ -type f -size +1G ! -path '*/Library/*' ! -path '*/.git/*' 2>/dev/null
 ```
 
-## Space Recovery Estimates
+## Report measured recovery only
 
-| Action | Typical savings |
-|--------|----------------|
-| Delete old screenshots | 10-50 GB |
-| Remove duplicate ZIPs | 5-20 GB |
-| Clean Downloads | 5-15 GB |
-| Remove DMG installers | 1-5 GB |
-| Delete temp files | 100 MB - 1 GB |
-| Archive Creative Market ZIPs to external | 30-40 GB |
+Do not use fixed savings ranges. Sum the sizes returned by the scan for the exact files under review, and keep potential savings separate from space that was actually recovered.

@@ -1,0 +1,11 @@
+{
+  "name": "shape-the-work",
+  "version": "0.1.0",
+  "description": "Route work by the result needed now to ordinary execution, OpenSpec Explore, Wayfinder, or Long-Horizon Prompting, with readiness checks and explicit handoffs.",
+  "author": {
+    "name": "okturan"
+  },
+  "repository": "https://github.com/okturan/claude-plugins",
+  "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/shape-the-work",
+  "license": "MIT"
+}

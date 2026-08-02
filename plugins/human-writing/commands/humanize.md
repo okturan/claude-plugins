@@ -14,9 +14,9 @@ Arguments: $ARGUMENTS
 
 2. Load the human-writing skill and read its `references/ai-tells.md` catalog in full.
 
-3. Pass one — identify. List the tells actually present in this text by category. If the text also lacks human markers (no specifics, no stakes, uniform rhythm), note that; removing tells alone will not fix it.
+3. Pass one: identify. List the tells actually present in this text by category. If the text also lacks human markers (no specifics, no stakes, uniform rhythm), note that; removing tells alone will not fix it.
 
-4. Pass two — rewrite. Preserve meaning, technical claims, and quoted material exactly. Keep the author's voice: if samples of their real writing are available in the conversation or repo, match their habits. Where the text needs a concrete detail you don't have, insert a bracketed question like `[what did this cost?]` rather than inventing one.
+4. Pass two: rewrite. Preserve meaning, technical claims, and quoted material exactly. Keep the author's voice: if samples of their real writing are available in the conversation or repo, match their habits. Where the text needs a concrete detail you don't have, insert a bracketed question like `[what did this cost?]` rather than inventing one.
 
 5. Output the rewritten text first, then a plain list of at most six changes (pattern → fix), then any bracketed questions that need the author's answers.
 

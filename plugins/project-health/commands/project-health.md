@@ -1,10 +1,10 @@
 ---
-description: Run a comprehensive health audit on the current repository
+description: Score the current repository against nine documented categories
 argument-hint: [--category git|structure|code|config|data|docs|testing|deps|security]
 allowed-tools: Read, Bash, Glob, Grep
 ---
 
-Run a full health audit on the current working directory's git repository. Score it out of 100 across 9 categories and suggest concrete improvements.
+Score the current working directory's Git repository out of 100 across nine categories. Show the evidence behind each deduction and give a concrete next step.
 
 Arguments: $ARGUMENTS
 
@@ -16,6 +16,6 @@ If a `--category` argument is provided, run only that single category audit and 
 
 2. Load the repo-audit skill for the full list of categories, diagnostic commands, scoring criteria, and report format.
 
-3. Run the diagnostic commands for all categories (or the specified one). All 9 categories are independent — run their commands in parallel for speed.
+3. Run the diagnostic commands for all categories, or for the selected category. The nine categories are independent, so run their commands in parallel.
 
 4. Score each category against its rubric, then present the report as specified in the skill.

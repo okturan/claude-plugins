@@ -2,25 +2,30 @@
 
 [![skills.sh](https://skills.sh/b/okturan/claude-plugins)](https://skills.sh/okturan/claude-plugins)
 
-Claude Code plugins and agent skills by [okturan](https://github.com/okturan): file organization, repo health audits, and prose that doesn't read as AI.
+This repository contains four Claude Code plugins by [okturan](https://github.com/okturan):
 
-![Capability map for the okturan plugin marketplace](docs/marketplace-map.svg)
+- `files-organizer` scans macOS storage and prepares file cleanup plans.
+- `project-health` scores a Git repository across nine categories.
+- `human-writing` drafts plain prose and rewrites text with common AI-writing patterns.
+- `shape-the-work` routes by the result needed now, checks whether its child can run, and defines the handoff.
 
-The map is generated from the real marketplace and plugin manifests, including their current versions and component counts. CI regenerates the same model on macOS and Linux and fails if the committed proof drifts from the installable repository structure.
+![Generated inventory of the plugins, skills, commands, and agents in this repository](docs/marketplace-map.svg)
 
-## Quickstart (any agent)
+The diagram is generated from the marketplace and plugin manifests. CI checks the generated file on macOS and Linux, so stale versions and component counts fail the build.
 
-Works with any agent that supports skills — Claude Code, Cursor, Codex, and others:
+## Install individual skills
+
+The `skills` CLI can copy individual `SKILL.md` files into Claude Code, Cursor, Codex, and other supported agents:
 
 ```bash
 npx skills@latest add okturan/claude-plugins
 ```
 
-Pick the skills you want and the agents to install them to. This copies editable `SKILL.md` files into your setup, so you can hack on them.
+Choose the skills and target agents at the prompt. The installed files remain editable.
 
-## Install as a Claude Code plugin
+## Install full Claude Code plugins
 
-Prefer a managed install that updates when this repo does, and includes the slash commands? Inside Claude Code:
+Claude Code installs each plugin's skills and slash commands together. Inside Claude Code, run:
 
 ```
 /plugin marketplace add okturan/claude-plugins
@@ -34,45 +39,56 @@ claude plugin marketplace add okturan/claude-plugins
 claude plugin install human-writing@okturan-plugins
 ```
 
-Same pattern for `files-organizer` and `project-health`.
+Replace `human-writing` with `files-organizer`, `project-health`, or `shape-the-work` to install another plugin.
 
 ## Skills
 
-- **[human-writing](plugins/human-writing/skills/human-writing/SKILL.md)** — Write outward-facing prose that reads like a person wrote it, and strip AI tells from existing drafts. Ships with a [full catalog of AI tells](plugins/human-writing/skills/human-writing/references/ai-tells.md).
-- **[repo-audit](plugins/project-health/skills/repo-audit/SKILL.md)** — Audit any git repo across 9 categories and score it out of 100.
-- **[mac-file-patterns](plugins/files-organizer/skills/mac-file-patterns/SKILL.md)** — Classify macOS files, recommend folder hierarchies, and identify cleanup targets.
-- **[generate-file-map](plugins/files-organizer/skills/generate-file-map/SKILL.md)** — Produce a self-contained HTML dashboard of file structure and storage usage.
+- **[shape-the-work](plugins/shape-the-work/skills/shape-the-work/SKILL.md):** Route by the result needed now: ordinary execution, OpenSpec exploration, a Wayfinder decision map, or a Long-Horizon launch brief.
+- **[human-writing](plugins/human-writing/skills/human-writing/SKILL.md):** Draft posts, READMEs, announcements, emails, and marketing copy in a plain voice. The accompanying [AI-writing catalog](plugins/human-writing/skills/human-writing/references/ai-tells.md) is used when revising existing text.
+- **[repo-audit](plugins/project-health/skills/repo-audit/SKILL.md):** Check a Git repository across nine categories and score it out of 100.
+- **[mac-file-patterns](plugins/files-organizer/skills/mac-file-patterns/SKILL.md):** Classify macOS files, review folder structure, and identify cleanup candidates.
+- **[generate-file-map](plugins/files-organizer/skills/generate-file-map/SKILL.md):** Write a self-contained HTML report of file structure and storage use.
 
 ## Plugins
 
 Plugins bundle the skills above with slash commands (Claude Code only).
 
+### shape-the-work
+
+Choose the mode that owns the current artifact. Task duration does not select the mode, and the router does not assume a particular product or repository.
+
+| Command | What it does |
+|---------|-------------|
+| `/shape-work [task]` | Check child readiness, select the mode responsible for the result, and declare its output and exit condition |
+
+OpenSpec Explore, Wayfinder, and Long-Horizon Prompting remain external dependencies maintained by their upstream projects. The included checker distinguishes file presence from operational readiness without changing the machine. See the [plugin README](plugins/shape-the-work/README.md) for sources and setup requirements.
+
 ### human-writing
 
 | Command | What it does |
 |---------|-------------|
-| `/humanize [text or file]` | Two-pass rewrite: identify AI tells, then rewrite keeping voice and meaning |
+| `/humanize [text or file]` | Report the patterns it found, then rewrite without changing the meaning or voice |
 
-The skill also auto-activates when drafting posts, READMEs, announcements, emails, or marketing copy. Based on Wikipedia's Signs of AI writing catalog plus positive craft rules: real specifics, varied rhythm, one rhetorical device per piece, never invent details.
+The skill also loads when Claude drafts posts, READMEs, announcements, emails, or marketing copy. It uses Wikipedia's Signs of AI writing as a pattern catalog. When a draft needs details that are not in the source material, it asks for them or leaves a bracketed question instead of making them up.
 
 ### files-organizer
 
-Find duplicates, analyze folder structure, and generate an HTML dashboard for any directory.
+Scan a directory, group duplicate candidates, review file placement, and write an HTML report.
 
 | Command | What it does |
 |---------|-------------|
-| `/scan [directory]` | File inventory - sizes, types, age |
-| `/organize [directory]` | Full analysis with 3 parallel agents |
-| `/file-map [output.html]` | Interactive HTML dashboard with cleanup commands |
+| `/scan [directory]` | Disk-usage inventory, including hidden folders and selected system locations |
+| `/organize [directory]` | Duplicate, placement, and folder-structure review with three agents |
+| `/file-map [output.html]` | Standalone HTML report with file counts, sizes, and suggested commands |
 
 ### project-health
 
-Audit any git repo and score it out of 100 across 9 categories.
+Score a Git repository out of 100 across nine documented categories.
 
 | Command | What it does |
 |---------|-------------|
-| `/project-health` | Full audit across all 9 categories |
-| `/project-health --category testing` | Audit a single category |
+| `/project-health` | Run all nine category checks |
+| `/project-health --category testing` | Run one category |
 
 Categories: Git Health (15), Structure (15), Code Quality (15), Config (10), Database (10), Docs (10), Testing & CI (15), Dependencies (5), Security (5).
 
@@ -85,7 +101,7 @@ claude plugin marketplace update okturan-plugins   # Claude Code plugin installs
 
 ## Verification
 
-Every pull request is checked on both macOS and Linux. CI verifies that marketplace entries and plugin manifests stay in sync, skill and command frontmatter is complete, local documentation links resolve, and the file-organizer shell tools pass syntax, lint, and fixture-based behavior checks. The deep disk scanner is never executed in CI.
+Every pull request is checked on macOS and Linux. CI compares marketplace entries with plugin manifests, requires this README to list every plugin, skill, and command, validates component frontmatter, resolves local documentation links, and tests the bundled shell helpers. It does not run the disk scanner against the CI host.
 
 ## Plugin Structure
 
@@ -96,7 +112,7 @@ plugins/plugin-name/
   .claude-plugin/plugin.json   # manifest (name, version, description)
   commands/*.md                # slash commands
   agents/*.md                  # autonomous subagents
-  skills/*/SKILL.md            # auto-activating skills
+  skills/*/SKILL.md            # reusable agent skills
   scripts/                     # helper scripts
   hooks/hooks.json             # event handlers
 ```
