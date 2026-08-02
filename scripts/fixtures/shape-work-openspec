@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+case "${1:-}" in
+  --version)
+    printf '9.9.9-test\n'
+    ;;
+  list)
+    if [[ "${2:-}" != "--json" ]]; then
+      exit 2
+    fi
+    if [[ "${FAKE_OPENSPEC_FAIL:-0}" == "1" ]]; then
+      exit 1
+    fi
+    printf '{"changes":[],"root":{"path":"%s","source":"nearest"}}\n' \
+      "${FAKE_OPENSPEC_ROOT:?FAKE_OPENSPEC_ROOT is required}"
+    ;;
+  *)
+    exit 2
+    ;;
+esac

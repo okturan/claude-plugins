@@ -1,15 +1,17 @@
 # shape-the-work
 
-Choose the right level of process for the work in front of you. The plugin routes a task to one of four options:
+Choose the mode that owns the artifact needed now. Duration is supporting evidence, not the routing rule:
 
 | Route | Best fit |
 |---|---|
-| None | Clear work that can proceed normally |
-| OpenSpec Explore | One bounded question that needs read-only investigation |
-| Wayfinder | A large, ambiguous project that needs a map before a plan |
-| Long-Horizon Prompting | A precise objective ready for sustained autonomous execution |
+| None | A clear answer or implementation, even when execution spans sessions |
+| OpenSpec Explore | Non-implementation thinking, investigation, or option comparison |
+| Wayfinder | A durable tracker map for decision fog that exceeds one session |
+| Long-Horizon Prompting | Writing or auditing the launch brief for a hard autonomous run |
 
-The router selects one mode per phase, declares an exit condition, and carries verified facts and unresolved decisions into an explicit handoff. It does not assume a particular product or repository.
+The router selects one mode per phase, verifies that the chosen child is operational, declares its real exit condition, and carries verified facts and unresolved decisions into an explicit handoff. It does not assume a particular product or repository.
+
+Long work is not automatically Long-Horizon Prompting. A fully specified multi-session migration remains ordinary execution unless the user asks for an autonomous-run brief. Conversely, reviewing a future twelve-hour launch prompt uses Long-Horizon Prompting even if the review itself takes one short session.
 
 ## Install
 
@@ -46,10 +48,10 @@ The reusable Codex metadata keeps the skill explicit-only. Clear routine request
 
 ## Child skills
 
-The router does not copy or bundle its child skills. Install the modes you intend to use from their upstream sources:
+The router does not copy or bundle its child skills. Install the working set needed by each mode:
 
 - [OpenSpec Explore](https://github.com/Fission-AI/OpenSpec), usually initialized per project
-- [Wayfinder](https://github.com/mattpocock/skills/tree/main/skills/engineering/wayfinder)
+- [Wayfinder](https://github.com/mattpocock/skills/tree/main/skills/engineering/wayfinder), plus its setup, interviewing, domain-modeling, and relevant ticket companions
 - [Long-Horizon Prompting](https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering/tree/main/skills/long-horizon-prompting)
 
 Check availability without changing the machine:
@@ -58,12 +60,12 @@ Check availability without changing the machine:
 bash plugins/shape-the-work/skills/shape-the-work/scripts/check-dependencies.sh --json "$PWD"
 ```
 
-The script searches project-local `.agents`, `.codex`, and `.claude` skill directories, then the corresponding user-level locations. A missing child is reported, not silently approximated or installed.
+The script searches project-local `.agents`, `.codex`, and `.claude` skill directories, then the corresponding user-level locations. It reports `ready`, `needs-context-check`, `needs-setup`, or `missing`. A child is never silently approximated or installed.
 
 ## Boundaries
 
 - One child mode runs at a time.
-- Exploration remains read-only.
+- Exploration never writes application code; OpenSpec artifacts may be captured when requested.
 - Wayfinder artifacts are linked, not duplicated into OpenSpec.
-- A long-run brief does not authorize launching agents or changing external systems.
+- Long-Horizon Prompting ends with an audited launch brief; it does not run the harness or agents.
 - Publishing, destructive actions, messages, credentials, and purchases remain user-gated.

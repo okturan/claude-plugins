@@ -1,6 +1,6 @@
 interface:
   display_name: "Shape the Work"
-  short_description: "Route fuzzy, huge, or autonomous work"
-  default_prompt: "Use $shape-the-work to select and run the right work-shaping mode for this task."
+  short_description: "Choose exploration, decision maps, or run briefs"
+  default_prompt: "Use $shape-the-work to route this request by the artifact it needs now, then run only that phase."
 policy:
   allow_implicit_invocation: false

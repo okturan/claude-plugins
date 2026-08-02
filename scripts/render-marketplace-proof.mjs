@@ -30,8 +30,8 @@ const proofCopy = {
   },
   "shape-the-work": {
     lines: [
-      "Routes each task phase to one work-shaping mode,",
-      "with checked dependencies and explicit handoffs.",
+      "Routes by the artifact needed now, not task duration,",
+      "and checks child readiness before each handoff.",
     ],
   },
 };

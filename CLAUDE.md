@@ -55,8 +55,8 @@ Draft plain prose and rewrite text with common AI-writing patterns.
 - The skill loads when drafting posts, READMEs, announcements, or emails
 
 ### shape-the-work
-Route a task to ordinary execution, OpenSpec Explore, Wayfinder, or Long-Horizon Prompting.
+Route by the artifact needed now: ordinary execution, OpenSpec exploration, a Wayfinder decision map, or a Long-Horizon launch brief.
 
 - `/shape-work <task>` - select one mode for the current phase
-- Child skills stay external and are checked before use
+- Child skills stay external and operational readiness is checked before use
 - The router is general-purpose and explicit-only in Codex

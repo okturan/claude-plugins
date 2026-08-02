@@ -9,4 +9,4 @@ Use the `shape-the-work` skill to route this request:
 
 If no request was provided, ask what needs to be shaped and wait for the answer.
 
-Run the skill's dependency checker from the active project, choose one route for the current phase, and state the mode contract before substantial work. Load and follow the selected child skill in full. Do not install a missing dependency, start a long-running agent, create a specification, or modify project files unless the user requested that action.
+Route by the artifact the user needs now, not by duration. Run the skill's readiness checker from the active project, choose one mode for the current phase, and state the mode contract before substantial work. Load and follow the selected child skill in full. Do not install or configure a dependency, create tracker artifacts, launch an autonomous run, create a specification, or modify project files unless the user requested that action.

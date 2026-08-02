@@ -67,9 +67,9 @@
     <line x1="0" y1="0" x2="1168" y2="0" class="rule" />
     <rect x="0" y="18" width="4" height="52" fill="#226554" />
     <text x="20" y="39" class="row-title">shape the work</text>
-    <text x="20" y="62" class="version">v0.1.0</text>
-    <text x="306" y="38" class="body">Routes each task phase to one work-shaping mode,</text>
-    <text x="306" y="62" class="body">with checked dependencies and explicit handoffs.</text>
+    <text x="20" y="62" class="version">v0.1.1</text>
+    <text x="306" y="38" class="body">Routes by the artifact needed now, not task duration,</text>
+    <text x="306" y="62" class="body">and checks child readiness before each handoff.</text>
     <text x="900" y="50" class="contents mono">1 command / 1 skill</text>
   </g>
   <line x1="56" y1="630" x2="1224" y2="630" class="rule" />

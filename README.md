@@ -43,7 +43,7 @@ Replace `human-writing` with `files-organizer`, `project-health`, or `shape-the-
 
 ## Skills
 
-- **[shape-the-work](plugins/shape-the-work/skills/shape-the-work/SKILL.md):** Route a task to ordinary execution, OpenSpec Explore, Wayfinder, or Long-Horizon Prompting. It selects one mode for the current phase and defines when to hand off.
+- **[shape-the-work](plugins/shape-the-work/skills/shape-the-work/SKILL.md):** Route by the artifact needed now: ordinary execution, OpenSpec exploration, a Wayfinder decision map, or a Long-Horizon launch brief.
 - **[human-writing](plugins/human-writing/skills/human-writing/SKILL.md):** Draft posts, READMEs, announcements, emails, and marketing copy in a plain voice. The accompanying [AI-writing catalog](plugins/human-writing/skills/human-writing/references/ai-tells.md) is used when revising existing text.
 - **[repo-audit](plugins/project-health/skills/repo-audit/SKILL.md):** Check a Git repository across nine categories and score it out of 100.
 - **[mac-file-patterns](plugins/files-organizer/skills/mac-file-patterns/SKILL.md):** Classify macOS files, review folder structure, and identify cleanup candidates.
@@ -55,13 +55,13 @@ Plugins bundle the skills above with slash commands (Claude Code only).
 
 ### shape-the-work
 
-Choose the smallest work-shaping mode that fits the current phase. The router does not assume a particular product or repository.
+Choose the mode that owns the current artifact. Task duration does not select the mode, and the router does not assume a particular product or repository.
 
 | Command | What it does |
 |---------|-------------|
-| `/shape-work [task]` | Check child-skill availability, select one mode, and declare its output and exit condition |
+| `/shape-work [task]` | Check child readiness, select one artifact-owning mode, and declare its output and exit condition |
 
-OpenSpec Explore, Wayfinder, and Long-Horizon Prompting remain external dependencies maintained by their upstream projects. The included checker reports which ones are installed without changing the machine. See the [plugin README](plugins/shape-the-work/README.md) for sources and installation options.
+OpenSpec Explore, Wayfinder, and Long-Horizon Prompting remain external dependencies maintained by their upstream projects. The included checker distinguishes file presence from operational readiness without changing the machine. See the [plugin README](plugins/shape-the-work/README.md) for sources and setup requirements.
 
 ### human-writing
 

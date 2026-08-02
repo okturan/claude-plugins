@@ -44,6 +44,7 @@ jobs:
           bash -n
           plugins/files-organizer/scripts/*.sh
           plugins/shape-the-work/skills/shape-the-work/scripts/check-dependencies.sh
+          scripts/fixtures/shape-work-openspec
           scripts/test-files-organizer.sh
           scripts/test-shape-the-work.sh
 
@@ -53,6 +54,7 @@ jobs:
           shellcheck
           plugins/files-organizer/scripts/*.sh
           plugins/shape-the-work/skills/shape-the-work/scripts/check-dependencies.sh
+          scripts/fixtures/shape-work-openspec
           scripts/test-files-organizer.sh
           scripts/test-shape-the-work.sh
 
