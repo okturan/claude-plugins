@@ -1,74 +1,74 @@
 ---
 name: shape-the-work
-description: Route a task to OpenSpec Explore, Wayfinder, Long-Horizon Prompting, or ordinary execution. Use when a user asks which work-shaping skill fits, when uncertainty and task size make the right mode unclear, or when planning a handoff between exploration, specification, and sustained autonomous work. Do not invoke merely because a clear, routine task has several steps.
+description: Route work by the artifact needed now—not by duration—to ordinary execution, OpenSpec Explore, Wayfinder, or Long-Horizon Prompting. Use when a user asks which work-shaping skill fits, when task size and uncertainty make the mode unclear, or when managing explicit handoffs among investigation, durable decision mapping, and launch-brief design for autonomous runs. Do not invoke merely because clear routine work is lengthy or has several steps.
 ---
 
 # Shape the Work
 
-Choose the smallest work-shaping mode that fits the task, load that skill, and keep handoffs explicit. This is a general router. It does not assume a particular repository, product, or implementation stack.
+Choose the smallest mode that owns the result the user needs now. This router is general-purpose; it does not assume a repository, product, implementation stack, or issue tracker.
 
 ## Operating rule
 
 Use at most one child mode at a time:
 
-1. Classify the current phase.
-2. Check whether the selected child skill is available.
-3. State the route and its exit condition.
-4. Read the selected child skill's `SKILL.md` in full and follow it faithfully.
-5. Stop or hand off when the exit condition is met.
+1. Identify the requested artifact or action.
+2. Classify the current phase; use duration only as supporting evidence.
+3. Check whether the selected child is operational, not merely installed.
+4. State the route and exit condition.
+5. Read the selected child's `SKILL.md` in full and follow it faithfully.
+6. Stop or name the next handoff when the child's own exit condition is met.
 
-Do not blend fragments from all three skills into a new process. A task may move between modes over time, but each transition must be named.
+Do not blend fragments from all three children into a new process. A task may move between modes, but each transition must be explicit.
 
-## Route the task
+## Route by owned artifact
 
-| Route | Choose it when | Primary output | Exit condition |
+| Route | Choose it when the user needs | Primary output | Exit condition |
 |---|---|---|---|
-| **None** | The outcome and constraints are clear, ordinary repository inspection can answer remaining questions, and the work fits a normal session | The requested answer or implementation | The task is complete |
-| **OpenSpec Explore** | A bounded product, policy, behavior, or design question needs read-only investigation before anyone commits to a change | Evidence, alternatives, tradeoffs, and unresolved decisions | The user has enough clarity to stop, specify, or implement |
-| **Wayfinder** | The project is too large or foggy to plan linearly; goals, constraints, dependencies, or major decisions still need mapping | A navigable map of decisions, risks, workstreams, and candidate tickets | A bounded workstream or ticket can be selected |
-| **Long-Horizon Prompting** | The objective is already precise enough for hours or days of autonomous execution and needs checkpoints, verification, recovery, and a durable run brief | A long-run execution prompt or managed run contract | The run finishes, reaches a decision gate, or reports a real blocker |
+| **None** | An answer or implementation whose outcome and constraints are clear enough to proceed | The requested result | The task is complete; length does not change the route |
+| **OpenSpec Explore** | Thinking, investigation, option comparison, or requirement clarification without application implementation | Grounded evidence, alternatives, tradeoffs, and decisions | The user has enough clarity to stop, capture an OpenSpec artifact, propose a change, or proceed normally |
+| **Wayfinder** | A durable, shared map because the decision space itself exceeds one session and the way to the destination is still hidden | A canonical tracker map and child decision tickets | Charting ends when the initial map, currently specifiable tickets, and their frontier exist; Wayfinding ends when the way is clear and no decision fog remains |
+| **Long-Horizon Prompting** | A launch prompt or pre-launch audit for a hard autonomous or parallel run | A pseudo-formal task brief with success, non-counting, audit, reporting, and return conditions | The brief passes pre-launch red-teaming and is ready to hand to a separate execution harness |
 
-Use these tie-breakers:
+Apply these precedence rules:
 
-- Prefer **None** when normal reasoning and tools are enough.
-- Prefer **OpenSpec Explore** for one bounded uncertainty in an existing project.
-- Prefer **Wayfinder** when the uncertainty is the shape of the project itself.
-- Prefer **Long-Horizon Prompting** only after the objective and acceptance criteria are concrete.
-- If two routes seem plausible, select the earlier phase: map before exploring a ticket, and explore before launching a long run.
+- Route by the requested artifact before judging clarity or duration.
+- A clear multi-session migration remains **None** unless the user asks for an autonomous-run brief.
+- A multi-day but bounded investigation remains **OpenSpec Explore**.
+- A huge unresolved decision space becomes **Wayfinder** only when it warrants a persistent tracker map.
+- Writing or reviewing a future long-run prompt is **Long-Horizon Prompting**, even if today's prompt-editing session is short.
+- A vague hard problem can enter **Long-Horizon Prompting** when the requested output is its launch brief; precision is a launch gate, not an activation prerequisite.
 
-Task duration alone does not select Long-Horizon Prompting. A vague multi-day goal belongs in Wayfinder first.
+If no child owns the requested artifact, choose **None**. Do not force every long task into Long-Horizon Prompting.
 
-## Check dependencies
+## Check operational readiness
 
-The router is self-contained, but the three child skills are external dependencies. Before selecting one, run the bundled read-only checker from the active project directory:
+Run the bundled checker from the active project directory before loading a child:
 
 ```bash
 skill_directory="<directory containing this SKILL.md>"
 bash "$skill_directory/scripts/check-dependencies.sh" --json "$PWD"
 ```
 
-Replace the placeholder with the resolved skill directory. The checker searches project-local and common user-level skill roots without modifying anything.
+Replace the placeholder with the resolved skill directory. Interpret the selected child's status:
 
-If the chosen child is missing:
+- `ready`: required local prerequisites were found.
+- `needs-context-check`: the child exists, but the resolved project/store context may not match the target.
+- `needs-setup`: the child exists, but a required runtime, companion skill, reference, or tracker contract is missing.
+- `missing`: the child skill itself was not found.
 
-1. Say that it is missing; do not pretend to execute it.
-2. Read [references/dependencies.md](references/dependencies.md).
-3. Offer the appropriate installation path or a clearly labelled lightweight fallback.
-4. Do not install anything unless the user asks.
-
-A missing unselected child does not block the current route.
+A route can still be recommended when it is not ready, but do not execute it. Read [references/dependencies.md](references/dependencies.md), report the exact prerequisite, and offer setup. Do not install or configure anything unless the user asks. Missing unselected children do not block the chosen route.
 
 ## Declare the mode contract
 
-Before doing substantial work, report:
+Before substantial work, report:
 
 ```text
 Route: <None | OpenSpec Explore | Wayfinder | Long-Horizon Prompting>
-Why: <one concrete sentence>
-Dependency: <available at path | missing | not needed>
-Mode: <read-only exploration | project mapping | run preparation/execution | ordinary work>
+Why: <one concrete sentence about the artifact this mode owns>
+Dependency: <ready at path | needs context check | needs setup | missing | not needed>
+Mode: <ordinary work | non-implementation exploration | decision mapping | launch-brief design/review>
 Output: <the artifact or result this phase will produce>
-Exit: <the event that ends this phase>
+Exit: <the selected child's real exit condition>
 ```
 
 Keep this short. It is an operating contract, not a preamble.
@@ -77,65 +77,70 @@ Keep this short. It is an operating contract, not a preamble.
 
 ### OpenSpec Explore
 
-- Load `openspec-explore` from the active skill catalog or the path reported by the checker.
-- Stay read-only unless that skill and the user explicitly authorize a later transition.
-- Inspect actual code, behavior, data, and active OpenSpec context before judging policy.
-- Return evidence, tradeoffs, and open questions. Do not silently turn exploration into a proposal or implementation.
+- Load `openspec-explore` from the active catalog or reported path.
+- Confirm the resolved OpenSpec root or named store belongs to the intended project. Do not adopt an unrelated ancestor-workspace change merely because it is nearest.
+- Treat this as non-implementation exploration: inspect code, behavior, data, and OpenSpec context, but never write application code.
+- Creating or updating OpenSpec proposals, designs, or specs is allowed only when the user asks; it remains part of Explore mode, not application implementation.
+- Return evidence, alternatives, decisions, and open questions. Do not silently turn exploration into implementation.
 
 ### Wayfinder
 
-- Load `wayfinder` from the active skill catalog or the reported path.
-- Use it to expose goals, unknowns, decision points, dependencies, and promising workstreams.
-- Preserve Wayfinder's own artifact model. Do not shadow-copy every Wayfinder ticket into OpenSpec.
-- End by selecting a bounded next workstream, not by claiming the whole program is specified.
+- Load `wayfinder` from the active catalog or reported path.
+- Require its tracker contract plus the `grilling` and `domain-modeling` companions before charting. If they are absent, stop at a setup recommendation rather than simulating Wayfinder.
+- Preserve its canonical tracker map, child decision tickets, frontier, fog, claims, and one-ticket-per-session rule.
+- Treat Wayfinder as planning by default. Charting stops after the initial map, currently specifiable tickets, and their frontier exist; the overall effort continues until the way to the destination is clear.
+- Hand a decision ticket to OpenSpec Explore only when that bounded product or design investigation genuinely benefits from OpenSpec. Record the resulting decision back in the Wayfinder ticket and map.
+- Before creating issues, assignments, dependency edges, or local tracker files, ensure the user authorized those tracker writes.
 
 ### Long-Horizon Prompting
 
-- Load `long-horizon-prompting` from the active skill catalog or the reported path.
-- Confirm that the objective, scope, acceptance checks, authority, and stop conditions are explicit.
-- Produce the durable run brief and checkpoint/recovery contract that the child skill requires.
-- Preparing a long-run prompt does not authorize launching agents, changing external systems, publishing, or spending money. Start the run only when the user requested execution.
+- Load `long-horizon-prompting` from the active catalog or reported path.
+- Use it only to write, strengthen, or red-team the launch brief for a hard autonomous or parallel run.
+- Let it turn a vague hard problem into precise definitions, a success predicate, non-counting outcomes, an adversarial audit checklist, reporting requirements, and return conditions.
+- Do not use it as the runtime, harness, evaluator, checkpoint store, topology manager, or executor. Those are separate capabilities.
+- Do not launch the run. End when the brief passes its pre-launch rubric and identify the separately authorized execution or harness handoff.
 
 ### None
 
-- State that no special work-shaping skill adds value.
-- Continue with ordinary reasoning and tools.
-- Do not manufacture an artifact merely to justify the router.
+- State that none of the three specialist artifacts is needed.
+- Continue with ordinary reasoning and tools, whether the work takes minutes or multiple sessions.
+- Use normal plans, checkpoints, tests, or progress records as the task requires; do not manufacture a specialist artifact merely because the task is long.
 
 ## Hand off between phases
 
-Use a handoff only when the current exit condition has been met. Include:
+Carry forward:
 
-- the chosen objective;
-- verified facts and their sources;
+- the objective;
+- verified facts and sources;
 - decisions already made;
-- unresolved decisions and who owns them;
+- unresolved decisions and their owner;
 - scope and explicit non-scope;
 - acceptance checks;
-- relevant artifact paths;
-- the recommended next route and why.
+- canonical artifact paths or tracker links;
+- the next route and why it owns the next output.
 
 Common transitions are:
 
 ```text
-Wayfinder --select bounded workstream--> OpenSpec Explore
-OpenSpec Explore --decision is clear--> None
-OpenSpec Explore --change needs a formal spec--> OpenSpec proposal workflow
-Wayfinder/OpenSpec --objective is execution-ready--> Long-Horizon Prompting
-Long-Horizon Prompting --decision gate reached--> OpenSpec Explore or user decision
+Wayfinder --bounded design ticket--> OpenSpec Explore
+OpenSpec Explore --decision reached--> Wayfinder (record ticket resolution)
+Wayfinder --way fully clear--> OpenSpec proposal workflow or None
+OpenSpec Explore --clarity reached--> OpenSpec artifact capture, proposal workflow, or None
+Any phase --launch brief requested for hard autonomous run--> Long-Horizon Prompting
+Long-Horizon Prompting --brief passes audit--> separately authorized harness/execution
 ```
 
-OpenSpec proposal or implementation workflows are separate from `openspec-explore`. Route to them only if they exist and the user asks to proceed beyond exploration.
+OpenSpec proposal and implementation workflows are separate from `openspec-explore`. Long-run execution is separate from `long-horizon-prompting`.
 
 ## Preserve boundaries
 
-- Treat child skills as upstream dependencies, not content to paraphrase from memory.
-- Do not modify or vendor child skills as part of routing.
-- Keep one canonical artifact for each decision or requirement; link to it instead of duplicating it.
-- Re-run routing when the objective, authority, or uncertainty materially changes.
-- Ask before destructive actions, publication, external messages, credential use, purchases, or broad scope expansion.
-- Describe agent topology only if the selected child requires it. This skill orchestrates phases, not a standing swarm.
+- Treat child skills as upstream dependencies, not instructions to paraphrase from memory.
+- Do not vendor or silently approximate a missing child.
+- Keep one canonical artifact for each decision or requirement; link instead of duplicating.
+- Re-run routing when the requested artifact, authority, or uncertainty materially changes.
+- Ask before destructive actions, tracker writes, publication, external messages, credential use, purchases, or broad scope expansion.
+- Describe agent topology only when a separate orchestration capability owns it. This skill orchestrates phases, not a standing swarm.
 
 ## Response shape
 
-Lead with the selected route. Then give the reason, dependency state, phase result, and next handoff if one is warranted. If the user asked only which skill to use, stop after the recommendation and dependency guidance.
+Lead with the route, artifact-based reason, readiness state, output, and exit. If the user asked only which skill to use, stop after the recommendation and readiness guidance.
