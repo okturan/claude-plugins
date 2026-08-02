@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="600" viewBox="0 0 1080 600" role="img" aria-labelledby="title desc">
+  <title id="title">human-writing · README revision</title>
+  <desc id="desc">A real before-and-after revision from the human-writing plugin README.</desc>
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#1c1917" flood-opacity="0.14" />
+    </filter>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .eyebrow { fill: #226554; font-size: 12px; font-weight: 750; letter-spacing: 1.4px; }
+      .title { fill: #1c1917; font-size: 31px; font-weight: 700; letter-spacing: -0.35px; }
+      .subtitle { fill: #57534e; font-size: 15px; }
+      .terminal { fill: #d8dee9; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 15px; }
+      .prompt { fill: #a7c080; font-weight: 650; }
+      .heading { fill: #d3c6aa; font-weight: 700; }
+      .output { fill: #d8dee9; }
+      .good, .plus { fill: #a7c080; }
+      .warn { fill: #dbbc7f; }
+      .bad, .minus { fill: #e67e80; }
+      .muted { fill: #859289; }
+      .footer { fill: #78716c; font-size: 12px; }
+      .footer-code { fill: #78716c; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; }
+    </style>
+  </defs>
+  <rect width="1080" height="600" fill="#f4f1ea" />
+  <text x="48" y="34" class="eyebrow">REPRODUCIBLE EVIDENCE</text>
+  <text x="48" y="74" class="title">human-writing · README revision</text>
+  <text x="48" y="101" class="subtitle">Exact text from commits 7ecdf43 and 1759db3</text>
+  <g filter="url(#shadow)">
+    <rect x="48" y="126" width="984" height="396" rx="9" fill="#151b1a" />
+    <path d="M48 135a9 9 0 0 1 9-9h966a9 9 0 0 1 9 9v28H48z" fill="#202725" />
+    <circle cx="70" cy="145" r="5" fill="#e67e80" />
+    <circle cx="88" cy="145" r="5" fill="#dbbc7f" />
+    <circle cx="106" cy="145" r="5" fill="#a7c080" />
+    <text x="540" y="150" text-anchor="middle" class="footer-code">captured output</text>
+    <text x="70" y="184" class="terminal prompt">$ git diff 7ecdf43..1759db3 -- plugins/human-writing/README.md</text>
+    <text x="70" y="230" class="terminal minus">− BEFORE · 7ecdf43</text>
+    <text x="70" y="253" class="terminal minus">Write outward-facing prose that reads like a person wrote it,</text>
+    <text x="70" y="276" class="terminal minus">and strip AI tells from existing drafts.</text>
+    <text x="70" y="322" class="terminal plus">+ AFTER · 1759db3</text>
+    <text x="70" y="345" class="terminal plus">Draft plain outward-facing prose.</text>
+    <text x="70" y="368" class="terminal plus">Rewrite existing text without sanding away the author's voice</text>
+    <text x="70" y="391" class="terminal plus">or changing technical claims.</text>
+    <text x="70" y="437" class="terminal muted">Same scope. Shorter opening. Concrete constraints kept.</text>
+  </g>
+  <text x="48" y="562" class="footer">Repository history, not sample marketing copy</text>
+  <text x="1032" y="562" text-anchor="end" class="footer-code">node scripts/render-plugin-examples.mjs --check</text>
+</svg>

@@ -192,6 +192,21 @@ async function validateReadmeInventory(files) {
       fail(`README.md: missing plugin section for ${plugin.name}`);
     }
 
+    const examplePath = `docs/examples/${plugin.name}.svg`;
+    if (!(await exists(path.join(root, examplePath)))) {
+      fail(`${examplePath}: plugin evidence capture is missing`);
+    }
+    if (!readme.includes(`(${examplePath})`)) {
+      fail(`README.md: missing evidence capture link for ${plugin.name}`);
+    }
+
+    const pluginReadmePath = path.join(root, plugin.source, "README.md");
+    const pluginReadme = await readFile(pluginReadmePath, "utf8").catch(() => "");
+    const pluginExampleLink = `../../${examplePath}`;
+    if (!pluginReadme.includes(`](${pluginExampleLink})`)) {
+      fail(`${path.relative(root, pluginReadmePath)}: missing evidence capture for ${plugin.name}`);
+    }
+
     const pluginPrefix = `${path.normalize(plugin.source)}${path.sep}`;
     for (const file of files) {
       const relative = path.relative(root, file);
@@ -216,7 +231,7 @@ async function validateMarkdownLinks(markdownFiles) {
   for (const file of markdownFiles) {
     const relative = path.relative(root, file);
     const markdown = await readFile(file, "utf8");
-    const links = markdown.matchAll(/(?<!!)\[[^\]]*\]\(([^)\s]+)(?:\s+["'][^"']*["'])?\)/g);
+    const links = markdown.matchAll(/\[[^\]]*\]\(([^)\s]+)(?:\s+["'][^"']*["'])?\)/g);
 
     for (const match of links) {
       const href = match[1];

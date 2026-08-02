@@ -46,6 +46,12 @@ $shape-the-work Turn this broad migration idea into the right next phase.
 
 The reusable Codex metadata keeps the skill explicit-only. Clear routine requests should proceed without routing overhead.
 
+## Verified readiness check
+
+![Dependency checker reporting OpenSpec Explore ready, Wayfinder needing setup, and Long-Horizon Prompting missing](../../docs/examples/shape-the-work.svg)
+
+The capture comes from the real checker running against a controlled temporary repository. The renderer verifies all three states before writing the image. CI fails if the checker output changes. See the [fixture setup and normalization notes](../../docs/examples/README.md#shape-the-work).
+
 ## External skills
 
 The router does not copy or bundle these skills. Install the set needed by the selected mode:

@@ -11,6 +11,19 @@ Four Claude Code plugins live here. Together they contain five reusable skills, 
 
 The diagram comes from the marketplace and plugin manifests rather than a hand-maintained list. CI rebuilds it on macOS and Linux. A stale version or component count fails the build.
 
+## Real output
+
+Each plugin page includes an evidence capture. Controlled fixtures rebuild the file and dependency examples. The writing example comes from repository history. The health report names the commit it audited.
+
+| Plugin | What the capture shows |
+|---|---|
+| [`files-organizer`](plugins/files-organizer/README.md) | [One duplicate group found in the test fixture](docs/examples/files-organizer.svg) |
+| [`project-health`](plugins/project-health/README.md) | [This repository's nine-category audit at `7e3e5d6`](docs/examples/project-health.svg) |
+| [`human-writing`](plugins/human-writing/README.md) | [An exact README before-and-after from repository history](docs/examples/human-writing.svg) |
+| [`shape-the-work`](plugins/shape-the-work/README.md) | [Ready, incomplete, and missing dependency states](docs/examples/shape-the-work.svg) |
+
+The [provenance notes](docs/examples/README.md) give the fixture setup, audit evidence, source commits, and reproduction commands.
+
 ## Install individual skills
 
 The `skills` CLI can copy individual `SKILL.md` files into Claude Code, Cursor, Codex, and other supported agents:
@@ -99,7 +112,7 @@ claude plugin marketplace update okturan-plugins   # Claude Code plugin installs
 
 ## Verification
 
-Every pull request is checked on macOS and Linux. CI compares marketplace entries with plugin manifests, requires this README to list every plugin, skill, and command, validates component frontmatter, resolves local documentation links, and tests the bundled shell helpers. It does not run the disk scanner against the CI host.
+Every pull request is checked on macOS and Linux. CI compares marketplace entries with plugin manifests and requires this README to list every plugin, skill, command, and evidence capture. It also validates component frontmatter and resolves local documentation links and images. The final steps rebuild the generated visuals and test the bundled shell helpers. CI does not run the disk scanner against its host.
 
 ## Plugin Structure
 
@@ -114,6 +127,8 @@ plugins/plugin-name/
   scripts/                     # helper scripts
   hooks/hooks.json             # event handlers
 ```
+
+Repository-level fixtures and visual renderers live under `scripts/`. Generated, reviewable SVGs live under `docs/`.
 
 ## License
 
