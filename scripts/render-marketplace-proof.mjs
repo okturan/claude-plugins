@@ -30,8 +30,8 @@ const proofCopy = {
   },
   "shape-the-work": {
     lines: [
-      "Routes by the result needed now, not task duration,",
-      "and checks each child before the handoff.",
+      "Selects one work mode for the requested output,",
+      "then checks its dependencies before the handoff.",
     ],
   },
 };

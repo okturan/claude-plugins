@@ -1,17 +1,15 @@
 # claude-plugins
 
-[![skills.sh](https://skills.sh/b/okturan/claude-plugins)](https://skills.sh/okturan/claude-plugins)
+Four Claude Code plugins live here. Together they contain five reusable skills, six slash commands, and three file-analysis agents:
 
-This repository contains four Claude Code plugins by [okturan](https://github.com/okturan):
+- `files-organizer` returns a storage inventory, duplicate candidates, and an HTML file map. It never moves or deletes files on its own.
+- `project-health` returns a score out of 100, the evidence behind each deduction, and a concrete next step.
+- `human-writing` reports common AI-writing patterns, then rewrites the text without inventing details or changing technical claims.
+- `shape-the-work` chooses one work mode for the requested output and reports whether its external dependencies are ready.
 
-- `files-organizer` scans macOS storage and prepares file cleanup plans.
-- `project-health` scores a Git repository across nine categories.
-- `human-writing` drafts plain prose and rewrites text with common AI-writing patterns.
-- `shape-the-work` routes by the result needed now, checks whether its child can run, and defines the handoff.
+![Generated inventory of four plugins, five skills, six commands, and three agents](docs/marketplace-map.svg)
 
-![Generated inventory of the plugins, skills, commands, and agents in this repository](docs/marketplace-map.svg)
-
-The diagram is generated from the marketplace and plugin manifests. CI checks the generated file on macOS and Linux, so stale versions and component counts fail the build.
+The diagram comes from the marketplace and plugin manifests rather than a hand-maintained list. CI rebuilds it on macOS and Linux. A stale version or component count fails the build.
 
 ## Install individual skills
 
@@ -43,7 +41,7 @@ Replace `human-writing` with `files-organizer`, `project-health`, or `shape-the-
 
 ## Skills
 
-- **[shape-the-work](plugins/shape-the-work/skills/shape-the-work/SKILL.md):** Route by the result needed now: ordinary execution, OpenSpec exploration, a Wayfinder decision map, or a Long-Horizon launch brief.
+- **[shape-the-work](plugins/shape-the-work/skills/shape-the-work/SKILL.md):** Choose ordinary execution, OpenSpec exploration, a Wayfinder decision map, or a Long-Horizon launch brief based on the requested output.
 - **[human-writing](plugins/human-writing/skills/human-writing/SKILL.md):** Draft posts, READMEs, announcements, emails, and marketing copy in a plain voice. The accompanying [AI-writing catalog](plugins/human-writing/skills/human-writing/references/ai-tells.md) is used when revising existing text.
 - **[repo-audit](plugins/project-health/skills/repo-audit/SKILL.md):** Check a Git repository across nine categories and score it out of 100.
 - **[mac-file-patterns](plugins/files-organizer/skills/mac-file-patterns/SKILL.md):** Classify macOS files, review folder structure, and identify cleanup candidates.
@@ -55,13 +53,13 @@ Plugins bundle the skills above with slash commands (Claude Code only).
 
 ### shape-the-work
 
-Choose the mode that owns the current artifact. Task duration does not select the mode, and the router does not assume a particular product or repository.
+Choose the mode that owns the requested output. Duration alone does not change the route. The router does not assume a particular product or repository.
 
 | Command | What it does |
 |---------|-------------|
-| `/shape-work [task]` | Check child readiness, select the mode responsible for the result, and declare its output and exit condition |
+| `/shape-work [task]` | Check dependency readiness, select one mode, and report its output and exit condition |
 
-OpenSpec Explore, Wayfinder, and Long-Horizon Prompting remain external dependencies maintained by their upstream projects. The included checker distinguishes file presence from operational readiness without changing the machine. See the [plugin README](plugins/shape-the-work/README.md) for sources and setup requirements.
+OpenSpec Explore, Wayfinder, and Long-Horizon Prompting remain external dependencies maintained by their upstream projects. The checker distinguishes file presence from operational readiness without changing the machine. See the [plugin README](plugins/shape-the-work/README.md) for sources and setup requirements.
 
 ### human-writing
 

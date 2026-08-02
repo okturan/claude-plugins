@@ -1,6 +1,6 @@
 # shape-the-work
 
-Choose the mode responsible for the result needed now. Duration is supporting evidence, not the routing rule:
+Choose the mode that produces the requested output. Duration is supporting evidence, not the routing rule:
 
 | Route | Best fit |
 |---|---|
@@ -9,7 +9,7 @@ Choose the mode responsible for the result needed now. Duration is supporting ev
 | Wayfinder | A durable tracker map for decision fog that exceeds one session |
 | Long-Horizon Prompting | Writing or auditing the launch brief for a hard autonomous run |
 
-The router selects one mode per phase, verifies that the chosen child is operational, declares its real exit condition, and carries verified facts and unresolved decisions into an explicit handoff. It does not assume a particular product or repository.
+The router selects one mode per phase and checks whether the required external skill can run. It reports the mode's output and exit condition, then carries verified facts and unresolved decisions into an explicit handoff. It does not assume a particular product or repository.
 
 Long work is not automatically Long-Horizon Prompting. A fully specified multi-session migration remains ordinary execution unless the user asks for an autonomous-run brief. Conversely, reviewing a future twelve-hour launch prompt uses Long-Horizon Prompting even if the review itself takes one short session.
 
@@ -46,9 +46,9 @@ $shape-the-work Turn this broad migration idea into the right next phase.
 
 The reusable Codex metadata keeps the skill explicit-only. Clear routine requests should proceed without routing overhead.
 
-## Child skills
+## External skills
 
-The router does not copy or bundle its child skills. Install the working set needed by each mode:
+The router does not copy or bundle these skills. Install the set needed by the selected mode:
 
 - [OpenSpec Explore](https://github.com/Fission-AI/OpenSpec), usually initialized per project
 - [Wayfinder](https://github.com/mattpocock/skills/tree/main/skills/engineering/wayfinder), plus `setup-matt-pocock-skills`, `grilling`, `domain-modeling`, and the ticket-type skills it needs
@@ -60,12 +60,12 @@ Check readiness without changing the machine:
 bash plugins/shape-the-work/skills/shape-the-work/scripts/check-dependencies.sh --json "$PWD"
 ```
 
-The script searches project-local `.agents`, `.codex`, and `.claude` skill directories, then the corresponding user-level locations. It reports `ready`, `needs-context-check`, `needs-setup`, or `missing`. A child is never silently approximated or installed.
+The script searches project-local `.agents`, `.codex`, and `.claude` skill directories, then the corresponding user-level locations. It reports `ready`, `needs-context-check`, `needs-setup`, or `missing`. The router does not simulate or install a missing skill.
 
 ## Boundaries
 
 - One child mode runs at a time.
-- Exploration never writes application code; OpenSpec artifacts may be captured when requested.
+- Exploration never writes application code. It may capture OpenSpec artifacts when requested.
 - Wayfinder artifacts are linked, not duplicated into OpenSpec.
-- Long-Horizon Prompting ends with an audited launch brief; it does not run the harness or agents.
+- Long-Horizon Prompting ends with an audited launch brief. It does not run the harness or agents.
 - Publishing, destructive actions, messages, credentials, and purchases remain user-gated.

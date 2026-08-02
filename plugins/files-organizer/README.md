@@ -2,7 +2,7 @@
 
 A Claude Code plugin for reviewing files on macOS.
 
-It inventories disk usage, groups exact duplicate candidates, flags files that may be misplaced, and writes a standalone HTML report. The plugin reports commands for review; it does not move or delete files on its own.
+It inventories disk usage, groups exact duplicate candidates, flags files that may be misplaced, and writes a standalone HTML report. The plugin prints commands for review. It does not move or delete files on its own.
 
 ## Commands
 
