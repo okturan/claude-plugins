@@ -16,9 +16,15 @@ The plugin has two parts:
 
 Claude can also load the skill automatically while drafting a post, README, announcement, email, or marketing page.
 
+## Real revision
+
+![Before and after opening lines from the human-writing README revision in commit 1759db3](../../docs/examples/human-writing.svg)
+
+The text above comes from this plugin's own history. Commit [`1759db3`](https://github.com/okturan/claude-plugins/commit/1759db3) replaced a generic opening with two shorter sentences while keeping the scope and constraints. The [capture provenance](../../docs/examples/README.md#human-writing) includes the exact `git diff` command.
+
 ## Limits
 
-The skill does not invent specifics. If the source material is missing a number, event, or limitation, it asks for that information or leaves a bracketed question. It also leaves quoted material and technical claims alone.
+The skill does not invent specifics. If the source material lacks a number, event, or limitation, it asks for that information. Otherwise, it leaves a bracketed question. It also leaves quoted material and technical claims alone.
 
 ## Sources and prior art
 

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="600" viewBox="0 0 1080 600" role="img" aria-labelledby="title desc">
+  <title id="title">files-organizer · duplicate scan</title>
+  <desc id="desc">A real deterministic run finding one pair of identical files.</desc>
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#1c1917" flood-opacity="0.14" />
+    </filter>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .eyebrow { fill: #226554; font-size: 12px; font-weight: 750; letter-spacing: 1.4px; }
+      .title { fill: #1c1917; font-size: 31px; font-weight: 700; letter-spacing: -0.35px; }
+      .subtitle { fill: #57534e; font-size: 15px; }
+      .terminal { fill: #d8dee9; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 15px; }
+      .prompt { fill: #a7c080; font-weight: 650; }
+      .heading { fill: #d3c6aa; font-weight: 700; }
+      .output { fill: #d8dee9; }
+      .good, .plus { fill: #a7c080; }
+      .warn { fill: #dbbc7f; }
+      .bad, .minus { fill: #e67e80; }
+      .muted { fill: #859289; }
+      .footer { fill: #78716c; font-size: 12px; }
+      .footer-code { fill: #78716c; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; }
+    </style>
+  </defs>
+  <rect width="1080" height="600" fill="#f4f1ea" />
+  <text x="48" y="34" class="eyebrow">REPRODUCIBLE EVIDENCE</text>
+  <text x="48" y="74" class="title">files-organizer · duplicate scan</text>
+  <text x="48" y="101" class="subtitle">Three-file fixture used by the repository test suite</text>
+  <g filter="url(#shadow)">
+    <rect x="48" y="126" width="984" height="396" rx="9" fill="#151b1a" />
+    <path d="M48 135a9 9 0 0 1 9-9h966a9 9 0 0 1 9 9v28H48z" fill="#202725" />
+    <circle cx="70" cy="145" r="5" fill="#e67e80" />
+    <circle cx="88" cy="145" r="5" fill="#dbbc7f" />
+    <circle cx="106" cy="145" r="5" fill="#a7c080" />
+    <text x="540" y="150" text-anchor="middle" class="footer-code">captured output</text>
+    <text x="70" y="184" class="terminal prompt">$ bash find-duplicates.sh ./sample-files 1</text>
+    <text x="70" y="207" class="terminal muted">Scanning file sizes...</text>
+    <text x="70" y="230" class="terminal muted">Hashing potential duplicates...</text>
+    <text x="70" y="253" class="terminal heading">=== DUPLICATE GROUPS ===</text>
+    <text x="70" y="276" class="terminal output">--- Duplicate group (MD5: 8e4d9100a3c9e54df9883cda503fe7b4) ---</text>
+    <text x="70" y="299" class="terminal output">  [23 B] ./sample-files/alpha/report.txt</text>
+    <text x="70" y="322" class="terminal output">  [23 B] ./sample-files/beta/report.txt</text>
+    <text x="70" y="368" class="terminal heading">=== SUMMARY ===</text>
+    <text x="70" y="391" class="terminal good">Duplicate groups found: 1</text>
+    <text x="70" y="414" class="terminal good">Bytes used by copies beyond the first: 23 B</text>
+  </g>
+  <text x="48" y="562" class="footer">Live fixture output · paths and timestamp normalized</text>
+  <text x="1032" y="562" text-anchor="end" class="footer-code">node scripts/render-plugin-examples.mjs --check</text>
+</svg>

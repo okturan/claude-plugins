@@ -39,6 +39,9 @@ jobs:
       - name: Verify marketplace visual proof
         run: node scripts/render-marketplace-proof.mjs --check
 
+      - name: Verify plugin example captures
+        run: node scripts/render-plugin-examples.mjs --check
+
       - name: Check shell syntax
         run: >-
           bash -n

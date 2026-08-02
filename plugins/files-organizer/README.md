@@ -4,6 +4,12 @@ A Claude Code plugin for reviewing files on macOS.
 
 It inventories disk usage, groups exact duplicate candidates, flags files that may be misplaced, and writes a standalone HTML report. The plugin prints commands for review. It does not move or delete files on its own.
 
+## Verified output
+
+![Duplicate scan finding one pair of identical 23-byte files in a controlled fixture](../../docs/examples/files-organizer.svg)
+
+This is output from the real duplicate finder, run against the same three-file setup used by the repository tests. The image shortens temporary paths and omits the run time. The script supplies the hash, file sizes, group count, and wasted-byte total. See the [capture provenance](../../docs/examples/README.md#files-organizer).
+
 ## Commands
 
 ### `/scan [directory]`
