@@ -68,8 +68,8 @@
     <rect x="0" y="18" width="4" height="52" fill="#226554" />
     <text x="20" y="39" class="row-title">shape the work</text>
     <text x="20" y="62" class="version">v0.1.0</text>
-    <text x="306" y="38" class="body">Routes by the result needed now, not task duration,</text>
-    <text x="306" y="62" class="body">and checks each child before the handoff.</text>
+    <text x="306" y="38" class="body">Selects one work mode for the requested output,</text>
+    <text x="306" y="62" class="body">then checks its dependencies before the handoff.</text>
     <text x="900" y="50" class="contents mono">1 command / 1 skill</text>
   </g>
   <line x1="56" y1="630" x2="1224" y2="630" class="rule" />
