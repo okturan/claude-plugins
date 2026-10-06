@@ -44,6 +44,16 @@
       "source": "./plugins/shape-the-work",
       "category": "development",
       "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/shape-the-work"
+    },
+    {
+      "name": "restart",
+      "description": "Adds /restart: reopen the current session on the newest installed Claude Code with the same conversation and launch flags. Needs herdr (it reopens the session in the same herdr pane).",
+      "author": {
+        "name": "okturan"
+      },
+      "source": "./plugins/restart",
+      "category": "productivity",
+      "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/restart"
     }
   ]
 }

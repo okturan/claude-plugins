@@ -37,3 +37,7 @@ The capture wraps long lines to fit the image but does not change their wording.
 ## shape-the-work
 
 `shape-the-work.svg` comes from a controlled Git repository in a temporary directory. The renderer installs the repository's fake OpenSpec executable and makes OpenSpec Explore ready. It leaves Wayfinder without its companions and tracker contract. Long-Horizon Prompting remains absent. The renderer then runs the real dependency checker and verifies all three statuses. [`scripts/test-shape-the-work.sh`](../../scripts/test-shape-the-work.sh) covers the same states and several failure paths.
+
+## restart
+
+`restart.svg` runs the plugin's [`relaunch.ts`](../../plugins/restart/hooks/relaunch.ts) under Node with type stripping. The renderer passes three sample launch lines, in the form `ps -o args=` reports them, through `argsOfPsLine`, `relaunchArgs`, and `shQuote`, with a fixed sample session id. It checks the three commands against the expected text before writing the image. The capture shortens the versioned binary path. It does not exercise the herdr handoff or the exit, which need a live session. [`relaunch.test.ts`](../../plugins/restart/hooks/relaunch.test.ts) covers the same function with `claude plugin test plugins/restart`.

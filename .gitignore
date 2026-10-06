@@ -1,2 +1,4 @@
 .DS_Store
 *.iso
+node_modules/
+plugins/*/.claude-plugin/types/

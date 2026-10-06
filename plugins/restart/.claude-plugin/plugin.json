@@ -1,0 +1,11 @@
+{
+  "name": "restart",
+  "version": "0.1.0",
+  "description": "Adds /restart: reopen the current session on the newest installed Claude Code with the same conversation and launch flags. Needs herdr (it reopens the session in the same herdr pane).",
+  "author": {
+    "name": "okturan"
+  },
+  "repository": "https://github.com/okturan/claude-plugins",
+  "homepage": "https://github.com/okturan/claude-plugins/tree/main/plugins/restart",
+  "license": "MIT"
+}

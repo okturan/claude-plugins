@@ -27,10 +27,13 @@ claude-plugins/
     │   ├── .claude-plugin/plugin.json
     │   ├── commands/
     │   └── skills/
-    └── shape-the-work/            # Work-shaping mode router
+    ├── shape-the-work/            # Work-shaping mode router
+    │   ├── .claude-plugin/plugin.json
+    │   ├── commands/
+    │   └── skills/
+    └── restart/                   # /restart mod (function hooks, needs herdr)
         ├── .claude-plugin/plugin.json
-        ├── commands/
-        └── skills/
+        └── hooks/                 # hooks.json, register.ts, relaunch.ts + test
 ```
 
 ## Plugins
@@ -60,3 +63,10 @@ Route by the artifact needed now: ordinary execution, OpenSpec exploration, a Wa
 - `/shape-work <task>` - select one mode for the current phase
 - Child skills stay external and operational readiness is checked before use
 - The router is general-purpose and explicit-only in Codex
+
+### restart
+Reopen the current session on the newest installed Claude Code with the same conversation and launch flags. A mod: function hooks in TypeScript, Claude Code 2.1.287 or later.
+
+- `/restart` - a detached helper ends the session with SIGTERM (a mod's `/exit` does not), then types `claude <flags> --resume <id>` into the herdr pane
+- Needs herdr; outside herdr it prints the command instead of exiting
+- `claude plugin test plugins/restart` runs `relaunch.test.ts`; `.claude-plugin/types/` is generated and ignored
