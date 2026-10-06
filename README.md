@@ -1,19 +1,20 @@
 # claude-plugins
 
-Four Claude Code plugins live here. Together they contain five reusable skills, six slash commands, and three file-analysis agents:
+Five Claude Code plugins live here. Together they contain five reusable skills, seven slash commands, and three file-analysis agents:
 
 - `files-organizer` returns a storage inventory, duplicate candidates, and an HTML file map. It never moves or deletes files on its own.
 - `project-health` returns a score out of 100, the evidence behind each deduction, and a concrete next step.
 - `human-writing` reports common AI-writing patterns, then rewrites the text without inventing details or changing technical claims.
 - `shape-the-work` chooses one work mode for the requested output and reports whether its external dependencies are ready.
+- `restart` reopens the current session on the newest installed Claude Code with the same conversation and launch flags. It needs [herdr](https://herdr.dev).
 
-![Generated inventory of four plugins, five skills, six commands, and three agents](docs/marketplace-map.svg)
+![Generated inventory of five plugins, five skills, and their commands, agents, and hook modules](docs/marketplace-map.svg)
 
 The diagram comes from the marketplace and plugin manifests rather than a hand-maintained list. CI rebuilds it on macOS and Linux. A stale version or component count fails the build.
 
 ## Real output
 
-Each plugin page includes an evidence capture. Controlled fixtures rebuild the file and dependency examples. The writing example comes from repository history. The health report names the commit it audited.
+Each plugin page includes an evidence capture. Controlled fixtures rebuild the file, dependency, and relaunch examples. The writing example comes from repository history. The health report names the commit it audited.
 
 | Plugin | What the capture shows |
 |---|---|
@@ -21,6 +22,7 @@ Each plugin page includes an evidence capture. Controlled fixtures rebuild the f
 | [`project-health`](plugins/project-health/README.md) | [This repository's nine-category audit at `7e3e5d6`](docs/examples/project-health.svg) |
 | [`human-writing`](plugins/human-writing/README.md) | [An exact README before-and-after from repository history](docs/examples/human-writing.svg) |
 | [`shape-the-work`](plugins/shape-the-work/README.md) | [Ready, incomplete, and missing dependency states](docs/examples/shape-the-work.svg) |
+| [`restart`](plugins/restart/README.md) | [Relaunch commands built from three sample launch lines](docs/examples/restart.svg) |
 
 The [provenance notes](docs/examples/README.md) give the fixture setup, audit evidence, source commits, and reproduction commands.
 
@@ -50,7 +52,7 @@ claude plugin marketplace add okturan/claude-plugins
 claude plugin install human-writing@okturan-plugins
 ```
 
-Replace `human-writing` with `files-organizer`, `project-health`, or `shape-the-work` to install another plugin.
+Replace `human-writing` with `files-organizer`, `project-health`, `shape-the-work`, or `restart` to install another plugin.
 
 ## Skills
 
@@ -103,6 +105,16 @@ Score a Git repository out of 100 across nine documented categories.
 
 Categories: Git Health (15), Structure (15), Code Quality (15), Config (10), Database (10), Docs (10), Testing & CI (15), Dependencies (5), Security (5).
 
+### restart
+
+Reopen the current session on the newest installed Claude Code. The conversation and the launch flags carry over.
+
+| Command | What it does |
+|---------|-------------|
+| `/restart` | End the session, then run `claude <launch flags> --resume <session id>` in the same pane |
+
+It needs [herdr](https://herdr.dev), because herdr can type a command into the pane after Claude Code exits. Outside herdr it does not exit and prints the command to run instead. It needs Claude Code 2.1.287 or later, since it is a mod built from function hooks. The session ends the way it would if you closed the terminal, so a running background task is stopped. A permission mode switched with shift+tab during the session does not carry over, and neither does the effort level. See the [plugin README](plugins/restart/README.md) for the other limits.
+
 ## Updating
 
 ```bash
@@ -125,7 +137,7 @@ plugins/plugin-name/
   agents/*.md                  # autonomous subagents
   skills/*/SKILL.md            # reusable agent skills
   scripts/                     # helper scripts
-  hooks/hooks.json             # event handlers
+  hooks/hooks.json             # event handlers, or function hook modules for a mod
 ```
 
 Repository-level fixtures and visual renderers live under `scripts/`. Generated, reviewable SVGs live under `docs/`.

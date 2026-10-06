@@ -180,6 +180,66 @@ async function captureShapeTheWork() {
   }
 }
 
+function captureRestart() {
+  const sessionId = "3f16a0e2-07d4-4d6f-9c7d-242450e38448";
+  const samples = [
+    "/home/me/.local/share/claude/versions/2.1.287 --dangerously-skip-permissions --resume old-name",
+    "claude --permission-mode=acceptEdits -c",
+    "claude --chrome --model claude-opus-5-5[1m] fix the flaky test",
+  ];
+  const script = `
+    const { argsOfPsLine, relaunchArgs, shQuote } = await import(${JSON.stringify(
+      path.join(root, "plugins", "restart", "hooks", "relaunch.ts"),
+    )});
+    const samples = JSON.parse(process.argv[1]);
+    for (const line of samples) {
+      console.log(["claude", ...relaunchArgs(argsOfPsLine(line), ${JSON.stringify(sessionId)})].map(shQuote).join(" "));
+    }
+  `;
+  const commands = run(process.execPath, [
+    "--experimental-strip-types",
+    "--no-warnings",
+    "--input-type=module",
+    "--eval",
+    script,
+    JSON.stringify(samples),
+  ])
+    .trim()
+    .split("\n");
+
+  const expected = [
+    `claude --dangerously-skip-permissions --resume ${sessionId}`,
+    `claude --permission-mode=acceptEdits --resume ${sessionId}`,
+    `claude --chrome --model 'claude-opus-5-5[1m]' --resume ${sessionId}`,
+  ];
+  if (JSON.stringify(commands) !== JSON.stringify(expected)) {
+    throw new Error(`restart relaunch commands differ from the expected capture:\n${commands.join("\n")}`);
+  }
+
+  return {
+    filename: "restart.svg",
+    title: "restart · relaunch command",
+    subtitle: "Three launch lines as ps reports them, rebuilt by the plugin's relaunch.ts",
+    description: "A real run of the restart plugin's argument rewriter on three sample launch lines.",
+    lines: [
+      ["muted", "# white: launch line as ps reports it"],
+      ["muted", "# green: command /restart types into the herdr pane"],
+      ["blank", ""],
+      ["output", samples[0].replace("/home/me/.local/share/claude/versions/", ".../versions/")],
+      ["good", commands[0]],
+      ["blank", ""],
+      ["output", samples[1]],
+      ["good", commands[1]],
+      ["blank", ""],
+      ["output", samples[2]],
+      ["good", commands[2]],
+      ["blank", ""],
+      ["warn", "Dropped: the old --resume target, -c, and the prompt. Kept: the other launch flags."],
+    ],
+    footer: "Live output of plugins/restart/hooks/relaunch.ts · version path shortened",
+  };
+}
+
 function projectHealthSnapshot() {
   const categories = [
     ["Repository & Git", 15, 15, ""],
@@ -304,6 +364,7 @@ const captures = [
   projectHealthSnapshot(),
   humanWritingRevision(),
   await captureShapeTheWork(),
+  captureRestart(),
 ];
 
 const marketplace = JSON.parse(

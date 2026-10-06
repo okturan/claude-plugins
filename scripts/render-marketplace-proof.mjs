@@ -34,6 +34,12 @@ const proofCopy = {
       "then checks its dependencies before the handoff.",
     ],
   },
+  restart: {
+    lines: [
+      "Reopens this session on the newest installed Claude Code",
+      "with the same conversation and launch flags. Needs herdr.",
+    ],
+  },
 };
 
 function escapeXml(value) {
@@ -78,6 +84,8 @@ async function readMarketplace() {
     );
     const visual = proofCopy[manifest.name];
     if (!visual) throw new Error(`missing visual proof copy for ${manifest.name}`);
+    const hooksPath = path.join(pluginRoot, "hooks", "hooks.json");
+    const hooks = (await exists(hooksPath)) ? JSON.parse(await readFile(hooksPath, "utf8")) : {};
 
     plugins.push({
       ...manifest,
@@ -86,6 +94,7 @@ async function readMarketplace() {
         commands: await countFiles(path.join(pluginRoot, "commands"), (file) => file.endsWith(".md")),
         agents: await countFiles(path.join(pluginRoot, "agents"), (file) => file.endsWith(".md")),
         skills: await countFiles(path.join(pluginRoot, "skills"), (file) => file.endsWith("SKILL.md")),
+        hookModules: hooks.modules?.length ?? 0,
       },
     });
   }
@@ -101,9 +110,10 @@ function pluginRow(plugin, y) {
   const title = plugin.name.replaceAll("-", " ");
   const [line1, line2] = plugin.lines.map(escapeXml);
   const contents = [
-    pluralize(plugin.counts.commands, "command"),
+    plugin.counts.commands > 0 ? pluralize(plugin.counts.commands, "command") : null,
     plugin.counts.agents > 0 ? pluralize(plugin.counts.agents, "agent") : null,
-    pluralize(plugin.counts.skills, "skill"),
+    plugin.counts.skills > 0 ? pluralize(plugin.counts.skills, "skill") : null,
+    plugin.counts.hookModules > 0 ? pluralize(plugin.counts.hookModules, "hook module") : null,
   ]
     .filter(Boolean)
     .join(" / ");
@@ -123,9 +133,11 @@ function render({ marketplace, plugins }) {
   const skillTotal = plugins.reduce((sum, plugin) => sum + plugin.counts.skills, 0);
   const pluginTotal = plugins.length;
   const rows = plugins.map((plugin, index) => pluginRow(plugin, 278 + index * 88)).join("\n");
+  const ruleY = 278 + pluginTotal * 88;
+  const height = ruleY + 90;
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="${height}" viewBox="0 0 1280 ${height}" role="img" aria-labelledby="title desc">
   <title id="title">Contents of the okturan Claude plugin repository</title>
   <desc id="desc">${pluginTotal} Claude Code plugins and ${skillTotal} reusable skills, counted from the repository files.</desc>
   <defs>
@@ -145,7 +157,7 @@ function render({ marketplace, plugins }) {
       .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
     </style>
   </defs>
-  <rect width="1280" height="720" fill="#f4f1ea" />
+  <rect width="1280" height="${height}" fill="#f4f1ea" />
   <text x="56" y="46" class="repo mono">okturan / ${escapeXml(marketplace.name)}</text>
   <text x="56" y="99" class="hero">Claude Code plugins and agent skills</text>
   <text x="56" y="132" class="sub">${pluginTotal} plugins and ${skillTotal} reusable skills, counted from the files in this repository.</text>
@@ -163,9 +175,9 @@ function render({ marketplace, plugins }) {
   <text x="362" y="266" class="column">WHAT IT DOES</text>
   <text x="956" y="266" class="column">CONTENTS</text>
   ${rows}
-  <line x1="56" y1="630" x2="1224" y2="630" class="rule" />
-  <text x="56" y="674" class="footer">Generated from .claude-plugin/marketplace.json and each plugin manifest.</text>
-  <text x="1224" y="674" text-anchor="end" class="footer mono">node scripts/render-marketplace-proof.mjs --check</text>
+  <line x1="56" y1="${ruleY}" x2="1224" y2="${ruleY}" class="rule" />
+  <text x="56" y="${ruleY + 44}" class="footer">Generated from .claude-plugin/marketplace.json and each plugin manifest.</text>
+  <text x="1224" y="${ruleY + 44}" text-anchor="end" class="footer mono">node scripts/render-marketplace-proof.mjs --check</text>
 </svg>
 `;
 }
